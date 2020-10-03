@@ -1,2 +1,2 @@
-# playlist_app_django
+# Playlist App Django
  Fun game to play with friends built on django
