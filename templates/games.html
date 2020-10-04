@@ -1,0 +1,22 @@
+<script>
+function GetSelectedItem(el)
+{
+    var e = document.getElementById(el);
+    var strSel = "The Value is: " + e.options[e.selectedIndex].value + " and text is: " + e.options[e.selectedIndex].text;
+}
+</script>
+<form method="post">
+    {% csrf_token %}
+    <select name="game" id="select1">
+         {% for game in games %}
+             <option  value="{{ game.0 }}">{{ game.1 }}</option>
+         {% endfor %}
+    </select>
+</form>
+<body>
+<script>
+var x=$('#select1').val();
+document.write('<button id="button1" onclick="location.href='/api/randomise/' + y + '/'">Go to Submission11</button>');
+</script>
+<button id="button1" onclick="location.href = '/api/randomise/' + y + '/'">Go to Submission</button>
+</body>
