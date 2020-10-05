@@ -52,7 +52,6 @@ def put_playlist(request):
 
 def get_games(request):
     if request.method == 'POST':
-        print(request.POST)
         form = GameListForm(request.POST)
         if form.is_valid():
             game = form.cleaned_data['game_list'].id
