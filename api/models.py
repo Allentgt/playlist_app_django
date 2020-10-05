@@ -12,6 +12,9 @@ class Game(models.Model):
     sample_size = models.IntegerField(null=False)
     contestants = models.IntegerField(null=False)
 
+    def __str__(self):
+        return self.name
+
 
 class Playlist(models.Model):
     """
@@ -20,5 +23,9 @@ class Playlist(models.Model):
     name = models.CharField(max_length=300, null=False)
     game = models.ForeignKey(Game, null=False, db_index=True, on_delete=models.CASCADE)
     playlist = models.TextField(null=False, blank=False)
+
+    def __str__(self):
+        return f"{self.name}'s Playlist"
+
 
 

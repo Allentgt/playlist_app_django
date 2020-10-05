@@ -1,5 +1,8 @@
 from django import forms
 
+# from playlist_app_django.api.models import Game
+from .models import Game
+
 
 class PlaylistForm(forms.Form):
     name = forms.CharField(max_length=100)
@@ -20,3 +23,7 @@ class GameForm(forms.Form):
     name = forms.CharField(max_length=100)
     sample_size = forms.IntegerField()
     contestants = forms.IntegerField()
+
+
+class GameListForm(forms.Form):
+    game_list = forms.ModelChoiceField(queryset=Game.objects.all().order_by('id'))

@@ -3,3 +3,6 @@ db.sqlite3
 api/migrations/
 *.pyc
 *.sqlite3
+*.pyc
+*.sqlite3
+*.pyc

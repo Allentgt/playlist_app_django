@@ -3,7 +3,7 @@ import random
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from .models import Playlist, Game
-from .forms import PlaylistForm, GameForm
+from .forms import PlaylistForm, GameForm, GameListForm
 
 
 def index(request):
@@ -18,7 +18,8 @@ def create_game(request):
     if request.method == 'POST':
         form = GameForm(request.POST)
         if form.is_valid():
-            data = {'name': form.cleaned_data['name'], 'sample_size': form.cleaned_data['sample_size'], 'contestants': form.cleaned_data['contestants']}
+            data = {'name': form.cleaned_data['name'], 'sample_size': form.cleaned_data['sample_size'],
+                    'contestants': form.cleaned_data['contestants']}
             game = Game(**data)
             game.save()
             return HttpResponseRedirect('/api/put_playlist/')
@@ -38,7 +39,8 @@ def put_playlist(request):
                                                          form.cleaned_data['song7'], form.cleaned_data['song8'],
                                                          form.cleaned_data['song9'], form.cleaned_data['song10']
                                                          ])}
-            data = {'name': form.cleaned_data['name'], 'game': Game.objects.get(name=form.cleaned_data['game']), 'playlist': json.dumps(playlist)}
+            data = {'name': form.cleaned_data['name'], 'game': Game.objects.get(name=form.cleaned_data['game']),
+                    'playlist': json.dumps(playlist)}
             p = Playlist(**data)
             p.save()
             return HttpResponseRedirect('/api/thanks/')
@@ -49,20 +51,26 @@ def put_playlist(request):
 
 
 def get_games(request):
-    games = Game.objects.all()
-    selected_game = request.POST.get("game")
-    context = {'games': [[i.id, i.name] for i in games], 'selected_game': selected_game}
-    return render(request, 'games.html', context)
+    if request.method == 'POST':
+        print(request.POST)
+        form = GameListForm(request.POST)
+        if form.is_valid():
+            game = form.cleaned_data['game_list'].id
+            return HttpResponseRedirect(f'/api/randomise/{game}/')
+    else:
+        form = GameListForm()
+    return render(request, 'games.html', {'form': form})
 
 
 def randomise(request, game):
     all_playlist = {}
     all_random_sample = []
     playlist = Playlist.objects.filter(game=game)
+    sample_size = Game.objects.get(id=game).sample_size
     for obj in playlist:
         all_playlist[obj.id] = json.loads(obj.playlist)
     for idx, i in all_playlist.items():
-        sampling = random.choices(list(i.values()), k=4)
+        sampling = random.choices(list(i.values()), k=sample_size)
         sampling = [{idx: i} for i in sampling]
         all_random_sample.extend(sampling)
     random.shuffle(all_random_sample)
