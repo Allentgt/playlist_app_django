@@ -26,7 +26,7 @@ def create_game(request):
     else:
         form = GameForm()
 
-    return render(request, 'game.html', {'form': form})
+    return render(request, 'create_game.html', {'form': form})
 
 
 def put_playlist(request):
@@ -73,4 +73,4 @@ def randomise(request, game):
         sampling = [{idx: i} for i in sampling]
         all_random_sample.extend(sampling)
     random.shuffle(all_random_sample)
-    return JsonResponse(all_random_sample, safe=False)
+    return render(request, 'songs.html', {'context': all_random_sample})
