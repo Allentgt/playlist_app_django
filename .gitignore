@@ -3,3 +3,5 @@ db.sqlite3
 api/migrations/
 *.pyc
 *.sqlite3
+api/__pycache__/
+playlist/__pycache__/
