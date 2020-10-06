@@ -5,3 +5,4 @@ api/migrations/
 *.sqlite3
 api/__pycache__/
 playlist/__pycache__/
+venv/
