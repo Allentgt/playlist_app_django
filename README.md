@@ -5,6 +5,13 @@
 # Installation
  1. Clone the repository.
  2. Create and activate virtual environment with the following command:
+ ```
+{
+  "firstName": "John",
+  "lastName": "Smith",
+  "age": 25
+}
+```
     virtualenv venv && venv\Scripts\activate
  3. Migrate the db:
     python manage.py makemigrations
