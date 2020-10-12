@@ -1,9 +1,9 @@
 import simplejson as json
 import random
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from .models import Playlist, Game
-from .forms import PlaylistForm, GameForm, GameListForm
+from .forms import PlaylistForm, GameForm, GameListForm, PlaylistSubmissionFormSet
 
 
 def index(request):
@@ -18,7 +18,9 @@ def create_game(request):
     if request.method == 'POST':
         form = GameForm(request.POST)
         if form.is_valid():
-            data = {'name': form.cleaned_data['name'], 'sample_size': form.cleaned_data['sample_size'],
+            data = {'name': form.cleaned_data['name'],
+                    'sample_size': form.cleaned_data['sample_size'],
+                    'pool_size': form.cleaned_data['pool_size'],
                     'contestants': form.cleaned_data['contestants']}
             game = Game(**data)
             game.save()
@@ -31,23 +33,27 @@ def create_game(request):
 
 def put_playlist(request):
     if request.method == 'POST':
-        form = PlaylistForm(request.POST)
-        if form.is_valid():
-            playlist = {i: j for i, j in zip(range(10), [form.cleaned_data['song1'], form.cleaned_data['song2'],
-                                                         form.cleaned_data['song3'], form.cleaned_data['song4'],
-                                                         form.cleaned_data['song5'], form.cleaned_data['song6'],
-                                                         form.cleaned_data['song7'], form.cleaned_data['song8'],
-                                                         form.cleaned_data['song9'], form.cleaned_data['song10']
-                                                         ])}
-            data = {'name': form.cleaned_data['name'], 'game': Game.objects.get(name=form.cleaned_data['game']),
+        fs = PlaylistSubmissionFormSet(request.POST)
+        user_details = PlaylistForm(request.POST)
+
+        if fs.is_valid() and user_details.is_valid():
+            playlist_data = fs.cleaned_data
+            playlist = {i: j for i, j in zip(range(len(playlist_data)), playlist_data)}
+            user_details = user_details.cleaned_data
+            data = {'name': user_details['name'], 'game': Game.objects.get(name=user_details['game']),
                     'playlist': json.dumps(playlist)}
             p = Playlist(**data)
             p.save()
             return HttpResponseRedirect('/api/thanks/')
     else:
-        form = PlaylistForm()
+        user_details = PlaylistForm()
+        fs = PlaylistSubmissionFormSet(initial=[dict()] * 10)
+    context = {
+        'fs': fs,
+        'playlist': user_details
+    }
 
-    return render(request, 'playlist.html', {'form': form})
+    return render(request, 'playlist.html', context)
 
 
 def get_games(request):

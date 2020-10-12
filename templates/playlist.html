@@ -4,11 +4,20 @@
     <meta charset="UTF-8">
     <title>Enter Your Submission</title>
 </head>
-<body>
-<form action="/api/put_playlist/" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Submit">
-</form>
-</body>
+    <body>
+        <form method="POST">
+            {% csrf_token %}
+            {{ playlist }}
+            <hr>
+            {{ fs.management_form }}
+            {% for form in fs %}
+                {% for field in form %}
+                    {{ field.label }}<div>{{ field }}</div>
+                {% endfor %}
+                <hr>
+            {% endfor %}
+            <button type="submit">Submit</button>
+        </form>
+        <hr>
+    </body>
 </html>
