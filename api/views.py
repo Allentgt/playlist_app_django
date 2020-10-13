@@ -20,7 +20,6 @@ def create_game(request):
         if form.is_valid():
             data = {'name': form.cleaned_data['name'],
                     'sample_size': form.cleaned_data['sample_size'],
-                    'pool_size': form.cleaned_data['pool_size'],
                     'contestants': form.cleaned_data['contestants']}
             game = Game(**data)
             game.save()
