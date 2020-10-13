@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'api',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -117,5 +118,23 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+USE_S3 = True
+
+if USE_S3:
+    # aws settings
+    AWS_ACCESS_KEY_ID = 'AKIAZIXW3W4FVNFDZOLY'
+    AWS_SECRET_ACCESS_KEY = '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'
+    AWS_STORAGE_BUCKET_NAME = 'django-static-1337x'
+    AWS_DEFAULT_ACL = 'public-read'
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+    # s3 static settings
+    AWS_LOCATION = 'static'
+    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+else:
+    STATIC_URL = '/static/'
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)
