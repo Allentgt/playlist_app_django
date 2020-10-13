@@ -3,3 +3,4 @@ simplejson==3.17.2
 django-storages==1.9.1
 boto3
 gunicorn
+environ
