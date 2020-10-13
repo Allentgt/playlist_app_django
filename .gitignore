@@ -6,3 +6,4 @@ api/migrations/
 api/__pycache__/
 playlist/__pycache__/
 venv/
+playlist/.env
