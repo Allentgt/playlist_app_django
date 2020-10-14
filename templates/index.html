@@ -1,20 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <head>
     <meta charset="UTF-8">
     <title>The Playlist Game</title>
 </head>
+  <div class="text-center">
+  <header style="font-size: xxx-large">The Playlist Game</header>
+  </div>
 <body style="background-color:lightgrey">
-<div style="margin-top: 20%; margin-left: 20%; background-color: cadetblue; width: 60%;">
-    <div style="margin-left: 10px; padding-top: 20px; padding-bottom: 20px;">
+<div style="margin-top: 20%; margin-left: 20%; width: 60%;" class="text-center">
+    <div style="margin-left: 10px; padding-top: 20px; padding-bottom: 20px;" class="text-center">
         <div>
-            <button onclick="location.href = '/api/create_game/'">Create Game</button>
+            <button class="btn btn-primary" onclick="location.href = '/api/create_game/'">Create Game</button>
         </div>
         <div style="margin-top: 20px">
-            <button onclick="location.href = '/api/put_playlist/'">Submit Your Entries</button>
+            <button class="btn btn-primary" onclick="location.href = '/api/put_playlist/'">Submit Your Entries</button>
         </div>
         <div style="margin-top: 20px;">
-            <button onclick="location.href = '/api/get_games/'">Play Game</button>
+            <button class="btn btn-primary" onclick="location.href = '/api/get_games/'">Play Game</button>
         </div>
 
     </div>
