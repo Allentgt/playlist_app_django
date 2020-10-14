@@ -37,7 +37,6 @@ def put_playlist(request):
 
         if fs.is_valid() and user_details.is_valid():
             playlist_data = fs.cleaned_data
-            print(playlist_data)
             for i in playlist_data:
                 i['link'] = i['link'].replace('watch?v=', 'embed/')
             playlist = {i: j for i, j in zip(range(len(playlist_data)), playlist_data)}
