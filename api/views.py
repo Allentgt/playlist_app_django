@@ -37,6 +37,9 @@ def put_playlist(request):
 
         if fs.is_valid() and user_details.is_valid():
             playlist_data = fs.cleaned_data
+            print(playlist_data)
+            for i in playlist_data:
+                i['link'] = i['link'].replace('watch?v=', 'embed/')
             playlist = {i: j for i, j in zip(range(len(playlist_data)), playlist_data)}
             user_details = user_details.cleaned_data
             data = {'name': user_details['name'], 'game': Game.objects.get(name=user_details['game']),
@@ -72,10 +75,14 @@ def randomise(request, game):
     playlist = Playlist.objects.filter(game=game)
     sample_size = Game.objects.get(id=game).sample_size
     for obj in playlist:
-        all_playlist[obj.id] = json.loads(obj.playlist)
+        all_playlist[obj.name] = json.loads(obj.playlist)
     for idx, i in all_playlist.items():
         sampling = random.choices(list(i.values()), k=sample_size)
         sampling = [{idx: i} for i in sampling]
         all_random_sample.extend(sampling)
     random.shuffle(all_random_sample)
+    for i in all_random_sample:
+        for j, k in i.items():
+            k['name'] = j
+    all_random_sample = [list(i.values())[0] for i in all_random_sample]
     return render(request, 'songs.html', {'context': all_random_sample})
