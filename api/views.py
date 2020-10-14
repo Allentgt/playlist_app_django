@@ -48,7 +48,7 @@ def put_playlist(request):
             return HttpResponseRedirect('/api/thanks/')
     else:
         user_details = PlaylistForm()
-        fs = PlaylistSubmissionFormSet(initial=[dict()] * 10)
+        fs = PlaylistSubmissionFormSet(initial=[dict()] * 1)
     context = {
         'fs': fs,
         'playlist': user_details
