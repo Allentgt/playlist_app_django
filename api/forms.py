@@ -12,6 +12,7 @@ class PlaylistForm(forms.Form):
 class GameForm(forms.Form):
     name = forms.CharField(max_length=100)
     sample_size = forms.IntegerField()
+    pool_size = forms.IntegerField()
     contestants = forms.IntegerField()
 
 

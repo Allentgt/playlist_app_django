@@ -10,6 +10,7 @@ class Game(models.Model):
     """
     name = models.CharField(max_length=300, null=False)
     sample_size = models.IntegerField(null=False)
+    pool_size = models.IntegerField(null=False)
     contestants = models.IntegerField(null=False)
 
     def __str__(self):

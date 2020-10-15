@@ -30,31 +30,47 @@ def create_game(request):
     return render(request, 'create_game.html', {'form': form})
 
 
+def put_game_details(request):
+    if request.method == 'POST':
+        user_details = PlaylistForm(request.POST)
+
+        if user_details.is_valid():
+            user_details = user_details.cleaned_data
+            pool_size = user_details['game'].pool_size
+            request.session['name'] = user_details['name']
+            request.session['game'] = user_details['game'].name
+            request.session['pool_size'] = pool_size
+            return HttpResponseRedirect('/api/put_playlist/')
+    else:
+        user_details = PlaylistForm()
+    context = {
+        'playlist': user_details
+    }
+    return render(request, 'playlist_step1.html', context)
+
+
 def put_playlist(request):
     if request.method == 'POST':
         fs = PlaylistSubmissionFormSet(request.POST)
-        user_details = PlaylistForm(request.POST)
-
-        if fs.is_valid() and user_details.is_valid():
+        if fs.is_valid():
             playlist_data = fs.cleaned_data
             for i in playlist_data:
                 i['link'] = i['link'].replace('watch?v=', 'embed/')
             playlist = {i: j for i, j in zip(range(len(playlist_data)), playlist_data)}
-            user_details = user_details.cleaned_data
-            data = {'name': user_details['name'], 'game': Game.objects.get(name=user_details['game']),
-                    'playlist': json.dumps(playlist)}
+            data = {
+                'name': request.session.get('name'),
+                'game': Game.objects.get(name=request.session.get('game')),
+                'playlist': json.dumps(playlist)
+            }
             p = Playlist(**data)
             p.save()
             return HttpResponseRedirect('/api/thanks/')
     else:
-        user_details = PlaylistForm()
-        fs = PlaylistSubmissionFormSet(initial=[dict()] * 1)
+        fs = PlaylistSubmissionFormSet(initial=[dict()] * request.session.get('pool_size'))
     context = {
-        'fs': fs,
-        'playlist': user_details
+        'fs': fs
     }
-
-    return render(request, 'playlist.html', context)
+    return render(request, 'playlist_step2.html', context)
 
 
 def get_games(request):
