@@ -5,23 +5,42 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <style type="text/css">
-          @font-face {
-            font-family: 'myfont';
-            src: url({% static 'fonts/SweetHipster-PzlE.ttf' %});
-    }
-  </style>
+<style>
+.btn {
+  padding: 5px 15px;
+  font-family: 'Ink+Free';
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #050505;
+  background-color: #effaef;
+  border: none;
+  border-radius: 2px;
+  box-shadow: 0 4px #999;
+}
+
+.btn:hover {background-color: #dfeee0
+}
+
+.btn:active {
+  background-color: #dbefdc;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+</style>
 <head>
     <meta charset="UTF-8">
+    <link href="//db.onlinewebfonts.com/c/ab83b275830b2d585ea027c47e3b237a?family=GraphiqueW01-Regular" rel="stylesheet" type="text/css"/>
+    <link href="//db.onlinewebfonts.com/c/0801c08e5412f54e4b4e9ad146d83a12?family=Ink+Free" rel="stylesheet" type="text/css"/>
     <title>The Playlist Game</title>
 </head>
   <div class="text-center">
 
-  <header style="font-family: myfont; font-size: xxx-large">The Playlist Game</header>
+  <header style="font-family: 'GraphiqueW01-Regular'; font-size: 84px;; color: white; margin-top: 20px">The Playlist Game</header>
   </div>
-<body style="background-color:lightgrey">
-<div style="margin-top: 20%; margin-left: 20%; width: 60%;" class="text-center">
-    <div style="margin-left: 10px; padding-top: 20px; padding-bottom: 20px;" class="text-center">
+<body style="background: url({% static 'slick/ep_naturalblack.png' %}) repeat;">
+    <div style="margin-top: 15%; margin-left: 20%; width: 60%;" class="text-center">
         <div>
             <button class="btn btn-primary" onclick="location.href = '/api/create_game/'">Create Game</button>
         </div>
@@ -31,8 +50,6 @@
         <div style="margin-top: 20px;">
             <button class="btn btn-primary" onclick="location.href = '/api/get_games/'">Play Game</button>
         </div>
-
     </div>
-</div>
 </body>
 </html>
