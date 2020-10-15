@@ -7,8 +7,6 @@
     <body>
         <form method="POST">
             {% csrf_token %}
-            {{ playlist }}
-            <hr>
             {{ fs.management_form }}
             {% for form in fs %}
                 {% for field in form %}
