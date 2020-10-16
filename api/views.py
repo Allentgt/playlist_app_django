@@ -101,4 +101,4 @@ def randomise(request, game):
         for j, k in i.items():
             k['name'] = j
     all_random_sample = [list(i.values())[0] for i in all_random_sample]
-    return render(request, 'songs.html', {'context': all_random_sample})
+    return render(request, 'carousel.html', {'context': all_random_sample})

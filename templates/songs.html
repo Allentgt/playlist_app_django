@@ -34,6 +34,15 @@
       color: black;
     }
 
+    .slick-prev {
+    margin-left: -60px;
+    background-image: {% static 'slick/left.png' %};
+    }
+
+  .slick-next {
+    margin-right: -60px;
+    background-image: {% static 'slick/right.png' %};
+    }
 
     .slick-slide {
       transition: all ease-in-out .3s;
@@ -50,13 +59,6 @@
   </style>
 </head>
 <body>
-   <script>
-          function createDiv() {
-            var div = document.createElement('div');
-            div.innerHTML = document.getElementById('getText').innerHTML;
-            document.body.appendChild(div);
-          }
-  </script>
 
   <section class="regular slider">
     {% for item in context %}
