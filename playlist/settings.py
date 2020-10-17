@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'api',
-    'storages',
 ]
 
 MIDDLEWARE = [
@@ -119,7 +118,7 @@ USE_TZ = True
 
 
 USE_S3 = env('USE_S3')
-
+"""
 if USE_S3:
 
     AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
@@ -133,7 +132,7 @@ if USE_S3:
     STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 else:
-    STATIC_URL = '/static/'
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+"""
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)
