@@ -24,7 +24,7 @@ def create_game(request):
                     'contestants': form.cleaned_data['contestants']}
             game = Game(**data)
             game.save()
-            return HttpResponseRedirect('/api/put_playlist/')
+            return HttpResponseRedirect('/api/put_game_details/')
     else:
         form = GameForm()
 
@@ -67,10 +67,14 @@ def put_playlist(request):
             p.save()
             return HttpResponseRedirect('/api/thanks/')
     else:
+        print(request.session.get('name'))
+        print(request.session.get('game'))
+        print(request.session.get('pool_size'))
         fs = PlaylistSubmissionFormSet(initial=[dict()] * request.session.get('pool_size'))
     context = {
         'fs': fs
     }
+    request.session.clear()
     return render(request, 'playlist_step2.html', context)
 
 
@@ -101,4 +105,4 @@ def randomise(request, game):
         for j, k in i.items():
             k['name'] = j
     all_random_sample = [list(i.values())[0] for i in all_random_sample]
-    return render(request, 'carousel.html', {'context': all_random_sample})
+    return render(request, 'songs.html', {'context': all_random_sample})
