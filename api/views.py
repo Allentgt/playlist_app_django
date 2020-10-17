@@ -67,9 +67,6 @@ def put_playlist(request):
             p.save()
             return HttpResponseRedirect('/api/thanks/')
     else:
-        print(request.session.get('name'))
-        print(request.session.get('game'))
-        print(request.session.get('pool_size'))
         fs = PlaylistSubmissionFormSet(initial=[dict()] * request.session.get('pool_size'))
     context = {
         'fs': fs
