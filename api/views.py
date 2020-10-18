@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
+from playlist.session import GAME_DETAIL
 from .forms import PlaylistForm, GameForm, GameListForm, PlaylistSubmissionFormSet
 from .models import Playlist, Game
 
@@ -43,9 +44,9 @@ def put_game_details(request):
         if user_details.is_valid():
             user_details = user_details.cleaned_data
             pool_size = user_details['game'].pool_size
-            request.session['name'] = user_details['name']
-            request.session['game'] = user_details['game'].name
-            request.session['pool_size'] = pool_size
+            GAME_DETAIL['name'] = user_details['name']
+            GAME_DETAIL['game'] = user_details['game'].name
+            GAME_DETAIL['pool_size'] = pool_size
             return HttpResponseRedirect('/api/put_playlist/')
     else:
         user_details = PlaylistForm()
@@ -64,15 +65,15 @@ def put_playlist(request):
                 i['link'] = i['link'].replace('watch?v=', 'embed/')
             playlist = {i: j for i, j in zip(range(len(playlist_data)), playlist_data)}
             data = {
-                'name': request.session.get('name'),
-                'game': Game.objects.get(name=request.session.get('game')),
+                'name': GAME_DETAIL['name'],
+                'game': Game.objects.get(name=GAME_DETAIL['game']),
                 'playlist': json.dumps(playlist)
             }
             p = Playlist(**data)
             p.save()
             return HttpResponseRedirect('/api/thanks/')
     else:
-        fs = PlaylistSubmissionFormSet(initial=[dict()] * request.session.get('pool_size'))
+        fs = PlaylistSubmissionFormSet(initial=[dict()] * GAME_DETAIL['pool_size'])
     context = {
         'fs': fs
     }
