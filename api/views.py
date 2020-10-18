@@ -95,6 +95,7 @@ def get_games(request):
 def randomise(request, game):
     all_playlist = {}
     all_random_sample = []
+    uniquePlayers = []
     playlist = Playlist.objects.filter(game=game)
     game_object = Game.objects.get(id=game)
     sample_size = game_object.sample_size
@@ -105,6 +106,7 @@ def randomise(request, game):
     game_object.save()
     for obj in playlist:
         all_playlist[obj.name] = json.loads(obj.playlist)
+        uniquePlayers.append(obj.name)
     for idx, i in all_playlist.items():
         sampling = random.choices(list(i.values()), k=sample_size)
         sampling = [{idx: i} for i in sampling]
@@ -114,7 +116,7 @@ def randomise(request, game):
         for j, k in i.items():
             k['name'] = j
     all_random_sample = [list(i.values())[0] for i in all_random_sample]
-    return render(request, 'songs.html', {'context': all_random_sample, 'scorecard': scorecard})
+    return render(request, 'songs.html', {'context': all_random_sample, 'uniquePlayers': uniquePlayers, 'scorecard': scorecard})
 
 
 def lcm(denominators):

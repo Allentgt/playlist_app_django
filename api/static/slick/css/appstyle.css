@@ -183,3 +183,24 @@ input:valid~label {
     margin-left: 10%; 
     margin-right: 10%;
   }
+
+  .app-text {
+      color: #ffffff;
+  }
+  
+  .text-center {
+      text-align: center;
+  }
+
+  .app-votings-section {
+      margin-left: 10%;
+  }
+
+  .voting-line-break {
+      line-height: 4rem;
+  }
+
+  .participant-dropdown-list {
+      margin-left: 5rem;
+      width: 250px;
+  }
