@@ -31,17 +31,16 @@
 
     .slick-prev:before,
     .slick-next:before {
-      color: black;
+      color: white;
     }
 
     .slick-prev {
     margin-left: -60px;
-    background-image: {% static 'slick/left.png' %};
+
     }
 
   .slick-next {
     margin-right: -60px;
-    background-image: {% static 'slick/right.png' %};
     }
 
     .slick-slide {
@@ -58,7 +57,7 @@
     }
   </style>
 </head>
-<body>
+<body style="background: url({% static 'slick/ep_naturalblack.png' %}) repeat;">
 
   <section class="regular slider">
     {% for item in context %}
