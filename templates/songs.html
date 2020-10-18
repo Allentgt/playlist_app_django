@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <link rel="stylesheet" href="/static/slick/css/appstyle.css" type="text/css"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
 
 <head>
   <title>Playground</title>
@@ -8,6 +10,16 @@
   {% load static %}
   <link rel="stylesheet" type="text/css" href="{% static 'slick/slick.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'slick/slick-theme.css' %}">
+  <script src="https://code.jquery.com/jquery-2.2.0.min.js" type="text/javascript"></script>
+  <script src="{% static 'slick/slick.js' %}" type="text/javascript" charset="utf-8"></script>
+  <script type="text/javascript">
+    $(document).on('ready', function() {
+      $(".regular").slick({
+        dots: true,
+        infinite: false
+      });
+    });
+</script>
 </head>
 <body class="app-body">
 
@@ -22,16 +34,21 @@
     {% endfor %}
   </section>
 
-  <script src="https://code.jquery.com/jquery-2.2.0.min.js" type="text/javascript"></script>
-  <script src="{% static 'slick/slick.js' %}" type="text/javascript" charset="utf-8"></script>
-  <script type="text/javascript">
-    $(document).on('ready', function() {
-      $(".regular").slick({
-        dots: true,
-        infinite: false
-      });
-    });
-</script>
+  <h1 class="app-text text-center">Votings</h1>
+  <form action="/api/vote/" method="post"></form>
+  <div class="app-votings-section">
+    {% for item in uniquePlayers %}
+    <div class="app-text voting-line-break">
+    {{ item}} :
+    <select name="selections" class="participant-dropdown-list">
+      {% for player in uniquePlayers %}
+      <option>{{player}}</option>
+      {% endfor %}
+    </select>
+    </div>
+    {% endfor %}
+    <button class="btn btn-primary" type="submit" value="Submit" style="margin-top: 15px;">Vote</button>
+  </div>
 
 </body>
 </html>
