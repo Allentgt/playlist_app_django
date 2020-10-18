@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+<link rel="stylesheet" href="/static/slick/css/appstyle.css" type="text/css"/>
 <head>
     <meta charset="UTF-8">
     <title>Join Game</title>
 </head>
-<body>
+<body class="app-body">
 <form action="/api/get_games/" method="post">
     {% csrf_token %}
     {{ form }}

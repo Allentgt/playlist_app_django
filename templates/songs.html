@@ -1,63 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+  <link rel="stylesheet" href="/static/slick/css/appstyle.css" type="text/css"/>
+
 <head>
   <title>Playground</title>
   <meta charset="UTF-8">
   {% load static %}
   <link rel="stylesheet" type="text/css" href="{% static 'slick/slick.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'slick/slick-theme.css' %}">
-  <style type="text/css">
-    html, body {
-      margin: 0;
-      padding: 0;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    .slider {
-        width: 50%;
-        margin: 100px auto;
-    }
-
-    .slick-slide {
-      margin: 0px 20px;
-    }
-
-    .slick-slide img {
-      width: 100%;
-    }
-
-    .slick-prev:before,
-    .slick-next:before {
-      color: white;
-    }
-
-    .slick-prev {
-    margin-left: -60px;
-
-    }
-
-  .slick-next {
-    margin-right: -60px;
-    }
-
-    .slick-slide {
-      transition: all ease-in-out .3s;
-      opacity: .2;
-    }
-
-    .slick-active {
-      opacity: .5;
-    }
-
-    .slick-current {
-      opacity: 1;
-    }
-  </style>
 </head>
-<body style="background: url({% static 'slick/ep_naturalblack.png' %}) repeat;">
+<body class="app-body">
 
   <section class="regular slider">
     {% for item in context %}

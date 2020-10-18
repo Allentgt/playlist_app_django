@@ -3,56 +3,10 @@
   {% load static %}
   <link href="//db.onlinewebfonts.com/c/ab83b275830b2d585ea027c47e3b237a?family=GraphiqueW01-Regular" rel="stylesheet" type="text/css"/>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/slick/css/appstyle.css" type="text/css"/>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<style>
-.btn {
-  padding: 5px 15px;
-  font-weight: bold;
-  font-size: 14px;
-  text-align: center;
-  cursor: pointer;
-  outline: none;
-  color: #050505;
-  background-color: #effaef;
-  border: none;
-  border-radius: 2px;
-  box-shadow: 0 4px #999;
-}
-
-.btn:hover {background-color: #dfeee0
-}
-
-.btn:active {
-  background-color: #dbefdc;
-  box-shadow: 0 5px #666;
-  transform: translateY(4px);
-}
-
-.card-img-top {
-  height: 265px;
-  width: 398px;
-}
-
-.card-title {
-  color: wheat;
-}
-
-.card-columns {
-  column-gap: 4rem;
-  transition: .5sec;
-}
-
-.card-body :hover {
-  transform: scale(1.2);
-}
-
-.card {
-  background-color: transparent;
-}
-
-</style>
 <head>
     <meta charset="UTF-8">
     <link href="//db.onlinewebfonts.com/c/ab83b275830b2d585ea027c47e3b237a?family=GraphiqueW01-Regular" rel="stylesheet" type="text/css"/>
@@ -61,12 +15,12 @@
 </head>
   <div class="text-center">
 
-  <header style="font-family: 'GraphiqueW01-Regular'; font-size: 84px;; color: white; margin-top: 20px">The Playlist Game</header>
+  <header class=header-title>The Playlist Game</header>
   </div>
-<body style="background: url({% static 'slick/ep_naturalblack.png' %}) repeat;">
-    <div style="margin-top: 10%; margin-left: 10%; margin-right: 10%;" class="text-center">
+<body class="app-body">
+    <div class="text-center index-main-body">
         <div class="card-columns">
-            <div class="card" style="width:400px">
+            <div class="card">
               <a href="/api/create_game/">
                 <img class="card-img-top" src="{% static 'slick/creategame.png' %}">
                 <div class="card-body">
@@ -74,7 +28,7 @@
                 </div>
               </a>
             </div>
-            <div class="card" style="width:400px">
+            <div class="card">
               <a href="/api/put_game_details/">
                 <img class="card-img-top" src="{% static 'slick/submitlist.png' %}">
                 <div class="card-body">
@@ -82,7 +36,7 @@
                 </div>
               </a>
             </div>
-            <div class="card" style="width:400px">
+            <div class="card">
               <a href="/api/get_games/">
                 <img class="card-img-top" src="{% static 'slick/playame.png' %}">
                 <div class="card-body">
