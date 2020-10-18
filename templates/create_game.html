@@ -1,97 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
+<link rel="stylesheet" href="/static/slick/css/appstyle.css" type="text/css"/>
+
 <head>
     <meta charset="UTF-8">
     <link href="//db.onlinewebfonts.com/c/ab83b275830b2d585ea027c47e3b237a?family=GraphiqueW01-Regular" rel="stylesheet" type="text/css"/>
     <title>Create Game</title>
 </head>
-<header>Create Game</header>
-<body style="background: url({% static 'slick/ep_naturalblack.png' %}) repeat;">
-<style>
-
-header {
-    font-family: 'GraphiqueW01-Regular';
-    font-size: 64px;
-    color: white;
-    position: center;
-    padding-top: 1.5%;
-    padding-left: 15%;
-    margin-top: 20px;
-    margin-left: 100px;
-
-}
-form {
-    margin-top: 20px;
-    margin-left: 100px;
-    padding-left: 15%;
-}
-.input-field {
-  position: relative;
-  width: 350px;
-  height: 64px;
-  line-height: 44px;
-  margin-bottom: 25px;
-
-}
-label {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  color: #d3d3d3;
-  transition: 0.2s all;
-  cursor: text;
-}
-input {
-  width: 100%;
-  border: 0;
-  outline: 0;
-  padding: 0.5rem 0;
-  border-bottom: 2px solid #d3d3d3;
-  box-shadow: none;
-  color: white;
-  background: url({% static 'slick/ep_naturalblack.png' %});
-}
-input:invalid {
-  outline: 0;
-  // color: #ff2300;
-  //   border-color: #ff2300;
-}
-input:focus,
-input:valid {
-  border-color: white;
-}
-input:focus~label,
-input:valid~label {
-  font-size: 14px;
-  top: -24px;
-  color: white;
-}
-.btn {
-  padding: 5px 15px;
-  font-weight: bold;
-  font-size: 14px;
-  text-align: center;
-  cursor: pointer;
-  outline: none;
-  color: #050505;
-  background-color: #effaef;
-  border: none;
-  border-radius: 2px;
-  box-shadow: 0 4px #999;
-}
-
-.btn:hover {background-color: #dfeee0
-}
-
-.btn:active {
-  background-color: #dbefdc;
-  box-shadow: 0 5px #666;
-  transform: translateY(4px);
-}
-</style>
-<form action="/api/create_game/" method="post" style="">
+<header class="header-title">Create Game</header>
+<body class="app-body">
+<form action="/api/create_game/" method="post">
     {% csrf_token %}
       <div class="input-field">
         <input type="text" id="name" name="name" required />
