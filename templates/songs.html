@@ -63,10 +63,10 @@
   <section class="regular slider">
     {% for item in context %}
         <div>
-          <iframe width="650" height="360" src={{ item.link }}></iframe>
+          <iframe style="width: 650px; height: 360px" src={{ item.link }}></iframe>
         </div>
         <div>
-            <img width="650" height="360" src="http://placehold.it/350x300?text={{ item.name }}">
+            <img width="650" height="360" src="http://placehold.it/650x360?text={{ item.name }}">
         </div>
     {% endfor %}
   </section>

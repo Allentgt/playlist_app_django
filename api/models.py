@@ -1,5 +1,5 @@
 from django.db import models
-
+import simplejson as json
 
 # Create your models here.
 
@@ -12,6 +12,7 @@ class Game(models.Model):
     sample_size = models.IntegerField(null=False)
     pool_size = models.IntegerField(null=False)
     contestants = models.IntegerField(null=False)
+    score = models.TextField(default='{}')
 
     def __str__(self):
         return self.name

@@ -1,9 +1,14 @@
-import simplejson as json
 import random
-from django.http import HttpResponseRedirect
+from functools import reduce
+from math import gcd
+
+import simplejson as json
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
-from .models import Playlist, Game
+from django.views.decorators.csrf import csrf_exempt
+
 from .forms import PlaylistForm, GameForm, GameListForm, PlaylistSubmissionFormSet
+from .models import Playlist, Game
 
 
 def index(request):
@@ -90,7 +95,13 @@ def randomise(request, game):
     all_playlist = {}
     all_random_sample = []
     playlist = Playlist.objects.filter(game=game)
-    sample_size = Game.objects.get(id=game).sample_size
+    game_object = Game.objects.get(id=game)
+    sample_size = game_object.sample_size
+    scorecard = dict()
+    for player in playlist:
+        scorecard[player.name] = 0
+    game_object.score = json.dumps(scorecard)
+    game_object.save()
     for obj in playlist:
         all_playlist[obj.name] = json.loads(obj.playlist)
     for idx, i in all_playlist.items():
@@ -102,4 +113,29 @@ def randomise(request, game):
         for j, k in i.items():
             k['name'] = j
     all_random_sample = [list(i.values())[0] for i in all_random_sample]
-    return render(request, 'songs.html', {'context': all_random_sample})
+    return render(request, 'songs.html', {'context': all_random_sample, 'scorecard': scorecard})
+
+
+def lcm(denominators):
+    return reduce(lambda a, b: a * b // gcd(a, b), denominators)
+
+
+@csrf_exempt
+def vote(request):
+    game = json.loads(request.POST.get('game'))
+    game_obj = Game.objects.get(id=game)
+    scorecard = json.loads(game_obj.score)
+    votes = json.loads(request.POST.get('votes'))
+    answer = request.POST.get('answer')
+    max_score = lcm([i+1 for i in range(len(scorecard))])
+    results = {player: 1 for player in scorecard if player in votes and votes[player] == answer}
+    correct_answers = len(results)
+    if correct_answers:
+        round_score = max_score / correct_answers
+        scorecard.update({player: scorecard[player] + round_score for player in results})
+    else:
+        round_score = max_score
+        scorecard.update({player: scorecard[player] + round_score for player in scorecard if player == answer})
+    game_obj.score = json.dumps(scorecard)
+    game_obj.save()
+    return JsonResponse(scorecard)
