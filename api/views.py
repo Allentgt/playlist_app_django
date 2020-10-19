@@ -142,3 +142,7 @@ def vote(request):
     game_obj.score = json.dumps(scorecard)
     game_obj.save()
     return JsonResponse(scorecard)
+
+
+def test(request):
+    return render(request, 'base.html')

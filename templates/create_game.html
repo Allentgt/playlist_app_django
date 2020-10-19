@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-{% load static %}
-    <link rel="icon" href="{% static 'slick/favicon.ico' %}">
-    <link rel="stylesheet" href="/static/slick/css/appstyle.css" type="text/css"/>
+{% extends 'base.html' %}
 
+{% block content %}
 <head>
     <meta charset="UTF-8">
-    <link href="//db.onlinewebfonts.com/c/ab83b275830b2d585ea027c47e3b237a?family=GraphiqueW01-Regular" rel="stylesheet" type="text/css"/>
     <title>Create Game</title>
 </head>
 <header class="header-title">Create Game</header>
@@ -33,4 +29,4 @@
     <button class="btn btn-primary" type="submit" value="Submit">Create</button>
 </form>
 </body>
-</html>
+{% endblock %}
