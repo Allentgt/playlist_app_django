@@ -6,7 +6,8 @@ from .models import Game
 
 class PlaylistForm(forms.Form):
     name = forms.CharField(max_length=100)
-    game = forms.ModelChoiceField(queryset=Game.objects.all().order_by('id'))
+    game = forms.ModelChoiceField(queryset=Game.objects.all().order_by('id'),
+                                  widget=forms.Select(attrs={'class': 'choices'}))
 
 
 class GameForm(forms.Form):
@@ -17,7 +18,8 @@ class GameForm(forms.Form):
 
 
 class GameListForm(forms.Form):
-    game_list = forms.ModelChoiceField(queryset=Game.objects.all().order_by('id'))
+    game_list = forms.ModelChoiceField(queryset=Game.objects.all().order_by('id'),
+                                       widget=forms.Select(attrs={'class': 'choices-play'}))
 
 
 class PlaylistSubmissionForm(forms.Form):
