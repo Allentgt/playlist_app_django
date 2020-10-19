@@ -2,16 +2,23 @@
 <html lang="en">
 {% load static %}
 <link rel="icon" href="{% static 'slick/favicon.ico' %}">
-<link rel="stylesheet" href="/static/slick/css/appstyle.css" type="text/css"/>
+<link rel="stylesheet" href="{% static 'slick/css/appstyle.css' %}" type="text/css"/>
 <head>
     <meta charset="UTF-8">
+    <link href="//db.onlinewebfonts.com/c/ab83b275830b2d585ea027c47e3b237a?family=GraphiqueW01-Regular" rel="stylesheet" type="text/css"/>
     <title>Join Game</title>
 </head>
 <body class="app-body">
+<header class="header-title">Enter Game</header>
+<br><br><br>
 <form action="/api/get_games/" method="post">
     {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Play!">
+    <div class="input-field">
+        Game List :
+       <section class="choices-play">{{ form.game_list }}</section>
+    </div>
+    <br>
+    <button class="btn btn-primary" type="submit">Play!</button>
 </form>
 </body>
 </html>

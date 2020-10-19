@@ -2,23 +2,27 @@
 <html lang="en">
 {% load static %}
   <link rel="icon" href="{% static 'slick/favicon.ico' %}">
-<link rel="stylesheet" href="/static/slick/css/appstyle.css" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'slick/css/appstyle.css' %}" type="text/css"/>
+    <link href="//db.onlinewebfonts.com/c/ab83b275830b2d585ea027c47e3b237a?family=GraphiqueW01-Regular" rel="stylesheet" type="text/css"/>
 <head>
     <meta charset="UTF-8">
     <title>Enter Your Submission</title>
 </head>
+<header class="header-title">Song Details</header>
     <body class="app-body">
+    <br><br>
         <form method="POST">
             {% csrf_token %}
             {{ fs.management_form }}
             {% for form in fs %}
                 {% for field in form %}
-                    {{ field.label }}<div>{{ field }}</div>
+                    <div class="input-field">
+                        {{ field }}
+                    <label>{{ field.label }}</label>
+                    </div>
                 {% endfor %}
-                <hr>
             {% endfor %}
-            <button type="submit">Submit</button>
+            <button class="btn btn-primary" type="submit">Submit</button>
         </form>
-        <hr>
     </body>
 </html>

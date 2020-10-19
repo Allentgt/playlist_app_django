@@ -1,9 +1,16 @@
+@font-face {
+  font-family: myFirstFont;
+  src: url(//db.onlinewebfonts.com/c/ab83b275830b2d585ea027c47e3b237a?family=GraphiqueW01-Regular);
+  font-weight: bold;
+}
+
 .app-body {
     background: url(/static/slick/ep_naturalblack.png) repeat;
+    margin-top: 20px;
 }
 
 header {
-    font-family: 'GraphiqueW01-Regular';
+    font-family: 'myFirstFont';
     font-size: 64px;
     color: white;
     position: center;
@@ -21,6 +28,8 @@ form {
   height: 64px;
   line-height: 44px;
   margin-bottom: 25px;
+  margin-left: -100px;
+  color: white;
 
 }
 label {
@@ -175,9 +184,12 @@ input:valid~label {
   }
 
   .header-title {
-    font-family: 'GraphiqueW01-Regular'; font-size: 84px;; color: white; margin-top: 20px
+      font-family: 'GraphiqueW01-Regular';
+      font-size: 84px;
+      color: white;
+      margin-top: 10px;
+      margin-left: 200px;
   }
-
   .index-main-body {
     margin-top: 10%; 
     margin-left: 10%; 
@@ -204,3 +216,38 @@ input:valid~label {
       margin-left: 5rem;
       width: 250px;
   }
+
+  .input-label {
+  position: relative;
+  width: 350px;
+  height: 64px;
+  line-height: 44px;
+  margin-bottom: 25px;
+
+}
+
+    .choices {
+        margin-top: -47px;
+        margin-left: 68px;
+        width: 214px;
+    }
+
+    .choices-play {
+        margin-top: -47px;
+        margin-left: 68px;
+        width: 175px;
+    }
+
+.thanks {
+    font-family: 'GraphiqueW01-Regular';
+    position: relative;
+    text-align: center;
+    color: white;
+    font-size: xxx-large;
+    margin-top: 150px;
+    }
+.home-btn {
+    position: relative;
+    text-align: center;
+    margin-top: 50px;
+}
