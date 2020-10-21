@@ -144,7 +144,7 @@ input:valid~label {
 
   .slider {
       width: 50%;
-      margin: 100px auto;
+      margin: 100px 10rem;
   }
 
   .slick-slide {
