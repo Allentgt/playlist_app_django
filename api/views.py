@@ -71,6 +71,11 @@ def put_playlist(request):
             }
             p = Playlist(**data)
             p.save()
+            game_object = Game.objects.get(name=GAME_DETAIL['game'])
+            playlist_object = Playlist.objects.filter(game=game_object)
+            if len(playlist_object) == game_object.contestants:
+                game_object.ready_to_play = 1
+                game_object.save()
             return HttpResponseRedirect('/api/thanks/')
     else:
         fs = PlaylistSubmissionFormSet(initial=[dict()] * GAME_DETAIL['pool_size'])

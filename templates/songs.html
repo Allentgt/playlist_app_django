@@ -8,7 +8,7 @@
   <script type="text/javascript">
     $(document).on('ready', function() {
       $(".regular").slick({
-          dots: true,
+          dots: false,
           infinite: false
       });
     });
@@ -22,7 +22,7 @@
           <iframe style="width: 650px; height: 360px" src={{ item.link }}></iframe>
         </div>
         <div>
-            <img width="650" height="360"  data-caption="Caption 1" src="http://placehold.it/650x360?text={{ item.name }}">
+            <img width="650" height="360" src="http://placehold.it/650x360/000000/FFFFFF/?text={{ item.name }}">
         </div>
     {% endfor %}
   </section>

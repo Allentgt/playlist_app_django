@@ -12,6 +12,7 @@ class Game(models.Model):
     sample_size = models.IntegerField(null=False)
     pool_size = models.IntegerField(null=False)
     contestants = models.IntegerField(null=False)
+    ready_to_play = models.BooleanField(default=False)
     score = models.TextField(default='{}')
 
     def __str__(self):
