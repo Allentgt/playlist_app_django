@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <head>
   <title>Playground</title>
@@ -12,35 +11,101 @@
           infinite: false
       });
     });
+
+    var votes = function() {
+      var votesInput = {};
+      var answer;
+      var votes = document.getElementsByClassName("participant-dropdown-list");
+      for(var i=0;i<votes.length;i++) {
+        votesInput[votes[i][i].innerHTML] = votes[i].value;
+      }
+
+      var trackElem = document.getElementsByClassName("slick-slide slick-current slick-active");
+      if(trackElem && trackElem[0] && trackElem[0].innerHTML )
+      {
+        answer =trackElem[0].innerHTML.split("value=")[1].split('"')[1];
+      }
+
+      var gameId = parseInt(document.URL.split("randomise/")[1].split("/")[0]);
+
+      var url = document.URL.split("randomise");
+      $.post(url[0] + "vote/",{
+        "game" : gameId,
+        "votes" : JSON.stringify(votesInput),
+        "answer" : answer
+      },function(response) {
+        var playerDom =document.getElementsByClassName("player-name");
+        var scoreDom = document.getElementsByClassName("player-score");
+
+        for(var i=0;i<playerDom.length;i++) {
+          scoreDom[i].innerHTML = response[playerDom[i].innerHTML];
+        }
+      });
+    }
 </script>
 </head>
+<header class="header-title text-center" style="margin-left: 0px;">Play Ground</header>
+<br>
 <body class="app-body">
 
-  <section class="regular slider">
-    {% for item in context %}
-        <div>
-          <iframe style="width: 650px; height: 360px" src={{ item.link }}></iframe>
-        </div>
-        <div>
-            <img width="650" height="360"  data-caption="Caption 1" src="http://placehold.it/650x360?text={{ item.name }}">
-        </div>
-    {% endfor %}
-  </section>
+  <div style="display: flex; margin-top: 4rem;">
+    <div style="width: 40%;">
+      <section class="regular slider">
+        {% for item in context %}
+            <div>
+              <iframe value = {{ item.name }} style="width: 650px; height: 360px" src={{ item.link }}></iframe>
+            </div>
+            <div>
+                <img width="650" height="360"  value = {{ item.name }} data-caption="Caption 1" src="http://placehold.it/650x360?text={{ item.name }}">
+            </div>
+        {% endfor %}
+      </section>
 
-  <h1 class="app-text text-center">Votings</h1>
-  <form action="/api/vote/" method="post"></form>
-  <div class="app-votings-section">
-    {% for item in uniquePlayers %}
-    <div class="app-text voting-line-break">
-    {{ item}} :
-    <select name="selections" class="participant-dropdown-list">
-      {% for player in uniquePlayers %}
-      <option>{{player}}</option>
-      {% endfor %}
-    </select>
     </div>
-    {% endfor %}
-    <button class="btn btn-primary" type="submit" value="Submit" style="margin-top: 15px;">Vote</button>
+    <div style="width: 30%;">
+      <h1 class="app-text text-center">Voting</h1>
+      <div class="app-votings-section">
+        <table class="app-text voting-line-break">
+          {% for item in uniquePlayers %}
+          <tr>
+            <td>
+              {{ item}} :
+            </td>
+            <td>
+              <select name="selections" class="participant-dropdown-list">
+                {% for player in uniquePlayers %}
+                  <option>{{player}}</option>
+                {% endfor %}
+              </select>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+        
+    <button class="btn btn-primary" onclick="votes()" style="margin-top: 15px;">Vote</button>
+  </div>
+
+    </div>
+    <div style="width: 30%;">
+      <h1 class="app-text text-center">Scores</h1>
+      <div id="scoreboard" class="app-text">
+      <table class="voting-line-break">
+        <tr>
+          <th>Player's Name</th>
+          <th style="padding-left: 4rem;">Scores</th>
+        </tr>
+      
+        {% for key, value in scorecard.items %}
+        <tr>
+          <td class="player-name">{{ key }}</td>
+          <td class="player-score" style="padding-left: 4rem;">{{ value }}</td>
+        </tr>
+        {% endfor %}
+      
+    </table>
+  </div>
+
+    </div>
   </div>
 
 </body>
