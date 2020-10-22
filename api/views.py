@@ -43,10 +43,21 @@ def put_game_details(request):
 
         if user_details.is_valid():
             user_details = user_details.cleaned_data
+            error = """Sorry, I guess you have a very common name ;)"""
+            username_list = [player_list.name for player_list in Playlist.objects.filter(game=user_details['game'])]
+            if user_details['name'] in username_list:
+                return render(request, 'duplicate.html', {'error': error})
             pool_size = user_details['game'].pool_size
             GAME_DETAIL['name'] = user_details['name']
             GAME_DETAIL['game'] = user_details['game'].name
             GAME_DETAIL['pool_size'] = pool_size
+            game_object = Game.objects.get(name=GAME_DETAIL['game'])
+            playlist_object = Playlist.objects.filter(game=game_object)
+            message = f'''Sorry {user_details["name"]}, You didn\'t make the cut :(\n
+            May be try joining another game 
+            or make better friends! '''
+            if len(playlist_object) == game_object.contestants:
+                return render(request, 'apology.html', {'message': message})
             return HttpResponseRedirect('/api/put_playlist/')
     else:
         user_details = PlaylistForm()

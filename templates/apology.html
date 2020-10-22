@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <title>Oops!</title>
+</head>
+<body class="app-body">
+    <div class="thanks">
+        {{ message }}
+    </div>
+    <div class="home-btn">
+        <button class="btn btn-primary" onclick="location.href = '/api/'">Home</button>
+    </div>
+    <div class="home-btn">
+        <button class="btn btn-primary" onclick="location.href = '/api/put_game_details/'">Join another Game</button>
+    </div>
+</body>
+{% endblock %}
