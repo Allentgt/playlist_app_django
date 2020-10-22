@@ -73,7 +73,8 @@ def put_playlist(request):
         if fs.is_valid():
             playlist_data = fs.cleaned_data
             for i in playlist_data:
-                i['link'] = i['link'].replace('watch?v=', 'embed/')
+                i['link'] = i['link'].split('watch?v=')[1]
+                print(i['link'])
             playlist = {i: j for i, j in zip(range(len(playlist_data)), playlist_data)}
             data = {
                 'name': GAME_DETAIL['name'],
