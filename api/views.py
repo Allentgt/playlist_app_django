@@ -46,7 +46,7 @@ def put_game_details(request):
             error = """Sorry, I guess you have a very common name ;)"""
             username_list = [player_list.name for player_list in Playlist.objects.filter(game=user_details['game'])]
             if user_details['name'] in username_list:
-                return render(request, 'duplicate.html', {'error': error})
+                return JsonResponse({'error': error})
             pool_size = user_details['game'].pool_size
             GAME_DETAIL['name'] = user_details['name']
             GAME_DETAIL['game'] = user_details['game'].name
@@ -160,3 +160,38 @@ def vote(request):
     game_obj.save()
     return JsonResponse(scorecard)
 
+
+@csrf_exempt
+def find_duplicate_name(request):
+    game = json.loads(request.POST.get('game'))
+    player_name = request.POST.get('player_name')
+    game_obj = Game.objects.get(id=game)
+    error = """Sorry, I guess you have a very common name ;)"""
+    username_list = [player_list.name for player_list in Playlist.objects.filter(game=game_obj)]
+    if player_name in username_list:
+        return JsonResponse({'message': error})
+    else:
+        return JsonResponse({'message': 'SUCCESS'})
+
+
+@csrf_exempt
+def game_info(request):
+    game = json.loads(request.POST.get('game'))
+    game_obj = Game.objects.get(id=game)
+    playlist_obj = Playlist.objects.filter(game=game_obj)
+    response = {
+        'contestants': [player.name for player in playlist_obj],
+        'available_slots': game_obj.contestants - len(playlist_obj)
+    }
+    return JsonResponse(response)
+
+
+@csrf_exempt
+def find_duplicate_game(request):
+    name = request.POST.get('name')
+    game_list = [game.name for game in Game.objects.all()]
+    error = """Sorry, A game with the same name already exists ;)"""
+    if name in game_list:
+        return JsonResponse({'message': error})
+    else:
+        return JsonResponse({'message': 'SUCCESS'})
