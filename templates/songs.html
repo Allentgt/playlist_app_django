@@ -5,11 +5,10 @@
   <meta charset="UTF-8">
 
   <script type="text/javascript">
+
     $(document).on('ready', function() {
-      $(".regular").slick({
-          dots: false,
-          infinite: false
-      });
+      displaySongName();
+      document.getElementById("nextButton").disabled = true;
     });
 
     var votes = function() {
@@ -17,13 +16,13 @@
       var answer;
       var votes = document.getElementsByClassName("participant-dropdown-list");
       for(var i=0;i<votes.length;i++) {
-        votesInput[votes[i][i].innerHTML] = votes[i].value;
+        votesInput[votes[i][i+1].innerHTML] = votes[i].value;
       }
 
-      var trackElem = document.getElementsByClassName("slick-slide slick-current slick-active");
-      if(trackElem && trackElem[0] && trackElem[0].innerHTML )
+      var audioElem = document.getElementById("youtube-audio");
+      if(audioElem && audioElem.attributes )
       {
-        answer =trackElem[0].innerHTML.split("value=")[1].split('"')[1];
+        answer = audioElem.attributes[4].value;
       }
 
       var gameId = parseInt(document.URL.split("randomise/")[1].split("/")[0]);
@@ -34,14 +33,56 @@
         "votes" : JSON.stringify(votesInput),
         "answer" : answer
       },function(response) {
+        document.getElementById("correctAnswerSpan").innerHTML = "Correct Answer :  " + answer;
         var playerDom =document.getElementsByClassName("player-name");
         var scoreDom = document.getElementsByClassName("player-score");
 
         for(var i=0;i<playerDom.length;i++) {
           scoreDom[i].innerHTML = response[playerDom[i].innerHTML];
         }
+
+        document.getElementById("nextButton").disabled = false;
+        document.getElementById("voteButton").disabled = true;
+
       });
     }
+
+    var next = function() {
+
+
+      $('.participant-dropdown-list').prop('selectedIndex',0);
+
+      document.getElementById("correctAnswerSpan").innerHTML = "";
+      document.getElementById("youtube-audio").remove();
+      if(document.getElementById("youtube-audio")) {
+        onYouTubeIframeAPIReady();
+        displaySongName();
+        var link = document.getElementById("youtube-audio").attributes[0].value
+        document.getElementById("youtube-player").attributes[7].value = "https://www.youtube.com/embed/"+ link +"?autoplay=0&amp;loop=1&amp;enablejsapi=1&amp;widgetid=1"
+
+        document.getElementById("nextButton").disabled = true;
+        document.getElementById("voteButton").disabled = false;
+
+      } else {
+        var para = document.createElement("P");                
+        para.innerHTML = "Game Over !!";               
+        document.getElementById("audioContainer").appendChild(para);
+
+        document.getElementById("nextButton").style.display ="none";
+        document.getElementById("voteButton").style.display ="none";
+      }
+      
+    }
+
+    var displaySongName = function() {
+      document.getElementById("correctAnswerSpan").innerHTML = "";
+      var audioElem = document.getElementById("youtube-audio");
+      if(audioElem && audioElem.attributes )
+      {
+        document.getElementById("correctAnswerSpan").innerHTML = "Song Name : " + audioElem.attributes[5].value;
+      }
+    }
+    
 </script>
 </head>
 <header class="header-title text-center" style="margin-left: 0px;">Play Ground</header>
@@ -49,20 +90,26 @@
 <body class="app-body">
 
   <div style="display: flex; margin-top: 4rem;">
-    <div style="width: 50%;">
-      <section class="regular slider">
+    <div id="audioContainer" class="app-text" style="width: 33%; padding-left: 4%;">
         {% for item in context %}
-            <div>
-              <iframe value = {{ item.name }} style="width: 100%; height: 360px" src={{ item.link }}></iframe>
-            </div>
-            <div>
-                <img width="100%" height="360"  value = {{ item.name }} data-caption="Caption 1" src="http://placehold.it/650x360?text={{ item.name }}">
-            </div>
+          <div data-video={{ item.link }}
+              data-autoplay="0"
+              data-loop="1"
+              id="youtube-audio"
+              value = {{ item.name }}
+              name = {{ item.song_name }}>
+          </div>
+          
         {% endfor %}
-      </section>
+        <div style="margin-top:4rem" class="app-text" id="songName"></div>
+        <div style ="margin-top: 4rem;" class="app-text" id="correctAnswerSpan">
+        <div class="app-text">
+          Game Over !!!
+        </div>
+        </div>
 
     </div>
-    <div style="width: 25%;">
+    <div style="width: 33%;">
       <h1 class="app-text text-center">Voting</h1>
       <div class="app-votings-section">
         <table class="app-text voting-line-break">
@@ -77,6 +124,7 @@
             </td>
             <td>
               <select name="selections" class="participant-dropdown-list">
+                <option>-------------</option>
                 {% for player in uniquePlayers %}
                   <option>{{player}}</option>
                 {% endfor %}
@@ -86,11 +134,12 @@
           {% endfor %}
         </table>
         
-    <button class="btn btn-primary" onclick="votes()" style="margin-top: 15px;">Vote</button>
+    <button class="btn btn-primary" id="voteButton" onclick="votes()" style="margin-top: 15px;">Vote</button>
+    <button class="btn btn-primary" id="nextButton" onclick="next()" style="margin-top: 15px; margin-left: 4rem;">Next</button>
   </div>
 
     </div>
-    <div style="width: 25%;">
+    <div style="width: 33%;">
       <h1 class="app-text text-center">Scores</h1>
       <div id="scoreboard" class="app-text">
       <table style="margin-left: auto;margin-right: auto;" class="text-center voting-line-break">

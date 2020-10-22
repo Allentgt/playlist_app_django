@@ -142,47 +142,6 @@ input:valid~label {
     box-sizing: border-box;
   }
 
-  .slider {
-      width: 50%;
-      margin: 100px 10rem;
-  }
-
-  .slick-slide {
-    margin: 0px 20px;
-  }
-
-  .slick-slide img {
-    width: 100%;
-  }
-
-  .slick-prev:before,
-  .slick-next:before {
-    color: black;
-  }
-
-  .slick-prev {
-  margin-left: -60px;
-  background-image: "/static/slick/left.png";
-  }
-
- .slick-next {
-  margin-right: -60px;
-  background-image: "/static/slick/right.png";
-  }
-
-  .slick-slide {
-    transition: all ease-in-out .3s;
-    opacity: .2;
-  }
-
-  .slick-active {
-    opacity: .5;
-  }
-
-  .slick-current {
-    opacity: 1;
-  }
-
   .header-title {
       font-family: 'GraphiqueW01-Regular';
       font-size: 84px;
@@ -214,7 +173,6 @@ input:valid~label {
 
   .participant-dropdown-list {
       margin-left: 5rem;
-      width: 250px;
   }
 
   .input-label {
