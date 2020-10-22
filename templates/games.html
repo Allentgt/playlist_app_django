@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% load static %}
 <head>
     <meta charset="UTF-8">
     <title>Join Game</title>
-	<button class="btn btn-primary" onclick="location.href = '/api/'" >Home</button>
+	<button class="btn btn-primary" onclick="location.href = '/api/'"><img src="{% static 'slick/favicon.ico' %}" style="height: 20px;
+    width: 25px;">  Home</button>
 </head>
 <body class="app-body">
 <header class="header-title">Enter Game</header>
