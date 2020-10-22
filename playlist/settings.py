@@ -118,7 +118,7 @@ USE_TZ = True
 
 
 USE_S3 = env('USE_S3')
-"""
+
 if USE_S3:
 
     AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
@@ -135,7 +135,7 @@ else:
     STATIC_URL = '/static/'
     STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
-"""
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+# STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
