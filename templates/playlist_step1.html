@@ -9,20 +9,46 @@
 	<button class="btn btn-primary" onclick="location.href = '/api/'"><img src="{% static 'slick/favicon.ico' %}" style="height: 20px;
     width: 25px;">  Home</button>
 </head>
+<script>
+    
+
+    var validateUserName = function() {
+
+        var url = document.URL.split("put_game_details");
+
+        $.post(url[0] + "find_duplicate_name/",{
+            "game": document.getElementById("gameValue").children[0].value,
+            "player_name" : document.getElementById("name").value
+      },function(response) {
+          if(response.message.toUpperCase() !== "SUCCESS") {
+            document.getElementById("errorMsg").innerHTML = response.message;
+            document.getElementById("submitButton").style.display = "none";
+
+          } else {
+              document.getElementById("submitButton").style.display = "block";
+                document.getElementById("errorMsg").innerHTML = "";
+
+          }
+      });
+    }
+</script>
 <header class="header-title">Game Details</header>
     <body class="app-body">
         <form method="POST">
             {% csrf_token %}
             <br>
             <div class="input-field">
-                <input type="text" id="name" name="name" required />
+                Game Name :
+               <section id="gameValue" class="choices">{{ playlist.game }}</section>
+            </div>
+            <br>
+            <div class="input-field">
+                <input onfocusout = "validateUserName()" type="text" id="name" name="name" required />
                 <label for="name">Player Name:</label>
             </div>
-            <div class="input-field">
-                Game Name :
-               <section class="choices">{{ playlist.game }}</section>
-            </div>
-            <button class="btn btn-primary" type="submit">Next</button>
+            
+            <button style="display: none" id="submitButton" class="btn btn-primary" type="submit">Next</button>
+            <div class="app-text" id="errorMsg" style="font-family: 'GraphiqueW01-Regular';font-size: 3rem;"></div>
         </form>
     </body>
 {% endblock %}
