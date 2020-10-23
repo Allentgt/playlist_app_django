@@ -3,6 +3,7 @@ from functools import reduce
 from math import gcd
 
 import simplejson as json
+from django.core.mail import EmailMessage
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
@@ -10,6 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from playlist.session import GAME_DETAIL
 from .forms import PlaylistForm, GameForm, GameListForm, PlaylistSubmissionFormSet
 from .models import Playlist, Game
+from playlist import settings
 
 
 def index(request):
@@ -195,3 +197,20 @@ def find_duplicate_game(request):
         return JsonResponse({'message': error})
     else:
         return JsonResponse({'message': 'SUCCESS'})
+
+
+@csrf_exempt
+def send_support_mail(request):
+    subject = request.POST.get('subject')
+    body = request.POST.get('body')
+    email = request.POST.get('email')
+    support = settings.EMAIL_HOST_USER
+    attachments = request.FILES.getlist('attachment')
+    try:
+        mail = EmailMessage(subject, body, email, [support])
+        for attachment in attachments:
+            mail.attach(attachment.name, attachment.read(), attachment.content_type)
+        mail.send()
+        return JsonResponse({'message': 'success'})
+    except Exception as e:
+        return JsonResponse({'message': str(e)})

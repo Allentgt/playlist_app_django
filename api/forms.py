@@ -6,7 +6,7 @@ from .models import Game
 
 class PlaylistForm(forms.Form):
     name = forms.CharField(max_length=100)
-    game = forms.ModelChoiceField(queryset=Game.objects.all().order_by('id'),
+    game = forms.ModelChoiceField(queryset=Game.objects.all().order_by('name'),
                                   widget=forms.Select(attrs={'class': 'choices'}))
 
 
