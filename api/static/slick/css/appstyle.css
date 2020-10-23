@@ -4,6 +4,12 @@
   font-weight: bold;
 }
 
+@font-face {
+  font-family: timebomb;
+  src: url(/static/slick/fonts/TickingTimebombBB.ttf);
+  font-weight: bold;
+}
+
 .app-body {
     background: url(/static/slick/ep_naturalblack.png) repeat;
     margin-top: 20px;
@@ -16,6 +22,8 @@ header {
     position: center;
     padding-top: 1.5%;
     margin-top: 20px;
+    align-content: center;
+    text-align: center;
 }
 form {
     margin-top: 20px;
@@ -111,12 +119,13 @@ input:valid~label {
   }
   
   .card-img-top {
-    height: 265px;
-    width: 398px;
+    height: 128px;
+    width: 128px;
   }
-  
+
   .card-title {
-    color: wheat;
+    color: white;
+    font-family: timebomb;
   }
   
   .card-columns {
@@ -131,6 +140,9 @@ input:valid~label {
   .card {
     background-color: transparent;
     width: 400px;
+  }
+    .card :hover {
+    transform: scale(1.2);
   }
 
   html, body {
@@ -147,7 +159,7 @@ input:valid~label {
       font-size: 84px;
       color: white;
       margin-top: 10px;
-      margin-left: 200px;
+      text-align: center;
   }
   .index-main-body {
     margin-top: 10%; 
