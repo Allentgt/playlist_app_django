@@ -57,7 +57,7 @@ input {
   border-bottom: 2px solid #d3d3d3;
   box-shadow: none;
   color: white;
-  background: url(static/slick/ep_naturalblack.png);
+  background: url(/static/slick/ep_naturalblack.png);
 }
 input:invalid {
   outline: 0;
