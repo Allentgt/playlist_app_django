@@ -6,8 +6,9 @@ function onYouTubeIframeAPIReady() {
     var a = document.createElement("div");
     a.setAttribute("id", "youtube-player"), e.appendChild(a);
     var o = function(e) {
-        var a = e ? "IDzX9gL.png" : "quyUPXN.png";
-        t.setAttribute("src", "https://i.imgur.com/" + a)
+        var a = e ? "pause-64.png" : "play-64.png";
+        t.setAttribute("src", "/static/slick/" + a);
+        t.style.marginLeft = "2rem";
     };
     e.onclick = function() {
         r.getPlayerState() === YT.PlayerState.PLAYING || r.getPlayerState() === YT.PlayerState.BUFFERING ? (r.pauseVideo(), o(!1)) : (r.playVideo(), o(!0))
