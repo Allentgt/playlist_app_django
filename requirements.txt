@@ -4,3 +4,4 @@ django-storages==1.9.1
 boto3
 gunicorn
 django-environ
+whitenoise==5.2.0
