@@ -17,6 +17,15 @@ from playlist import settings
 def index(request):
     return render(request, 'index.html')
 
+def terms_and_conditions(request):
+    return render(request, 'tnc.html')
+
+def about_us(request):
+    return render(request, 'aboutus.html')
+
+def feedback(request):
+    return render(request, 'feedback.html')
+
 
 def thanks(request):
     return render(request, 'thanks.html')

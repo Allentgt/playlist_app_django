@@ -15,4 +15,7 @@ urlpatterns = [
     path('find_duplicate_game/', views.find_duplicate_game, name='find_duplicate_game'),
     path('game_info/', views.game_info, name='game_info'),
     path('send_support_mail/', views.send_support_mail, name='send_support_mail'),
+    path('tnc/', views.terms_and_conditions, name='terms_and_conditions'),
+    path('about_us/', views.about_us, name='about_us'),
+    path('feedback/', views.feedback, name='feedback'),
 ]

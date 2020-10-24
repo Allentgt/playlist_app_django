@@ -25,6 +25,16 @@ header {
     align-content: center;
     text-align: center;
 }
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  color:white;
+  text-align: center;
+}
+
 form {
     margin-top: 20px;
     margin-left: 100px;

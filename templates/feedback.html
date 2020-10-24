@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+<head>
+  <title>Feedback</title>
+  <meta charset="UTF-8">
+
+  <script type="text/javascript">
+  
+
+    var sendEmail = function() {
+        var from = document.getElementById("fromEmail").value;
+        var sub = document.getElementById("subject").value;
+        var body = document.getElementById("body").value;
+        var file = document.getElementById("attachment").files[0];
+
+      
+        var url = document.URL.split("feedback");
+        $.post(url[0] + "send_support_mail/",{
+            "subject" : sub,
+            "body" : body,
+            "email" : from
+        },function(response) {
+
+        });
+    }
+    
+</script>
+</head>
+<header class="header-title text-center" style="margin-left: 0px;">Feedback</header>
+<br>
+<body class="app-body">
+    <div class="app-text" style="text-align: center;">
+        <label style="position: static;">Your Email:</label><br>
+        <input style= "width: 15%; text-align: center;" type="text" id="fromEmail" name="fromEmail"><br><br>
+
+        <label style="position: static;">Subject:</label><br>
+        <input style= "width: 20%; text-align: center;" type="text" id="subject" name="subject"><br><br>
+
+        <label style="position: static;">Attachments:</label><br>
+        <input type="file" style= "width: 20%; text-align: center;" id="attachment" name="filename"><br><br>
+    
+        <label style="position: static;">Your Suggestion:</label><br>
+        <textarea style= "width: 30%; background: transparent; color: white;" id="body" name="body" rows="8" cols="100">
+            
+        </textarea>
+
+        <br>
+        <br>
+        <button style= "width: 15%; text-align: center;" class="btn btn-primary" id="submitButton" onclick="sendEmail()" style="margin-top: 15px;">Send Feedback</button>
+    
+    </div>
+
+    
+    
+
+
+</body>
+{% endblock %}
