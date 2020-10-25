@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 
 {% block content %}
 
@@ -7,37 +7,60 @@
 <head>
     <meta charset="UTF-8">
     <title>The Playlist Game</title>
-</head>
-  <div class="text-center">
 
-  <header class=header-title>The Playlist Game</header>
-  </div>
+</head>
+
+<div style="margin-left:30%">
+    <nav>
+
+        <div>
+            <h1 class="header-title">
+                <img src="{% static 'slick/headphone.png' %}" style="height: 70px;
+    width: 70px;">The Playlist Game
+            </h1>
+        </div>
+        <ul class="nav-links">
+            <li>
+                <a href='#'>Game Info</a>
+            </li>
+            <li>
+                <a href="#">About Us</a>
+            </li>
+
+        </ul>
+
+
+    </nav>
+
+</div>
+
 <body class="app-body">
+    
     <div class="text-center index-main-body">
         <div class="card-columns">
             <div class="card">
-              <a href="/api/create_game/" style="color: none; text-decoration: none;">
-                <img class="card-img-top" src="{% static 'slick/create.png' %}">
-                <div class="card-body">
-                  <h4 class="card-title">Create Game</h4>
-                </div>
-              </a>
+                <a href="/api/create_game/" style="color: none; text-decoration: none;">
+                    <img class="card-img-top" src="{% static 'slick/create.png' %}">
+                    <div class="card-body">
+                        <h4 class="card-title">Create Game</h4>
+                    </div>
+                </a>
             </div>
             <div class="card">
-              <a href="/api/put_game_details/" style="color: none; text-decoration: none;">
-                <img class="card-img-top" src="{% static 'slick/submit.png' %}">
-                <div class="card-body">
-                  <h4 class="card-title">Submit Your Entries</h4>
-                </div>
-              </a>
+                <a href="/api/put_game_details/" style="color: none; text-decoration: none;">
+                    <img class="card-img-top" src="{% static 'slick/submit.png' %}">
+                    <div class="card-body">
+                        <h4 class="card-title">Submit Your Entries</h4>
+                    </div>
+                </a>
             </div>
             <div class="card">
-              <a href="/api/get_games/" style="color: none; text-decoration: none;">
-                <img class="card-img-top" src="{% static 'slick/play.png' %}">
-                <div class="card-body">
-                  <h4 class="card-title">Play Game</h4>
-                </div>
-              </a>
+                <a href="/api/get_games/" style="color: none; text-decoration: none;">
+                    <img class="card-img-top" src="{% static 'slick/play.png' %}">
+                    <div class="card-body">
+                        <h4 class="card-title">Play Game</h4>
+                    </div>
+                </a>
             </div>
         </div>
     </div>

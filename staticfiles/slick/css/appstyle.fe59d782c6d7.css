@@ -1,0 +1,265 @@
+@font-face {
+  font-family: myFirstFont;
+  src: url(//db.onlinewebfonts.com/c/ab83b275830b2d585ea027c47e3b237a?family=GraphiqueW01-Regular);
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: timebomb;
+  src: url("/static/slick/fonts/TickingTimebombBB.86203afc717c.ttf");
+  font-weight: bold;
+}
+
+.app-body {
+    background: url("/static/slick/ep_naturalblack.23e2b6cf7507.png") repeat;
+    margin-top: 20px;
+}
+
+header {
+    font-family: 'myFirstFont';
+    font-size: 64px;
+    color: white;
+    position: center;
+    margin-top: 20px;
+    align-content: center;
+    text-align: center;
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  color:white;
+  text-align: center;
+}
+
+form {
+    margin-top: 20px;
+    margin-left: 100px;
+    padding-left: 15%;
+}
+.input-field {
+  position: relative;
+  width: 350px;
+  height: 64px;
+  line-height: 44px;
+  margin-bottom: 25px;
+  margin-left: -100px;
+  color: white;
+
+}
+label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  color: #d3d3d3;
+  transition: 0.2s all;
+  cursor: text;
+}
+input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  padding: 0.5rem 0;
+  border-bottom: 2px solid #d3d3d3;
+  box-shadow: none;
+  color: white;
+  background: url("/static/slick/ep_naturalblack.23e2b6cf7507.png");
+}
+input:invalid {
+  outline: 0;
+}
+input:focus,
+input:valid {
+  border-color: white;
+}
+input:focus~label,
+input:valid~label {
+  font-size: 14px;
+  top: -24px;
+  color: white;
+}
+.btn {
+  padding: 5px 15px;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #050505;
+  background-color: #effaef;
+  border: none;
+  border-radius: 2px;
+  box-shadow: 0 4px #999;
+}
+
+.btn:hover {background-color: #dfeee0
+}
+
+.btn:active {
+  background-color: #dbefdc;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+.btn {
+    padding: 5px 15px;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: #050505;
+    background-color: #effaef;
+    border: none;
+    border-radius: 2px;
+    box-shadow: 0 4px #999;
+  }
+  
+  .btn:hover {background-color: #dfeee0
+  }
+  
+  .btn:active {
+    background-color: #dbefdc;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+  }
+  
+  .card-img-top {
+    height: 128px;
+    width: 128px;
+  }
+
+  .card-title {
+    color: white;
+    font-family: timebomb;
+  }
+  
+  .card-columns {
+    column-gap: 4rem;
+    transition: .5sec;
+  }
+  
+  .card-body :hover {
+    transform: scale(1.2);
+  }
+  
+  .card {
+    background-color: transparent;
+    width: 400px;
+  }
+    .card :hover {
+    transform: scale(1.2);
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  .header-title {
+      font-family: 'GraphiqueW01-Regular';
+      font-size: 84px;
+      color: white;
+      margin-top: 10px;
+      text-align: center;
+  }
+  .index-main-body {
+    margin-top: 10%; 
+    margin-left: 10%; 
+    margin-right: 10%;
+  }
+
+  .app-text {
+      color: #ffffff;
+  }
+  
+  .text-center {
+      text-align: center;
+  }
+
+  .app-votings-section {
+      margin-left: 10%;
+  }
+
+  .voting-line-break {
+      line-height: 4rem;
+  }
+
+  .participant-dropdown-list {
+      margin-left: 5rem;
+  }
+
+  .input-label {
+  position: relative;
+  width: 350px;
+  height: 64px;
+  line-height: 44px;
+  margin-bottom: 25px;
+
+}
+
+    .choices {
+        margin-top: -47px;
+        margin-left: 68px;
+        width: 214px;
+    }
+
+    .choices-play {
+        margin-top: -47px;
+        margin-left: 68px;
+        width: 175px;
+    }
+
+.thanks {
+    font-family: 'GraphiqueW01-Regular';
+    position: relative;
+    text-align: center;
+    color: white;
+    font-size: xxx-large;
+    margin-top: 100px;
+    white-space: pre-line;
+    }
+.home-btn {
+    position: relative;
+    text-align: center;
+    margin-top: 50px;
+
+}
+
+nav {
+    display: inline-block;
+    justify-content: space-around;
+    align-items: center;
+    min-height: 8vh;
+    font-family: 'GraphiqueW01-Regular';
+}
+.logo {
+    color: rgb(226,226,226);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: 'GraphiqueW01-Regular';
+    font-size: 20px;
+ 
+}
+.nav-links {
+    display: flex;
+    justify-content: space-around;
+    
+}
+.nav-links {
+    list-style: none;
+}
+.nav-links a {
+        color: rgb(226,226,226);
+        text-decoration: none;
+        letter-spacing: 4px;
+        font-size:25px;
+        
+    }

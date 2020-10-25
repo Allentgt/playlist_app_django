@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 
 {% block content %}
 {% load static %}
@@ -6,59 +6,76 @@
     <meta charset="UTF-8">
 
     <title>Create Game</title>
-	<button class="btn btn-primary" onclick="location.href = '/api/'"><img src="{% static 'slick/favicon.ico' %}" style="height: 20px;
-    width: 25px;">  Home</button>
+    
 </head>
 
+
 <script>
-  var validateGameName = function() {
-    
-    var url = document.URL.split("create_game");
+    var validateGameName = function () {
 
-        $.post(url[0] + "find_duplicate_game/",{
+        var url = document.URL.split("create_game");
+
+        $.post(url[0] + "find_duplicate_game/", {
             "name": document.getElementById("name").value
-      },function(response) {
-          if(response.message.toUpperCase() !== "SUCCESS") {
-            document.getElementById("errorMsg").innerHTML = response.message;
-            document.getElementById("submitButton").style.display = "none";
+        }, function (response) {
+            if (response.message.toUpperCase() !== "SUCCESS") {
+                document.getElementById("errorMsg").innerHTML = response.message;
+                document.getElementById("submitButton").style.display = "none";
 
-          } else {
-              document.getElementById("submitButton").style.display = "block";
+            } else {
+                document.getElementById("submitButton").style.display = "block";
                 document.getElementById("errorMsg").innerHTML = "";
 
-          }
-      });
-  }
+            }
+        });
+    }
 </script>
+
+<nav>
+    <div>
+        <h1 class="logo">
+            <img src="{% static 'slick/headphone.png' %}" style="height: 20px;
+    width: 20px;">The Playlist Game
+        </h1>
+    </div>
+    <div >
+        <ul class="nav-links">
+            <li>
+                <a href='/api/'>Home</a>
+            </li>
+
+        </ul>
+        </div>
+</nav>
 
 <header class="header-title">Create Game</header>
 <br>
 <body class="app-body">
-<form action="/api/create_game/" method="post">
-    {% csrf_token %}
-      <div class="input-field">
-        <input onfocusout = "validateGameName()" type="text" id="name" name="name" required />
-        <label for="name">Game Name:</label>
-		<div class="animation image" style="margin-left: 500px;"> 
-		<img src="{% static 'slick/oie_2212120tebkhWoO.gif' %}">
-		</div>
-    </div>
-          <div class="input-field">
-        <input type="number" id="sample_size" min="1" name="sample_size" required />
-        <label for="sample_size">Sample Size:</label>
-    </div>
-          <div class="input-field">
-        <input type="number" id="pool_size" min="1" name="pool_size" required />
-        <label for="pool_size">Pool Size:</label>
-    </div>
-          <div class="input-field">
-        <input type="number" id="contestants" min="1" name="contestants" required />
-        <label for="contestants">Contestants:</label>
-    </div>
-    <button style="display: none" id="submitButton" class="btn btn-primary" type="submit" value="Submit">Create</button>
-    <div class="app-text" id="errorMsg" style="font-family: 'GraphiqueW01-Regular';font-size: 3rem;"></div>
-	
-	
-</form>
+    <form action="/api/create_game/" method="post">
+        {% csrf_token %}
+        <div class="input-field">
+            <input onfocusout="validateGameName()" type="text" id="name" name="name" required />
+            <label for="name">Game Name:</label>
+            <div class="animation image" style="margin-left: 500px;">
+                <img src="{% static 'slick/oie_2212120tebkhWoO.gif' %}">
+            </div>
+        </div>
+        <div class="input-field">
+            <input type="number" id="sample_size" min="1" name="sample_size" required />
+            <label for="sample_size">Sample Size:</label>
+        </div>
+        <div class="input-field">
+            <input type="number" id="pool_size" min="1" name="pool_size" required />
+            <label for="pool_size">Pool Size:</label>
+        </div>
+        <div class="input-field">
+            <input type="number" id="contestants" min="1" name="contestants" required />
+            <label for="contestants">Contestants:</label>
+        </div>
+        <button style="display: none" id="submitButton" class="btn btn-primary" type="submit" value="Submit">Create</button>
+        <div class="app-text" id="errorMsg" style="font-family: 'GraphiqueW01-Regular';font-size: 3rem;"></div>
+
+
+    </form>
 </body>
 {% endblock %}
