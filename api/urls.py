@@ -13,6 +13,7 @@ urlpatterns = [
     path('vote/', views.vote, name='vote'),
     path('find_duplicate_name/', views.find_duplicate_name, name='find_duplicate_name'),
     path('find_duplicate_game/', views.find_duplicate_game, name='find_duplicate_game'),
+    path('find_duplicate_song/', views.find_duplicate_song, name='find_duplicate_song'),
     path('game_info/', views.game_info, name='game_info'),
     path('send_support_mail/', views.send_support_mail, name='send_support_mail'),
     path('tnc/', views.terms_and_conditions, name='terms_and_conditions'),

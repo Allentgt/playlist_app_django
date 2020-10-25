@@ -223,3 +223,16 @@ def send_support_mail(request):
         return JsonResponse({'message': 'success'})
     except Exception as e:
         return JsonResponse({'message': str(e)})
+
+
+@csrf_exempt
+def find_duplicate_song(request):
+    song = request.POST.get('song')
+    game = request.POST.get('game')
+    song_list = [item['link'] for playlist_obj in Playlist.objects.filter(game=game)
+                 for item in json.loads(playlist_obj.playlist).values()]
+    error = """Sorry, Your friend has already taken the song! ;)"""
+    if song in song_list:
+        return JsonResponse({'message': error})
+    else:
+        return JsonResponse({'message': 'SUCCESS'})
