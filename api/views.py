@@ -17,11 +17,14 @@ from playlist import settings
 def index(request):
     return render(request, 'index.html')
 
+
 def terms_and_conditions(request):
     return render(request, 'tnc.html')
 
+
 def about_us(request):
     return render(request, 'aboutus.html')
+
 
 def feedback(request):
     return render(request, 'feedback.html')
@@ -144,7 +147,8 @@ def randomise(request, game):
         for j, k in i.items():
             k['name'] = j
     all_random_sample = [list(i.values())[0] for i in all_random_sample]
-    return render(request, 'songs.html', {'context': all_random_sample, 'uniquePlayers': uniquePlayers, 'scorecard': scorecard})
+    return render(request, 'songs.html',
+                  {'context': all_random_sample, 'uniquePlayers': uniquePlayers, 'scorecard': scorecard})
 
 
 def lcm(denominators):
@@ -158,7 +162,7 @@ def vote(request):
     scorecard = json.loads(game_obj.score)
     votes = json.loads(request.POST.get('votes'))
     answer = request.POST.get('answer')
-    max_score = lcm([i+1 for i in range(len(scorecard))])
+    max_score = lcm([i + 1 for i in range(len(scorecard))])
     results = {player: 1 for player in scorecard if player in votes and votes[player] == answer}
     correct_answers = len(results)
     if correct_answers:
