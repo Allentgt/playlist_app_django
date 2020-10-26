@@ -21,6 +21,8 @@ def index(request):
 def terms_and_conditions(request):
     return render(request, 'tnc.html')
 
+def game_info_howto(request):
+    return render(request, 'gameinfo.html')
 
 def about_us(request):
     return render(request, 'aboutus.html')

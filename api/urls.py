@@ -19,4 +19,5 @@ urlpatterns = [
     path('tnc/', views.terms_and_conditions, name='terms_and_conditions'),
     path('about_us/', views.about_us, name='about_us'),
     path('feedback/', views.feedback, name='feedback'),
+    path('gameinfo/', views.game_info_howto, name='game_info_howto'),
 ]
