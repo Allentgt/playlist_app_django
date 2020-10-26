@@ -8,3 +8,4 @@ playlist/__pycache__/
 venv/
 playlist/.env
 static/
+staticfiles/
