@@ -21,8 +21,10 @@ def index(request):
 def terms_and_conditions(request):
     return render(request, 'tnc.html')
 
+
 def game_info_howto(request):
     return render(request, 'gameinfo.html')
+
 
 def about_us(request):
     return render(request, 'aboutus.html')
@@ -159,7 +161,7 @@ def lcm(denominators):
 
 @csrf_exempt
 def vote(request):
-    game = json.loads(request.POST.get('game'))
+    game = request.POST.get('game')
     game_obj = Game.objects.get(id=game)
     scorecard = json.loads(game_obj.score)
     votes = json.loads(request.POST.get('votes'))
@@ -180,7 +182,7 @@ def vote(request):
 
 @csrf_exempt
 def find_duplicate_name(request):
-    game = json.loads(request.POST.get('game'))
+    game = request.POST.get('game')
     player_name = request.POST.get('player_name')
     game_obj = Game.objects.get(id=game)
     error = """Sorry, I guess you have a very common name ;)"""
@@ -193,7 +195,7 @@ def find_duplicate_name(request):
 
 @csrf_exempt
 def game_info(request):
-    game = json.loads(request.POST.get('game'))
+    game = request.POST.get('game')
     game_obj = Game.objects.get(id=game)
     playlist_obj = Playlist.objects.filter(game=game_obj)
     response = {
@@ -242,3 +244,17 @@ def find_duplicate_song(request):
         return JsonResponse({'message': error})
     else:
         return JsonResponse({'message': 'SUCCESS'})
+
+
+@csrf_exempt
+def end_game(request):
+    list_of_winners = []
+    game_obj = Game.objects.get(id=request.POST.get('game'))
+    score = game_obj.score
+    winner = max(score, key=score.get)
+    for key, value in score.items():
+        if value == score[winner]:
+            list_of_winners.append(key)
+    game_obj.is_over = 1
+    game_obj.save()
+    return JsonResponse({'message': f'The winner is {list_of_winners}'})

@@ -13,7 +13,8 @@ class Game(models.Model):
     pool_size = models.IntegerField(null=False)
     contestants = models.IntegerField(null=False)
     ready_to_play = models.BooleanField(default=False)
-    score = models.TextField(default='{}')
+    score = models.TextField(null=False, default='{}')
+    is_over = models.BooleanField(null=False, default=False)
 
     def __str__(self):
         return self.name

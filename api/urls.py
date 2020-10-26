@@ -20,4 +20,5 @@ urlpatterns = [
     path('about_us/', views.about_us, name='about_us'),
     path('feedback/', views.feedback, name='feedback'),
     path('gameinfo/', views.game_info_howto, name='game_info_howto'),
+    path('end_game/', views.end_game, name='end_game'),
 ]
