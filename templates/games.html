@@ -6,31 +6,16 @@
     <meta charset="UTF-8">
     <title>Join Game</title>
 </head>
-<nav>
 
-    <div>
-        <ul class="nav-links">
-            <li>
-                <a href='/api/' style="margin-left:5px;">
-                    <img src="{% static 'slick/headphone.png' %}" style="height: 20px;
-    width: 20px;"> Home
-                </a>
-            </li>
-
-        </ul>
-    </div>
-</nav>
-<body class="app-body">
-<header class="header-title">Enter Game</header>
-<br><br><br>
-<form action="/api/get_games/" method="post">
+<div class="input-container-playlist">
+    <form action="/api/get_games/" method="post">
     {% csrf_token %}
-    <div class="input-field">
-        Game List :
-       <section class="choices-play">{{ form.game_list }}</section>
+    <div class="game-selector-div">
+        <span class="label-style">Game List :</span>
+       <section class="choices">{{ form.game_list }}</section>
     </div>
     <br>
-    <button class="btn btn-primary" type="submit">Play!</button>
+    <button type="submit">Play!</button>
 </form>
-</body>
+</div>
 {% endblock %}

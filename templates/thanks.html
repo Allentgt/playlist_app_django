@@ -4,14 +4,12 @@
     <meta charset="UTF-8">
     <title>Thanks for your submission</title>
 </head>
-
-<body class="app-body">
-    <div class="thanks">
-        Your submission has been recorded!
+    <div style="display: flex; flex-direction: column;align-items: center; margin-top: 75px">
+        <div class="thanks">
+            Your submission has been recorded!
+        </div>
+        <div class="home-btn">
+            <button onclick="location.href = '/api/'">Home</button>
+        </div>
     </div>
-    <div class="home-btn">
-        <button class="btn btn-primary" onclick="location.href = '/api/'">Home</button>
-    </div>
-</body>
-
 {% endblock %}

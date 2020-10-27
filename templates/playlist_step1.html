@@ -55,28 +55,14 @@
       });
     }
 </script>
-<nav>
 
-    <div>
-        <ul class="nav-links">
-            <li>
-                <a href='/api/' style="margin-left:5px;">
-                    <img src="{% static 'slick/headphone.png' %}" style="height: 20px;
-    width: 20px;"> Home
-                </a>
-            </li>
-
-        </ul>
-    </div>
-</nav>
-<header class="header-title">Game Details</header>
-    <body class="app-body">
-        <div style="display: flex;">
-            <form style="width: 60%;" method="POST">
+        <div class="input-container-playlist">
+            <div class="game-selector-div">
+                <form method="POST">
                 {% csrf_token %}
-                <br>
-                <div class="input-field">
-                    Game Name :
+
+                <div class="input-field" id="gname">
+                    <span class="label-style">Game Name :</span>
                    <section id="gameValue" class="choices">{{ playlist.game }}</section>
                 </div>
                 <br>
@@ -85,12 +71,12 @@
                     <label for="name">Player Name:</label>
                 </div>
                 
-                <button style="display: none" id="submitButton" class="btn btn-primary" type="submit">Next</button>
+                <button id="submitButton" type="submit">Next</button>
                 <div class="app-text" id="errorMsg" style="font-size: 3rem;"></div>
-                <div id="sorryMsg" class="app-text" style="margin-top:5rem;font-size: 0.75rem;"></div>
-            </form>
-
-            <div id="gameInfo" class="app-text" style="width: 40%; font-family: 'timebomb';font-size: 3rem; display: none">
+                <div id="sorryMsg" class="app-text" style="margin-top:5rem;font-size: 0.75rem; color: whitesmoke"></div>
+                </form>
+            </div>
+            <div id="gameInfo" class="app-text">
                 <div>
                     Game Info 
                 </div>
@@ -116,6 +102,5 @@
             </div>
 
         </div>
-        
-    </body>
+
 {% endblock %}

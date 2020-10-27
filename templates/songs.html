@@ -84,25 +84,8 @@
 
     </script>
 </head>
-<nav>
 
-    <div>
-        <ul class="nav-links">
-            <li>
-                <a href='/api/' style="margin-left:5px;">
-                    <img src="{% static 'slick/headphone.png' %}" style="height: 20px;
-    width: 20px;"> Home
-                </a>
-            </li>
-
-        </ul>
-    </div>
-</nav>
-<header class="header-title text-center" style="margin-left: 0px;">Play Ground</header>
-<br>
-<body class="app-body">
-
-    <div style="display: flex; margin-top: 4rem;">
+    <div class="main-container">
         <div id="audioContainer" class="app-text" style="width: 33%; padding-left: 4%;">
             {% for item in context %}
             <div data-video={{ item.link }}
@@ -174,5 +157,4 @@
         </div>
     </div>
 
-</body>
 {% endblock %}

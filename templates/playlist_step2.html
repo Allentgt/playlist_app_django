@@ -6,24 +6,8 @@
     <meta charset="UTF-8">
     <title>Enter Your Submission</title>
 </head>
-<nav>
-
-    <div>
-        <ul class="nav-links">
-            <li>
-                <a href='/api/' style="margin-left:5px;">
-                    <img src="{% static 'slick/headphone.png' %}" style="height: 20px;
-    width: 20px;"> Home
-                </a>
-            </li>
-
-        </ul>
-    </div>
-</nav>
-<header class="header-title">Song Details</header>
-    <body class="app-body">
-    <br><br>
-        <form method="POST">
+        <div class="main-container">
+            <form method="POST" style="display: flex; justify-content: center;flex-direction: column;align-content: center">
             {% csrf_token %}
             {{ fs.management_form }}
             {% for form in fs %}
@@ -34,7 +18,37 @@
                     </div>
                 {% endfor %}
             {% endfor %}
-            <button class="btn btn-primary" type="submit">Submit</button>
+            <button type="submit">Submit</button>
         </form>
-    </body>
+        <div class="carousel-container">
+            <div class="content-slider">
+              <div class="slider">
+                <div class="mask">
+                  <ul>
+                    <li class="anim1">
+                      <div class="quote">The greatest glory in living lies not in never falling, but in rising every time we fall.</div>
+                      <div class="source">- Nelson Mandela</div>
+                    </li>
+                    <li class="anim2">
+                      <div class="quote">If life were predictable it would cease to be life, and be without flavor.</div>
+                      <div class="source">- Eleanor Roosevelt</div>
+                    </li>
+                    <li class="anim3">
+                      <div class="quote">Imagination is more important than knowledge.</div>
+                      <div class="source">- Albert Einstein</div>
+                    </li>
+                    <li class="anim4">
+                      <div class="quote">We are what we repeatedly do. Excellence, then, is not an act, but a habit.</div>
+                      <div class="source">- Aristotle</div>
+                    </li>
+                    <li class="anim5">
+                      <div class="quote">What lies behind you and what lies in front of you, pales in comparison to what lies inside of you.</div>
+                      <div class="source">- Ralph Waldo Emerson</div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+        </div>
+        </div>
 {% endblock %}

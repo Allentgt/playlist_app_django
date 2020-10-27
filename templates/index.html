@@ -4,40 +4,9 @@
 
 {% load static %}
 
-<head>
     <meta charset="UTF-8">
     <title>The Playlist Game</title>
-
-</head>
-
-<div style="margin-left:30%">
-    <nav>
-
-        <div>
-            <h1 class="header-title">
-                <img src="{% static 'slick/headphone.png' %}" style="height: 70px;
-    width: 70px;">The Playlist Game
-            </h1>
-        </div>
-        <ul class="nav-links">
-            <li>
-                <a href='/api/gameinfo/'>Game Info</a>
-            </li>
-            <li>
-                <a href='/api/about_us/'>About Us</a>
-            </li>
-
-        </ul>
-
-
-    </nav>
-
-</div>
-
-<body class="app-body">
-    
-    <div class="text-center index-main-body">
-        <div class="card-columns">
+    <div class="text-center">
             <div class="card">
                 <a href="/api/create_game/" style="color: none; text-decoration: none;">
                     <img class="card-img-top" src="{% static 'slick/create.png' %}">
@@ -62,7 +31,5 @@
                     </div>
                 </a>
             </div>
-        </div>
     </div>
-</body>
 {% endblock %}

@@ -11,8 +11,7 @@
 }
 
 .app-body {
-    background: url(/static/slick/ep_naturalblack.png) repeat;
-    margin-top: 20px;
+    background-color: #24252A;
 }
 
 header {
@@ -66,7 +65,6 @@ input {
   border-bottom: 2px solid #d3d3d3;
   box-shadow: none;
   color: white;
-  background: url(/static/slick/ep_naturalblack.png);
 }
 input:invalid {
   outline: 0;
@@ -148,20 +146,20 @@ input:valid~label {
   
   .card {
     background-color: transparent;
-    width: 400px;
+    width: auto;
   }
     .card :hover {
     transform: scale(1.2);
   }
 
-  html, body {
-    margin: 0;
-    padding: 0;
-  }
+  /*html, body {*/
+  /*  margin: 0;*/
+  /*  padding: 0;*/
+  /*}*/
 
-  * {
-    box-sizing: border-box;
-  }
+  /** {*/
+  /*  box-sizing: border-box;*/
+  /*}*/
 
   .header-title {
       font-family: 'GraphiqueW01-Regular';
@@ -181,6 +179,9 @@ input:valid~label {
   }
   
   .text-center {
+      display: flex;
+      justify-content: space-around;
+      flex-direction: row;
       text-align: center;
   }
 
@@ -233,33 +234,33 @@ input:valid~label {
 
 }
 
-nav {
-    display: inline-block;
-    justify-content: space-around;
-    align-items: center;
-    min-height: 8vh;
-    font-family: 'GraphiqueW01-Regular';
-}
-.logo {
-    color: rgb(226,226,226);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-family: 'GraphiqueW01-Regular';
-    font-size: 20px;
- 
-}
-.nav-links {
-    display: flex;
-    justify-content: space-around;
-    
-}
-.nav-links {
-    list-style: none;
-}
-.nav-links a {
-        color: rgb(226,226,226);
-        text-decoration: none;
-        letter-spacing: 4px;
-        font-size:25px;
-        
-    }
+/*nav {*/
+/*    display: inline-block;*/
+/*    justify-content: space-around;*/
+/*    align-items: center;*/
+/*    min-height: 8vh;*/
+/*    font-family: 'GraphiqueW01-Regular';*/
+/*}*/
+/*.logo {*/
+/*    color: rgb(226,226,226);*/
+/*    text-transform: uppercase;*/
+/*    letter-spacing: 2px;*/
+/*    font-family: 'GraphiqueW01-Regular';*/
+/*    font-size: 20px;*/
+/* */
+/*}*/
+/*.nav-links {*/
+/*    display: flex;*/
+/*    justify-content: space-around;*/
+/*    */
+/*}*/
+/*.nav-links {*/
+/*    list-style: none;*/
+/*}*/
+/*.nav-links a {*/
+/*        color: rgb(226,226,226);*/
+/*        text-decoration: none;*/
+/*        letter-spacing: 4px;*/
+/*        font-size:25px;*/
+/*        */
+/*    }*/

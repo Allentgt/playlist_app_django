@@ -1,22 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
   {% load static %}
+  <link rel="stylesheet" href="{% static 'css/navigation.css' %}" type="text/css"/>
   <link rel="icon" href="{% static 'slick/favicon.ico' %}">
   <link href="//db.onlinewebfonts.com/c/ab83b275830b2d585ea027c47e3b237a?family=GraphiqueW01-Regular" rel="stylesheet" type="text/css"/>
-  <link href="//db.onlinewebfonts.com/c/0801c08e5412f54e4b4e9ad146d83a12?family=Ink+Free" rel="stylesheet" type="text/css"/>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="{% static 'slick/css/appstyle.css' %}" type="text/css"/>
+{#  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">#}
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="https://code.jquery.com/jquery-2.2.0.min.js" type="text/javascript"></script>
   <script src="https://www.youtube.com/iframe_api"></script>
   <script src="{% static 'slick/js/yt.js' %}"></script>
-{% block content %}
-{% endblock %}
+  <body class="app-body">
+      <header>
+            <a class="logo logo-style" href="/api/">THE PLAYLIST GAME</a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="/api/gameinfo/">How To Play</a> </li>
+                    <li><a href="/api/tnc/">Terms and Conditions</a> </li>
+                </ul>
+            </nav>
+            <a class="cta" href="/api/feedback/"><button>Contact Us</button></a>
+      </header>
+      {% block content %}
+      {% endblock %}
+  </body>
 
-<div class="footer" style="margin-bottom: 1rem;">
-  <a class="app-text" href="/api/feedback/">Feedback</a>
-  <a class="app-text" style= "margin-left: 4rem;" href="/api/tnc/">Terms And Conditions</a>
-  <a style="position:absolute;margin-left:20rem;font-size:small;">Copyright&#174; 2020. All rights reserved.</a>
-  </div>
