@@ -66,17 +66,18 @@
                    <section id="gameValue" class="choices">{{ playlist.game }}</section>
                 </div>
                 <br>
+                <br>
                 <div class="input-field">
                     <input onfocusout = "validateUserName()" type="text" id="name" name="name" required />
                     <label for="name">Player Name:</label>
                 </div>
                 
                 <button id="submitButton" type="submit">Next</button>
-                <div class="app-text" id="errorMsg" style="font-size: 3rem;"></div>
-                <div id="sorryMsg" class="app-text" style="margin-top:5rem;font-size: 0.75rem; color: whitesmoke"></div>
+                <div class="app-text-play" id="errorMsg" style="font-size: 3rem;"></div>
+                <div id="sorryMsg" class="app-text-play" style="margin-top:5rem;font-size: 0.75rem; color: whitesmoke"></div>
                 </form>
             </div>
-            <div id="gameInfo" class="app-text">
+            <div id="gameInfo" class="app-text-play">
                 <div>
                     Game Info 
                 </div>

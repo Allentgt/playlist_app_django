@@ -150,7 +150,7 @@ input:valid~label {
 .input-container-playlist {
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-evenly;
   margin-left: 7.5%;
   margin-top: 7.5%;
 
@@ -198,7 +198,7 @@ input:valid~label {
 .app-text-play {
   font-family: 'montserrat', sans-serif;
   font-size: 18px;
-  color: #ffffff;
+  color: #edf0f1;
 }
 
 .participant-dropdown-list {
@@ -231,6 +231,7 @@ input:valid~label {
 
 .carousel-container {
     height: 100%;
+  width: 30%;
 }
 
 h1 {
