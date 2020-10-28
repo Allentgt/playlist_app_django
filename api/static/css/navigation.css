@@ -64,7 +64,8 @@ button:hover {
 .logo-style {
     font-family: "montserrat", sans-serif;
     font-weight: 750;
-    font-size: 20px;
+    font-size: 26px;
+  margin-bottom: 4px;
     color: #edf0f1;
     text-decoration: none;
     transition: all 0.3ms ease 0s;
@@ -85,7 +86,7 @@ button:hover {
   justify-content: space-evenly;
   flex-direction: row;
   text-align: center;
-    margin: 10% 10% 0 10%;
+  margin: 10% 10% 0 10%;
 }
 
 .card-img-top {
@@ -149,12 +150,17 @@ input:valid~label {
 .input-container-playlist {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: flex-start;
+  margin-left: 7.5%;
+  margin-top: 7.5%;
 
 }
 
 .game-selector-div {
   margin-left: 7.5%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .label-style {
@@ -168,12 +174,29 @@ input:valid~label {
   margin-top: 5px;
 }
 
+.choices-play {
+  font-family: 'montserrat', sans-serif;
+  color: whitesmoke;
+  margin-bottom: 20px;
+}
+
 .app-text {
   width: 40%;
   font-family: 'montserrat', sans-serif;
   font-size: 24px;
   color: antiquewhite;
   display: none
+}
+
+.app-text-play {
+  font-family: 'montserrat', sans-serif;
+  font-size: 18px;
+  color: #ffffff;
+}
+
+.participant-dropdown-list {
+  color: antiquewhite;
+  font-family: 'montserrat', sans-serif;
 }
 
 .input-container {

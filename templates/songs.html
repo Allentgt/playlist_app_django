@@ -4,7 +4,7 @@
 <head>
     <title>Playground</title>
     <meta charset="UTF-8">
-
+</head>
     <script type="text/javascript">
 
         $(document).on('ready', function () {
@@ -33,7 +33,7 @@
                 "votes": JSON.stringify(votesInput),
                 "answer": answer
             }, function (response) {
-                document.getElementById("correctAnswerSpan").innerHTML = "Correct Answer :  " + answer;
+                document.getElementById("correctAnswerSpan").innerHTML = "Answer : " + answer;
                 var playerDom = document.getElementsByClassName("player-name");
                 var scoreDom = document.getElementsByClassName("player-score");
 
@@ -78,15 +78,14 @@
             document.getElementById("correctAnswerSpan").innerHTML = "";
             var audioElem = document.getElementById("youtube-audio");
             if (audioElem && audioElem.attributes) {
-                document.getElementById("correctAnswerSpan").innerHTML = "Song Name : " + audioElem.attributes[5].value;
+                document.getElementById("correctAnswerSpan").innerHTML = audioElem.attributes[5].value;
             }
         }
 
     </script>
-</head>
 
     <div class="main-container">
-        <div id="audioContainer" class="app-text" style="width: 33%; padding-left: 4%;">
+        <div id="audioContainer" class="app-text-play" style="margin-top:4rem">
             {% for item in context %}
             <div data-video={{ item.link }}
                  data-autoplay="0"
@@ -97,24 +96,24 @@
             </div>
 
             {% endfor %}
-            <div style="margin-top:4rem" class="app-text" id="songName"></div>
-            <div style="margin-top: 4rem;" class="app-text" id="correctAnswerSpan">
-                <div class="app-text">
+            <div style="margin-top:4rem" class="app-text-play" id="songName"></div>
+            <div style="margin-top: 4rem;display:flex;justify-content: center" class="app-text-play" id="correctAnswerSpan">
+                <div class="app-text-play">
                     Game Over !!!
                 </div>
             </div>
 
         </div>
-        <div style="width: 33%;">
-            <h1 class="app-text text-center">Voting</h1>
+        <div class="app-text-play">
+            <h1 class="app-text-play" style="font-size: 50px; margin-bottom: 20px">Voting</h1>
             <div class="app-votings-section">
-                <table class="app-text voting-line-break">
-                    <tr>
+                <table class="app-text-play voting-line-break" style="width: 100%">
+                    <tr style="display: flex;justify-content: space-between;margin-bottom: 1rem;margin-top: 1rem">
                         <th>Player's Name</th>
-                        <th style="padding-left: 4rem;">Vote</th>
+                        <th>Vote</th>
                     </tr>
                     {% for item in uniquePlayers %}
-                    <tr>
+                    <tr style="display: flex;justify-content: space-between;margin-bottom: 1rem;margin-top: 1rem">
                         <td>
                             {{ item}} :
                         </td>
@@ -135,17 +134,17 @@
             </div>
 
         </div>
-        <div style="width: 33%;">
-            <h1 class="app-text text-center">Scores</h1>
-            <div id="scoreboard" class="app-text">
-                <table style="margin-left: auto;margin-right: auto;" class="text-center voting-line-break">
-                    <tr>
+        <div class="app-text-play">
+            <h1 class="app-text-play" style="font-size: 50px; margin-bottom: 20px">Scores</h1>
+            <div id="scoreboard" class="app-text-play">
+                <table style="width: 100%" class="voting-line-break">
+                    <tr style="display: flex;justify-content: space-between;margin-bottom: 1rem;margin-top: 1rem">
                         <th>Player's Name</th>
                         <th style="padding-left: 4rem;">Score</th>
                     </tr>
 
                     {% for key, value in scorecard.items %}
-                    <tr>
+                    <tr style="display: flex;justify-content: space-between;margin-bottom: 1rem;margin-top: 1rem">
                         <td class="player-name">{{ key }}</td>
                         <td class="player-score" style="padding-left: 4rem;">{{ value }}</td>
                     </tr>
