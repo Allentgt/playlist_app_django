@@ -174,6 +174,13 @@ input:valid~label {
   margin-top: 5px;
 }
 
+.howto {
+  font-family: 'montserrat', sans-serif;
+  line-height: 200%;
+  color: whitesmoke;
+  margin: 10px 100px 100px 100px;
+}
+
 .choices-play {
   font-family: 'montserrat', sans-serif;
   color: whitesmoke;
