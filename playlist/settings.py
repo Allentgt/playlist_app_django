@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api',
     'storages',
-    'django_celery_results',
 ]
 
 MIDDLEWARE = [
