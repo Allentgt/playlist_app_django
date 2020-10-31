@@ -1,3 +1,4 @@
+import os
 import random
 from functools import reduce
 from math import gcd
@@ -12,6 +13,7 @@ from playlist.session import GAME_DETAIL
 from .forms import PlaylistForm, GameForm, GameListForm, PlaylistSubmissionFormSet
 from .models import Playlist, Game
 from playlist import settings
+from .tasks import download_and_save_music_locally
 
 
 def index(request):
@@ -91,8 +93,10 @@ def put_playlist(request):
         if fs.is_valid():
             playlist_data = fs.cleaned_data
             for i in playlist_data:
-                i['link'] = i['link'].split('watch?v=')[1]
-                print(i['link'])
+                # i['link'] = i['link'].split('watch?v=')[1]
+                filename = f"{GAME_DETAIL['name']}_{i['song_name']}"
+                download_and_save_music_locally.delay(filename, i['link'])
+                i['link'] = os.path.join(os.getcwd(), 'music', f'{filename}.mp4')
             playlist = {i: j for i, j in zip(range(len(playlist_data)), playlist_data)}
             data = {
                 'name': GAME_DETAIL['name'],

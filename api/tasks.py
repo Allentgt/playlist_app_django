@@ -12,4 +12,4 @@ def sleep_for_10():
 def download_and_save_music_locally(name, link):
     yt = YouTube(link)
     stream = yt.streams.filter(only_audio=True).first()
-    stream.download(f'music/')
+    stream.download(f'music/', filename=name)
