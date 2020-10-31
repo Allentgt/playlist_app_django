@@ -5,6 +5,7 @@ boto3
 gunicorn
 django-environ
 whitenoise==5.2.0
-redis
-celery
-pytube
+redis==3.5.3
+celery==5.0.1
+pytube==9.7.0
+mysqlclient==2.0.1
