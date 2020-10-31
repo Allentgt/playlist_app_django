@@ -5,3 +5,6 @@ boto3
 gunicorn
 django-environ
 whitenoise==5.2.0
+redis
+celery
+pytube
