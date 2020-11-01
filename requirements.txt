@@ -6,6 +6,7 @@ gunicorn
 django-environ
 whitenoise==5.2.0
 redis==3.5.3
-celery==5.0.1
+celery==4.4.0
 pytube==9.7.0
 mysqlclient==2.0.1
+backoff==1.10.0

@@ -9,4 +9,4 @@ venv/
 playlist/.env
 static/
 staticfiles/
-music/
+api/static/music/

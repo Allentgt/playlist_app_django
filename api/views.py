@@ -3,14 +3,14 @@ import random
 from functools import reduce
 from math import gcd
 
+from pytube import Playlist as YTPlaylist
 import simplejson as json
 from django.core.mail import EmailMessage
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
-from playlist.session import GAME_DETAIL
-from .forms import PlaylistForm, GameForm, GameListForm, PlaylistSubmissionFormSet
+from .forms import PlaylistForm, GameForm, GameListForm
 from .models import Playlist, Game
 from playlist import settings
 from .tasks import download_and_save_music_locally
@@ -50,74 +50,53 @@ def create_game(request):
                     'contestants': form.cleaned_data['contestants']}
             game = Game(**data)
             game.save()
-            return HttpResponseRedirect('/api/put_game_details/')
+            return HttpResponseRedirect('/api/put_playlist/')
     else:
         form = GameForm()
 
     return render(request, 'create_game.html', {'form': form})
 
 
-def put_game_details(request):
-    if request.method == 'POST':
-        user_details = PlaylistForm(request.POST)
-
-        if user_details.is_valid():
-            user_details = user_details.cleaned_data
-            error = """Sorry, I guess you have a very common name ;)"""
-            username_list = [player_list.name for player_list in Playlist.objects.filter(game=user_details['game'])]
-            if user_details['name'] in username_list:
-                return JsonResponse({'error': error})
-            pool_size = user_details['game'].pool_size
-            GAME_DETAIL['name'] = user_details['name']
-            GAME_DETAIL['game'] = user_details['game'].name
-            GAME_DETAIL['pool_size'] = pool_size
-            game_object = Game.objects.get(name=GAME_DETAIL['game'])
-            playlist_object = Playlist.objects.filter(game=game_object)
-            message = f'''Sorry {user_details["name"]}, You didn\'t make the cut :(\n
-            May be try joining another game 
-            or make better friends! '''
-            if len(playlist_object) == game_object.contestants:
-                return render(request, 'apology.html', {'message': message})
-            return HttpResponseRedirect('/api/put_playlist/')
-    else:
-        user_details = PlaylistForm()
-    context = {
-        'playlist': user_details
-    }
-    return render(request, 'playlist_step1.html', context)
-
-
 def put_playlist(request):
     if request.method == 'POST':
-        fs = PlaylistSubmissionFormSet(request.POST)
-        if fs.is_valid():
-            playlist_data = fs.cleaned_data
-            for i in playlist_data:
-                # i['link'] = i['link'].split('watch?v=')[1]
-                filename = f"{GAME_DETAIL['name']}_{i['song_name']}"
-                download_and_save_music_locally.delay(filename, i['link'])
-                i['link'] = os.path.join(f'{filename}.mp4')
-            playlist = {i: j for i, j in zip(range(len(playlist_data)), playlist_data)}
+        playlist_details = PlaylistForm(request.POST)
+        if playlist_details.is_valid():
+            playlist_details = playlist_details.cleaned_data
+            error = """Sorry, I guess you have a very common name ;)"""
+            username_list = [player_list.name for player_list in Playlist.objects.filter(game=playlist_details['game'])]
+            if playlist_details['name'] in username_list:
+                return JsonResponse({'error': error})
+            game_obj = Game.objects.get(name=playlist_details['game'])
+            playlist_object = Playlist.objects.filter(game=game_obj)
+            message = f'''Sorry {playlist_details["name"]}, You didn\'t make the cut :(\n
+            May be try joining another game 
+            or make better friends! '''
+            if len(playlist_object) == game_obj.contestants:
+                return render(request, 'apology.html', {'message': message})
+            playlist = {}
+            pl = YTPlaylist(playlist_details["playlist"])
+            for idx, link in enumerate(pl):
+                filename = f"{playlist_details['name'].lower()}_{playlist_details['game']}_{idx + 1}"
+                download_and_save_music_locally.delay(filename, link)
+                playlist[idx + 1] = os.path.join(f'{filename}.mp4')
             data = {
-                'name': GAME_DETAIL['name'],
-                'game': Game.objects.get(name=GAME_DETAIL['game']),
+                'name': playlist_details['name'].lower(),
+                'game': Game.objects.get(name=playlist_details['game']),
                 'playlist': json.dumps(playlist)
             }
             p = Playlist(**data)
             p.save()
-            game_object = Game.objects.get(name=GAME_DETAIL['game'])
-            playlist_object = Playlist.objects.filter(game=game_object)
-            if len(playlist_object) == game_object.contestants:
-                game_object.ready_to_play = 1
-                game_object.save()
+            playlist_object = Playlist.objects.filter(game=game_obj)
+            if len(playlist_object) == game_obj.contestants:
+                game_obj.ready_to_play = 1
+                game_obj.save()
             return HttpResponseRedirect('/api/thanks/')
     else:
-        fs = PlaylistSubmissionFormSet(initial=[dict()] * GAME_DETAIL['pool_size'])
+        playlist_details = PlaylistForm()
     context = {
-        'fs': fs
+        'playlist': playlist_details
     }
-    request.session.clear()
-    return render(request, 'playlist_step2.html', context)
+    return render(request, 'playlist.html', context)
 
 
 def get_games(request):
@@ -254,11 +233,11 @@ def find_duplicate_song(request):
 def end_game(request):
     list_of_winners = []
     game_obj = Game.objects.get(id=request.POST.get('game'))
-    score = game_obj.score
+    score = json.loads(game_obj.score)
     winner = max(score, key=score.get)
     for key, value in score.items():
         if value == score[winner]:
             list_of_winners.append(key)
     game_obj.is_over = 1
     game_obj.save()
-    return JsonResponse({'message': f'The winner is {list_of_winners}'})
+    return JsonResponse({'message': list_of_winners})

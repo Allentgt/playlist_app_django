@@ -9,7 +9,6 @@ urlpatterns = [
     path('put_playlist/', views.put_playlist, name='put_playlist'),
     path('create_game/', views.create_game, name='create_game'),
     path('get_games/', views.get_games, name='get_games'),
-    path('put_game_details/', views.put_game_details, name='put_game_details'),
     path('vote/', views.vote, name='vote'),
     path('find_duplicate_name/', views.find_duplicate_name, name='find_duplicate_name'),
     path('find_duplicate_game/', views.find_duplicate_game, name='find_duplicate_game'),

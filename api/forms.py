@@ -4,12 +4,6 @@ from django.forms import formset_factory
 from .models import Game
 
 
-class PlaylistForm(forms.Form):
-    name = forms.CharField(max_length=100)
-    game = forms.ModelChoiceField(queryset=Game.objects.all().order_by('name'),
-                                  widget=forms.Select(attrs={'class': 'choices'}))
-
-
 class GameForm(forms.Form):
     name = forms.CharField(max_length=100)
     sample_size = forms.IntegerField()
@@ -22,9 +16,8 @@ class GameListForm(forms.Form):
                                        widget=forms.Select(attrs={'class': 'choices-play'}))
 
 
-class PlaylistSubmissionForm(forms.Form):
-    song_name = forms.CharField(required=True)
-    link = forms.CharField(required=True)
-
-
-PlaylistSubmissionFormSet = formset_factory(PlaylistSubmissionForm, extra=0)
+class PlaylistForm(forms.Form):
+    name = forms.CharField(max_length=100)
+    game = forms.ModelChoiceField(queryset=Game.objects.all().order_by('name'),
+                                  widget=forms.Select(attrs={'class': 'choices'}))
+    playlist = forms.CharField(required=True)
