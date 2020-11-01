@@ -96,7 +96,7 @@ def put_playlist(request):
                 # i['link'] = i['link'].split('watch?v=')[1]
                 filename = f"{GAME_DETAIL['name']}_{i['song_name']}"
                 download_and_save_music_locally.delay(filename, i['link'])
-                i['link'] = os.path.join(os.getcwd(), 'music', f'{filename}.mp4')
+                i['link'] = os.path.join(f'{filename}.mp4')
             playlist = {i: j for i, j in zip(range(len(playlist_data)), playlist_data)}
             data = {
                 'name': GAME_DETAIL['name'],
