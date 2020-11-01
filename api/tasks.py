@@ -4,8 +4,8 @@ from celery.decorators import task
 from celery_progress.backend import ProgressRecorder
 
 
-@backoff.on_exception(backoff.expo, [Exception, KeyError], max_tries=5)
 @task(name='download_and_save_music_locally', bind=True)
+@backoff.on_exception(backoff.expo, [Exception, KeyError], max_tries=5)
 def download_and_save_music_locally(self, name, link):
     yt = YouTube(link)
     progress_recorder = ProgressRecorder(self)
