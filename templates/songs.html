@@ -7,10 +7,23 @@
 </head>
     <script type="text/javascript">
 
+        var displayAudio = function() {
+            var audioElem = document.getElementById("audioDiv");
+            var elem = document.createElement("AUDIO");
+            var x = audioElem.append(elem);
+            var link = document.getElementById("audioDiv").attributes[1].value;
+            document.getElementsByTagName("audio")[0].setAttribute("src","/static/music/"+ link);
+            document.getElementsByTagName("audio")[0].setAttribute("controls","controls");
+
+            document.getElementById("nextButton").style.display = "none";
+            document.getElementById("voteButton").style.display = "block";
+
+        }
+
         $(document).on('ready', function () {
-            displaySongName();
-            document.getElementById("nextButton").disabled = true;
+            displayAudio();
         });
+
 
         var votes = function () {
             var votesInput = {};
@@ -20,9 +33,9 @@
                 votesInput[votes[i][i + 1].innerHTML] = votes[i].value;
             }
 
-            var audioElem = document.getElementById("youtube-audio");
+            var audioElem = document.getElementById("audioDiv");
             if (audioElem && audioElem.attributes) {
-                answer = audioElem.attributes[4].value;
+                answer = audioElem.attributes[2].value;
             }
 
             var gameId = parseInt(document.URL.split("randomise/")[1].split("/")[0]);
@@ -41,27 +54,24 @@
                     scoreDom[i].innerHTML = response[playerDom[i].innerHTML];
                 }
 
-                document.getElementById("nextButton").disabled = false;
-                document.getElementById("voteButton").disabled = true;
+                document.getElementById("voteButton").style.display = "none";
+                document.getElementById("nextButton").style.display = "block";
+
 
             });
         }
 
         var next = function () {
 
-
             $('.participant-dropdown-list').prop('selectedIndex', 0);
 
             document.getElementById("correctAnswerSpan").innerHTML = "";
-            document.getElementById("youtube-audio").remove();
-            if (document.getElementById("youtube-audio")) {
-                onYouTubeIframeAPIReady();
-                displaySongName();
-                var link = document.getElementById("youtube-audio").attributes[0].value
-                document.getElementById("youtube-player").attributes[7].value = "https://www.youtube.com/embed/" + link + "?autoplay=0&amp;loop=1&amp;enablejsapi=1&amp;widgetid=1"
+            document.getElementById("audioDiv").remove();
+            if (document.getElementById("audioDiv")) {
+                displayAudio();
 
-                document.getElementById("nextButton").disabled = true;
-                document.getElementById("voteButton").disabled = false;
+                document.getElementById("voteButton").style.display = "block";
+                document.getElementById("nextButton").style.display = "none";
 
             } else {
                 var para = document.createElement("P");
@@ -70,37 +80,35 @@
 
                 document.getElementById("nextButton").style.display = "none";
                 document.getElementById("voteButton").style.display = "none";
+
+                var url = document.URL.split("randomise");
+                var gameId = parseInt(document.URL.split("randomise/")[1].split("/")[0]);
+
+                $.post(url[0] + "end_game/", {"game" : gameId}, function (res) {
+                    var msgText;
+                    if(res && res.message.length > 1) {
+                        msgText = "The Winners are "
+                    } else {
+                        msgText = "The Winner is "
+                    }
+
+                    document.getElementById("winner").innerHTML = msgText + res.message.toString() + " !!";
+                })
             }
 
         }
 
-        var displaySongName = function () {
-            document.getElementById("correctAnswerSpan").innerHTML = "";
-            var audioElem = document.getElementById("youtube-audio");
-            if (audioElem && audioElem.attributes) {
-                document.getElementById("correctAnswerSpan").innerHTML = audioElem.attributes[5].value;
-            }
-        }
 
     </script>
 
     <div class="main-container">
         <div id="audioContainer" class="app-text-play" style="margin-top:4rem">
             {% for item in context %}
-            <div data-video={{ item.link }}
-                 data-autoplay="0"
-                 data-loop="1"
-                 id="youtube-audio"
-                 value={{ item.name }}
-                 name={{ item.song_name }}>
-            </div>
+
+            <div id="audioDiv" link = {{ item.link }} value = {{ item.name }}></div>
 
             {% endfor %}
-            <div style="margin-top:4rem" class="app-text-play" id="songName"></div>
             <div style="margin-top: 4rem;display:flex;justify-content: center" class="app-text-play" id="correctAnswerSpan">
-                <div class="app-text-play">
-                    Game Over !!!
-                </div>
             </div>
 
         </div>
@@ -154,6 +162,10 @@
             </div>
 
         </div>
+    </div>
+    
+    <div id="winner" style="text-align: center; margin-top: 2rem;" class="app-text-play">
+
     </div>
 
 {% endblock %}
