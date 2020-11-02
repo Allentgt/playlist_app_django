@@ -57,7 +57,7 @@
 </script>
 
         <div class="input-container-playlist">
-            <div class="game-selector-div">
+            <div class="game-selector-div" style="margin-bottom: 4rem;">
                 <form method="POST">
                 {% csrf_token %}
 
@@ -78,7 +78,7 @@
                 </div>
                 <button id="submitButton" type="submit">Submit</button>
                 <div class="app-text-play" id="errorMsg" style="font-size: 3rem;"></div>
-                <div id="sorryMsg" class="app-text-play" style="margin-top:5rem;font-size: 0.75rem; color: whitesmoke"></div>
+                <div id="sorryMsg" class="app-text-play" style="font-size: 0.75rem; color: whitesmoke"></div>
                 </form>
             </div>
             <div id="gameInfo" class="app-text-play">
