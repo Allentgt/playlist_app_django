@@ -78,10 +78,14 @@ def put_playlist(request):
             for idx, link in enumerate(pl):
                 filename = f"{playlist_details['name'].lower()}_{playlist_details['game']}_{idx + 1}"
                 download_and_save_music_locally.delay(filename, link)
+                all_songs = json.loads(game_obj.all_songs)
+                all_songs.append(link)
+                game_obj.all_songs = json.dumps(all_songs)
+                game_obj.save()
                 playlist[idx + 1] = os.path.join(f'{filename}.mp4')
             data = {
                 'name': playlist_details['name'].lower(),
-                'game': Game.objects.get(name=playlist_details['game']),
+                'game': game_obj,
                 'playlist': json.dumps(playlist)
             }
             p = Playlist(**data)
@@ -130,10 +134,10 @@ def randomise(request, game):
         sampling = [{idx: i} for i in sampling]
         all_random_sample.extend(sampling)
     random.shuffle(all_random_sample)
-    for i in all_random_sample:
+    """for i in all_random_sample:
         for j, k in i.items():
             k['name'] = j
-    all_random_sample = [list(i.values())[0] for i in all_random_sample]
+    all_random_sample = [list(i.values())[0] for i in all_random_sample]"""
     return render(request, 'songs.html',
                   {'context': all_random_sample, 'uniquePlayers': uniquePlayers, 'scorecard': scorecard})
 
@@ -218,15 +222,15 @@ def send_support_mail(request):
 
 @csrf_exempt
 def find_duplicate_song(request):
-    song = request.POST.get('song')
     game = request.POST.get('game')
-    song_list = [item['link'] for playlist_obj in Playlist.objects.filter(game=game)
-                 for item in json.loads(playlist_obj.playlist).values()]
+    link = request.POST.get('link')
+    song_list = json.loads(Game.objects.get(id=game).all_songs)
     error = """Sorry, Your friend has already taken the song! ;)"""
-    if song in song_list:
-        return JsonResponse({'message': error})
-    else:
-        return JsonResponse({'message': 'SUCCESS'})
+    for song in YTPlaylist(link):
+        if song in song_list:
+                return JsonResponse({'message': error})
+        else:
+            return JsonResponse({'message': 'SUCCESS'})
 
 
 @csrf_exempt

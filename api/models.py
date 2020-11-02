@@ -14,6 +14,7 @@ class Game(models.Model):
     contestants = models.IntegerField(null=False)
     ready_to_play = models.BooleanField(default=False)
     score = models.TextField(null=False, default='{}')
+    all_songs = models.TextField(null=False, default='[]')
     is_over = models.BooleanField(null=False, default=False)
 
     def __str__(self):
