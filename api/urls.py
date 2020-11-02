@@ -13,7 +13,7 @@ urlpatterns = [
     path('vote/', views.vote, name='vote'),
     path('find_duplicate_name/', views.find_duplicate_name, name='find_duplicate_name'),
     path('find_duplicate_game/', views.find_duplicate_game, name='find_duplicate_game'),
-    path('find_duplicate_song/', views.find_duplicate_song, name='find_duplicate_song'),
+    path('playlist_validations/', views.playlist_validations, name='playlist_validations'),
     path('game_info/', views.game_info, name='game_info'),
     path('send_support_mail/', views.send_support_mail, name='send_support_mail'),
     path('tnc/', views.terms_and_conditions, name='terms_and_conditions'),
@@ -21,5 +21,4 @@ urlpatterns = [
     path('feedback/', views.feedback, name='feedback'),
     path('gameinfo/', views.game_info_howto, name='game_info_howto'),
     path('end_game/', views.end_game, name='end_game'),
-    path('playlist_length_validation/', views.playlist_length_validation, name='playlist_length_validation'),
 ]

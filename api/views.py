@@ -236,16 +236,29 @@ def send_support_mail(request):
 
 
 @csrf_exempt
-def find_duplicate_song(request):
+def playlist_validations(request):
     game = request.POST.get('game')
     link = request.POST.get('link')
-    song_list = json.loads(Game.objects.get(id=game).all_songs)
-    error = """Sorry, Your friend has already taken the song! ;)"""
-    for song in YTPlaylist(link):
+    game_object = Game.objects.get(id=game)
+    song_list = json.loads(game_object.all_songs)
+    playlist = YTPlaylist(link)
+    duplicate_songs = []
+    error_data = {}
+    for song in playlist:
         if song in song_list:
-            return JsonResponse({'message': song})
-        else:
-            return JsonResponse({'message': 'SUCCESS'})
+            duplicate_songs.append(song)
+    if duplicate_songs:
+        error_data['duplicate'] = duplicate_songs
+
+    game_pool_size = game_object.pool_size
+    playlist_length = len(playlist)
+    length_error = f"Sorry, Your playlist should be of length {game_pool_size}! ;)"
+    if not playlist_length == game_pool_size:
+        error_data['length'] = length_error
+    if error_data:
+        error_data['status'] = 'FAILED'
+        return JsonResponse(error_data)
+    return JsonResponse({'status': 'SUCCESS'})
 
 
 @csrf_exempt
@@ -273,17 +286,3 @@ def end_game(request):
             except Exception as e:
                 delete_message = str(e)
     return JsonResponse({'message': list_of_winners, 'delete_message': delete_message})
-
-
-@csrf_exempt
-def playlist_length_validation(request):
-    game = request.POST.get('game')
-    link = request.POST.get('link')
-    game_object = Game.objects.get(id=game)
-    game_pool_size = game_object.pool_size
-    playlist_length = len(YTPlaylist(link))
-    error = f"Sorry, Your playlist should be of length {game_pool_size}! ;)"
-    if not playlist_length == game_pool_size:
-        return JsonResponse({'message': error})
-    else:
-        return JsonResponse({'message': 'SUCCESS'})
