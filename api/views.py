@@ -1,8 +1,10 @@
+import ast
 import os
 import random
 from functools import reduce
 from math import gcd
 
+from celery.result import AsyncResult
 from pytube import Playlist as YTPlaylist
 import simplejson as json
 from django.core.mail import EmailMessage
@@ -73,11 +75,12 @@ def put_playlist(request):
             or make better friends! '''
             if len(playlist_object) == game_obj.contestants:
                 return render(request, 'apology.html', {'message': message})
-            playlist = {}
+            playlist, jobs = {}, []
             pl = YTPlaylist(playlist_details["playlist"])
             for idx, link in enumerate(pl):
                 filename = f"{playlist_details['name'].lower()}_{playlist_details['game']}_{idx + 1}"
-                download_and_save_music_locally.delay(filename, link)
+                result = download_and_save_music_locally.delay(filename, link)
+                jobs.append(result.task_id)
                 all_songs = json.loads(game_obj.all_songs)
                 all_songs.append(link)
                 game_obj.all_songs = json.dumps(all_songs)
@@ -94,13 +97,24 @@ def put_playlist(request):
             if len(playlist_object) == game_obj.contestants:
                 game_obj.ready_to_play = 1
                 game_obj.save()
-            return HttpResponseRedirect('/api/thanks/')
+            # return HttpResponseRedirect('/api/thanks/', )
+            return render(request, 'thanks.html', context={'jobs': jobs})
     else:
         playlist_details = PlaylistForm()
     context = {
         'playlist': playlist_details
     }
     return render(request, 'playlist.html', context)
+
+
+@csrf_exempt
+def poll_download(request):
+    jobs = ast.literal_eval(request.POST.get('jobs'))
+    result = []
+    for task in jobs:
+        res = AsyncResult(task)
+        result.append({'state': res.status, 'info': res.result})
+    return JsonResponse({'result': result})
 
 
 def get_games(request):

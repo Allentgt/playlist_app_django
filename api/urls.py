@@ -7,6 +7,7 @@ urlpatterns = [
     path('thanks/', views.thanks, name='thanks'),
     path('randomise/<str:game>/', views.randomise, name='randomise'),
     path('put_playlist/', views.put_playlist, name='put_playlist'),
+    path('poll_download/', views.poll_download, name='poll_download'),
     path('create_game/', views.create_game, name='create_game'),
     path('get_games/', views.get_games, name='get_games'),
     path('vote/', views.vote, name='vote'),

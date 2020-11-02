@@ -19,7 +19,6 @@ from django.views.generic import RedirectView
 
 urlpatterns = [
     path('api/', include('api.urls')),
-    path(r'^celery-progress/', include('celery_progress.urls')),
     path('admin/', admin.site.urls),
     path('', RedirectView.as_view(url='/api/'), name='home-redirect'),
 ]
