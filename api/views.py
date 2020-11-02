@@ -258,7 +258,20 @@ def end_game(request):
             list_of_winners.append(key)
     game_obj.is_over = 1
     game_obj.save()
-    return JsonResponse({'message': list_of_winners})
+    playlist_obj = Playlist.objects.filter(game=game_obj)
+    song_list = []
+    for row in playlist_obj:
+        song_list.extend(json.loads(row.playlist).values())
+    delete_message = 'Already empty!'
+    workdir = 'api/static/music'
+    for file in os.listdir(workdir):
+        if file in song_list:
+            try:
+                os.remove(f'{workdir}/{file}')
+                delete_message = 'SUCCESS'
+            except Exception as e:
+                delete_message = str(e)
+    return JsonResponse({'message': list_of_winners, 'delete_message': delete_message})
 
 
 @csrf_exempt
@@ -273,23 +286,3 @@ def playlist_length_validation(request):
         return JsonResponse({'message': error})
     else:
         return JsonResponse({'message': 'SUCCESS'})
-
-
-@csrf_exempt
-def game_playlist_del(request):
-    game = request.POST.get('game')
-    playlist_obj = Playlist.objects.filter(game=game)
-    song_list = []
-
-    for row in playlist_obj:
-        song_list.extend(json.loads(row.playlist).values())
-    message = 'Already empty!'
-    workdir = 'api/static/music'
-    for file in os.listdir(workdir):
-        if file in song_list:
-            try:
-                os.remove(f'{workdir}/{file}')
-                message = 'SUCCESS'
-            except Exception as e:
-                message = str(e)
-    return JsonResponse({'message': message})
