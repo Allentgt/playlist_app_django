@@ -148,12 +148,13 @@ def randomise(request, game):
         sampling = [{idx: i} for i in sampling]
         all_random_sample.extend(sampling)
     random.shuffle(all_random_sample)
-    """for i in all_random_sample:
-        for j, k in i.items():
-            k['name'] = j
-    all_random_sample = [list(i.values())[0] for i in all_random_sample]"""
+    result = []
+    for i in all_random_sample:
+        result.append({'name': list(i.keys())[0], 'link': list(i.values())[0]})
+    # all_random_sample = [list(i.values())[0] for i in all_random_sample]
+    print(result)
     return render(request, 'songs.html',
-                  {'context': all_random_sample, 'uniquePlayers': uniquePlayers, 'scorecard': scorecard})
+                  {'context': result, 'uniquePlayers': uniquePlayers, 'scorecard': scorecard})
 
 
 def lcm(denominators):
