@@ -9,4 +9,3 @@ redis==3.5.3
 celery==4.4.0
 pytube==9.7.0
 mysqlclient==2.0.1
-backoff==1.10.0
