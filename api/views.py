@@ -97,7 +97,6 @@ def put_playlist(request):
             if len(playlist_object) == game_obj.contestants:
                 game_obj.ready_to_play = 1
                 game_obj.save()
-            # return HttpResponseRedirect('/api/thanks/', )
             return render(request, 'thanks.html', context={'jobs': jobs})
     else:
         playlist_details = PlaylistForm()

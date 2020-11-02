@@ -16,6 +16,6 @@ class GameListForm(forms.Form):
 
 class PlaylistForm(forms.Form):
     name = forms.CharField(max_length=100)
-    game = forms.ModelChoiceField(queryset=Game.objects.all().order_by('name'),
+    game = forms.ModelChoiceField(queryset=Game.objects.filter(ready_to_play=0).order_by('name'),
                                   widget=forms.Select(attrs={'class': 'choices'}))
     playlist = forms.CharField(required=True)
