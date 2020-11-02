@@ -26,5 +26,5 @@ python manage.py runserver
 ```
 To run the celery application :
 ```
-celery -A playlist worker -l info
+celery -A playlist worker -l info -P gevent
 ```
