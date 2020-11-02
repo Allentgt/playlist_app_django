@@ -243,7 +243,7 @@ def find_duplicate_song(request):
     error = """Sorry, Your friend has already taken the song! ;)"""
     for song in YTPlaylist(link):
         if song in song_list:
-            return JsonResponse({'message': error})
+            return JsonResponse({'message': song})
         else:
             return JsonResponse({'message': 'SUCCESS'})
 
