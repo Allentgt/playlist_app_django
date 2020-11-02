@@ -259,3 +259,40 @@ def end_game(request):
     game_obj.is_over = 1
     game_obj.save()
     return JsonResponse({'message': list_of_winners})
+
+
+@csrf_exempt
+def playlist_length_validation(request):
+    game = request.POST.get('game')
+    link = request.POST.get('link')
+    gameobject = Game.objects.get(id=game)
+    gamepoolsize = gameobject.pool_size
+    playlistlength = len(YTPlaylist(link))
+	
+    error = f"Sorry, Your playlist should be of length {gamepoolsize}! ;)"
+    
+    if not playlistlength == gamepoolsize :
+        return JsonResponse({'message': error})
+    else:
+        return JsonResponse({'message': 'SUCCESS'})
+
+
+@csrf_exempt
+def game_playlist_del(request):
+    game = request.POST.get('game')
+    playlist_obj = Playlist.objects.filter(game=game)
+    songlist=[]
+	
+    for row in playlist_obj:
+	    songlist.extend(json.loads(row.playlist).values())
+    message='Already empty'
+    for file in os.listdir('api/static/music'):
+        if file in songlist:
+            try :
+                os.remove(f'api/static/music/{file}') 
+                message='SUCCESS'
+            except Exception as e:
+                message=str(e)
+
+    return JsonResponse({'message': message})
+

@@ -21,4 +21,7 @@ urlpatterns = [
     path('feedback/', views.feedback, name='feedback'),
     path('gameinfo/', views.game_info_howto, name='game_info_howto'),
     path('end_game/', views.end_game, name='end_game'),
+    path('playlist_length_validation/', views.playlist_length_validation, name='playlist_length_validation'),
+    path('game_playlist_del/', views.game_playlist_del, name='game_playlist_del'),
+
 ]
