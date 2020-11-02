@@ -11,7 +11,7 @@
     $(document).on('ready', function() {
         var select = document.getElementById("gameValue").children[0];
         select.addEventListener('change',function(){
-            var url = document.URL.split("put_game_details");
+            var url = document.URL.split("put_playlist");
 
             $.post(url[0] + "game_info/",{
             "game": document.getElementById("gameValue").children[0].value,
@@ -37,7 +37,7 @@
 
     var validateUserName = function() {
 
-        var url = document.URL.split("put_game_details");
+        var url = document.URL.split("put_playlist");
 
         $.post(url[0] + "find_duplicate_name/",{
             "game": document.getElementById("gameValue").children[0].value,

@@ -8,8 +8,12 @@
 ```
 virtualenv venv && venv\Scripts\activate
 ```
-    
- 3. Migrate the db:
+ 3. To install dependencies -
+ ```
+ pip install -r requirements.txt
+ ```
+ 
+ 4. Migrate the db:
 ```
 python manage.py makemigrations
 ```
