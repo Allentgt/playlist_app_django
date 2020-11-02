@@ -242,7 +242,7 @@ def find_duplicate_song(request):
     error = """Sorry, Your friend has already taken the song! ;)"""
     for song in YTPlaylist(link):
         if song in song_list:
-                return JsonResponse({'message': error})
+            return JsonResponse({'message': error})
         else:
             return JsonResponse({'message': 'SUCCESS'})
 
@@ -265,13 +265,11 @@ def end_game(request):
 def playlist_length_validation(request):
     game = request.POST.get('game')
     link = request.POST.get('link')
-    gameobject = Game.objects.get(id=game)
-    gamepoolsize = gameobject.pool_size
-    playlistlength = len(YTPlaylist(link))
-	
-    error = f"Sorry, Your playlist should be of length {gamepoolsize}! ;)"
-    
-    if not playlistlength == gamepoolsize :
+    game_object = Game.objects.get(id=game)
+    game_pool_size = game_object.pool_size
+    playlist_length = len(YTPlaylist(link))
+    error = f"Sorry, Your playlist should be of length {game_pool_size}! ;)"
+    if not playlist_length == game_pool_size:
         return JsonResponse({'message': error})
     else:
         return JsonResponse({'message': 'SUCCESS'})
@@ -281,18 +279,17 @@ def playlist_length_validation(request):
 def game_playlist_del(request):
     game = request.POST.get('game')
     playlist_obj = Playlist.objects.filter(game=game)
-    songlist=[]
-	
+    song_list = []
+
     for row in playlist_obj:
-	    songlist.extend(json.loads(row.playlist).values())
-    message='Already empty'
-    for file in os.listdir('api/static/music'):
-        if file in songlist:
-            try :
-                os.remove(f'api/static/music/{file}') 
-                message='SUCCESS'
+        song_list.extend(json.loads(row.playlist).values())
+    message = 'Already empty!'
+    workdir = 'api/static/music'
+    for file in os.listdir(workdir):
+        if file in song_list:
+            try:
+                os.remove(f'{workdir}/{file}')
+                message = 'SUCCESS'
             except Exception as e:
-                message=str(e)
-
+                message = str(e)
     return JsonResponse({'message': message})
-
