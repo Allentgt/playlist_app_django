@@ -44,12 +44,44 @@
             "player_name" : document.getElementById("name").value
       },function(response) {
           if(response.message.toUpperCase() !== "SUCCESS") {
-            document.getElementById("errorMsg").innerHTML = response.message;
+            document.getElementById("sorryMsg").innerHTML = response.message;
             document.getElementById("submitButton").style.display = "none";
 
           } else {
               document.getElementById("submitButton").style.display = "block";
-                document.getElementById("errorMsg").innerHTML = "";
+                document.getElementById("sorryMsg").innerHTML = "";
+
+          }
+      });
+    }
+
+    var validatePlaylist =  function() {
+        var url = document.URL.split("put_playlist");
+        $.post(url[0] + "playlist_validations/",{
+            "game": document.getElementById("gameValue").children[0].value,
+            "link" : document.getElementById("playlist").value
+      },function(response) {
+          if(response.status.toUpperCase() !== "SUCCESS") {
+              var errorMsg = "";
+              if(response.length) {
+                  errorMsg = errorMsg + response.length;
+              }
+              if(response.duplicate && response.duplicate.length > 0) {
+                  errorMsg = errorMsg +"<br>" + "The duplicates songs is/are -" + "<br>";
+                  for(var i=0;i<response.duplicate.length;i++) {
+                      errorMsg = errorMsg + response.duplicate[i] + "<br>";
+                  }
+
+              }
+
+
+            document.getElementById("sorryMsg").innerHTML = errorMsg;
+            document.getElementById("submitButton").style.display = "none";
+            document.getElementById("playlist").value = "";
+
+          } else {
+            document.getElementById("submitButton").style.display = "block";
+            document.getElementById("sorryMsg").innerHTML = "";
 
           }
       });
@@ -68,16 +100,15 @@
                 <br>
                 <br>
                 <div class="input-field">
-                    <input onfocusout = "validateUserName()" type="text" id="name" name="name" required />
+                    <input onfocusout = "validateUserName()" type="text" id="name" name="name" autocomplete="off" required />
                     <label for="name">Player Name:</label>
                 </div>
 
                 <div class="input-field">
-                    <input type="text" id="playlist" name="playlist" required />
+                    <input onfocusout = "validatePlaylist()" type="text" id="playlist" name="playlist" autocomplete="off" required />
                     <label for="playlist">Playlist:</label>
                 </div>
                 <button id="submitButton" type="submit">Submit</button>
-                <div class="app-text-play" id="errorMsg" style="font-size: 3rem;"></div>
                 <div id="sorryMsg" class="app-text-play" style="font-size: 0.75rem; color: whitesmoke"></div>
                 </form>
             </div>
