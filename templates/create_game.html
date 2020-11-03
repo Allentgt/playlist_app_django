@@ -21,6 +21,7 @@
             if (response.message.toUpperCase() !== "SUCCESS") {
                 document.getElementById("errorMsg").innerHTML = response.message;
                 document.getElementById("submitButton").style.display = "none";
+                document.getElementById("name").value = "";
 
             } else {
                 document.getElementById("submitButton").style.display = "block";
@@ -34,7 +35,7 @@
 <form action="/api/create_game/" method="post">
     {% csrf_token %}
     <div class="main-container">
-        <div class="input-container">
+        <div class="input-container" style="margin-bottom: 4rem;">
             <div class="input-field">
                 <input onfocusout="validateGameName()" type="text" id="name" name="name" autocomplete="off" required />
                 <label for="name" class="label-name">Game Name :</label>
@@ -52,7 +53,8 @@
                 <label for="contestants">Contestants :</label>
             </div>
             <button id="submitButton" type="submit" value="Submit">Create</button>
-            <div class="app-text" id="errorMsg" style="font-family: 'GraphiqueW01-Regular';font-size: 3rem;"></div>
+            <div id="errorMsg" class="app-text-play" style="font-size: 0.75rem; color: whitesmoke"></div>
+
         </div>
         <div class="input-container" style="margin-left: 1rem;">
             <img src="{% static 'slick/oie_2212120tebkhWoO.gif' %}">
