@@ -1,3 +1,39 @@
-<body>
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<head>
+  <title>About Us</title>
+  <meta charset="UTF-8">
+
+</head>
+    <div class="app-text-play" style="text-align: center;">
+        <table style="margin:auto; border-spacing: 2.5rem;">
+            <tr>
+                <td rowspan="2"> <img src="{% static 'slick/arpit.jpg' %}" style="height: 10rem; border-radius: 50%;"/></td>
+                <td style="font-size: 2rem;">Arpit Agrawal</td>
+            </tr>
+            <tr>
+                <td><a href="https://www.linkedin.com/in/arpit-agrawal-a0818a5a/" target="_blank"><img src="{% static 'slick/in.png' %}" style="height: 3rem;"/></a></td>
+            </tr>
+
+            <tr>
+                <td style="font-size: 2rem;">Sabyasachi Das</td>
+                <td rowspan="2"> <img src="{% static 'slick/sabya.jpg' %}" style="height: 10rem; border-radius: 50%;"/></td>
+            </tr>
+            <tr>
+                <td><a href="https://www.linkedin.com/in/sabyasachi-das-23a168a7/" target="_blank"><img src="{% static 'slick/in.png' %}" style="height: 3rem;"/></a></td>
+            </tr>
+
+            <tr>
+                <td rowspan="2"> <img src="{% static 'slick/anuja.jpg' %}" style="height: 10rem; border-radius: 50%;"/></td>
+                <td style="font-size: 2rem;">Anuja  Dubey</td>
+            </tr>
+            <tr>
+                <td><a href="https://www.linkedin.com/in/anuja-dubey-43305077/" target="_blank"><img src="{% static 'slick/in.png' %}" style="height: 3rem;"/></a></td>
+            </tr>
+            
+        </table>
     
-</body>
+    </div>
+
+{% endblock %}
