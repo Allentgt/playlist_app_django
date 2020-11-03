@@ -1,6 +1,7 @@
 import ast
 import os
 import random
+import re
 from functools import reduce
 from math import gcd
 
@@ -77,6 +78,7 @@ def put_playlist(request):
                 return render(request, 'apology.html', {'message': message})
             playlist, jobs = {}, []
             pl = YTPlaylist(playlist_details["playlist"])
+            # pl._video_regex = re.compile(r"\"url\":\"(/watch\?v=[\w-]*)")
             for idx, link in enumerate(pl):
                 filename = f"{playlist_details['name'].lower()}_{playlist_details['game']}_{idx + 1}"
                 result = download_and_save_music_locally.delay(filename, link)
@@ -85,7 +87,7 @@ def put_playlist(request):
                 all_songs.append(link)
                 game_obj.all_songs = json.dumps(all_songs)
                 game_obj.save()
-                playlist[idx + 1] = os.path.join(f'{filename}.mp4')
+                playlist[idx + 1] = os.path.join(f'{filename}.mp3')
             data = {
                 'name': playlist_details['name'].lower(),
                 'game': game_obj,
