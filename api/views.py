@@ -84,7 +84,7 @@ def put_playlist(request):
                 pl = YTPlaylist(playlist_details["playlist"])
                 # pl._video_regex = re.compile(r"\"url\":\"(/watch\?v=[\w-]*)")
                 for idx, link in enumerate(pl):
-                    filename = f"{playlist_details['name'].lower()}_{playlist_details['game']}_{idx + 1}"
+                    filename = f"{playlist_details['name'].lower()}_{playlist_details['game'].replace(' ', '_')}_{idx + 1}"
                     result = download_and_save_music_locally.delay(filename, link)
                     jobs.append(result.task_id)
                     all_songs = json.loads(game_obj.all_songs)

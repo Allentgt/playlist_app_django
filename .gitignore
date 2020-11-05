@@ -10,3 +10,4 @@ playlist/.env
 static/
 staticfiles/
 api/static/music/
+.vs/
