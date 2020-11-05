@@ -11,6 +11,13 @@
 
 
 <script>
+    $(document).keypress(
+        function(event){
+            if (event.which == '13') {
+                event.preventDefault();
+            }
+    });
+
     var validateGameName = function () {
 
         var url = document.URL.split("create_game");
@@ -21,7 +28,6 @@
             if (response.message.toUpperCase() !== "SUCCESS") {
                 document.getElementById("errorMsg").innerHTML = response.message;
                 document.getElementById("submitButton").style.display = "none";
-                document.getElementById("name").value = "";
 
             } else {
                 document.getElementById("submitButton").style.display = "block";

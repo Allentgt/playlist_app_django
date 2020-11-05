@@ -33,6 +33,13 @@
             
         });
     });
+
+    $(document).keypress(
+        function(event){
+            if (event.which == '13') {
+                event.preventDefault();
+            }
+    });
     
     
 
@@ -78,7 +85,6 @@
 
             document.getElementById("sorryMsg").innerHTML = errorMsg;
             document.getElementById("submitButton").style.display = "none";
-            document.getElementById("playlist").value = "";
 
           } else {
             document.getElementById("submitButton").style.display = "block";
