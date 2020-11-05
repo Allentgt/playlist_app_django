@@ -3,6 +3,7 @@
 {% block content %}
 
 {% load static %}
+    <script type="text/javascript" src="{% static 'slick/vanilla-tilt.js' %}"></script>
 
     <meta charset="UTF-8">
     <title>The Playlist Game</title>
@@ -32,4 +33,12 @@
                 </a>
             </div>
     </div>
+
+    <script type="text/javascript">
+        VanillaTilt.init(document.querySelectorAll(".card"), {
+                max: 25,
+                speed: 400,
+                scale: 1
+            });
+    </script>
 {% endblock %}
