@@ -223,7 +223,8 @@ def game_info(request):
         playlist_obj = Playlist.objects.filter(game=game_obj)
         response = {
             'contestants': [player.name for player in playlist_obj],
-            'available_slots': game_obj.contestants - len(playlist_obj)
+            'available_slots': game_obj.contestants - len(playlist_obj),
+            'playlist_length': game_obj.pool_size
         }
         return JsonResponse(response)
     except Exception as e:
