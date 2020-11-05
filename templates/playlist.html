@@ -19,6 +19,7 @@
                 document.getElementById("gameInfo").style.display = "block";
                 document.getElementById("gameSlots").innerHTML = response.available_slots;
                 document.getElementById("contestants").innerHTML = response.contestants.toString();
+                document.getElementById("playlist_length").innerHTML = response.playlist_length;
 
                 if(response.available_slots === 0) {
                     document.getElementById("submitButton").style.display = "none";
@@ -119,20 +120,23 @@
                 <table>
                     <tr>
                         <td>
-                            Available Slots : 
+                            Available Slots :
                         </td>
-                        <td id="gameSlots" style="padding-left: 2rem;">
+                        <td id="gameSlots" style="padding-left: 2rem;"></td>
 
-                        </td>
-                        
                     </tr>
                     <tr>
                         <td>
-                            contestants :
+                            Contestants :
                         </td>
-                        <td id="contestants" style="padding-left: 2rem;">
+                        <td id="contestants" style="padding-left: 2rem;"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Playlist Length :
+                        </td>
+                        <td id="playlist_length" style="padding-left: 2rem;"></td>
 
-                        </td>
                     </tr>
                 </table>
             </div>
