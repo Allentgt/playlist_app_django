@@ -13,6 +13,7 @@
         var select = document.getElementById("gameValue");
         
         select.addEventListener('change',function(){
+            enableSubmitAndClearMsg();
             
 
             $.post(url[0] + "game_info/",{
@@ -53,6 +54,12 @@
 
     var validateAndSubmit = function () {
 
+        if(parseInt(document.getElementById("gameValue").value) === -1 ) {
+            document.getElementById("submitButton").style.display = "none";
+            document.getElementById("sorryMsg").innerHTML = "Please select the game !!";
+            return;
+        }
+
         $.post(url[0] + "put_playlist/",{
             name : document.getElementById("name").value,
             game : document.getElementById("gameValue").value,
@@ -91,7 +98,7 @@
                     document.getElementById("sorryMsg").innerHTML = errorMsg;
                     document.getElementById("submitButton").style.display = "none";
                 } else {
-                    enableSubmitAndClearMsg();
+                    window.location.replace(url[0] + "thanks/");
                 }
             }
         })
@@ -104,57 +111,12 @@
     }
 
 
-    // var validateUserName = function() {
-
-    //     var url = document.URL.split("put_playlist");
-
-    //     $.post(url[0] + "find_duplicate_name/",{
-    //         "game": document.getElementById("gameValue").children[0].value,
-    //         "player_name" : document.getElementById("name").value
-    //   },function(response) {
-    //       if(response.message.toUpperCase() !== "SUCCESS") {
-    //         document.getElementById("sorryMsg").innerHTML = response.message;
-    //         document.getElementById("submitButton").style.display = "none";
-
-    //       } else {
-    //           document.getElementById("submitButton").style.display = "block";
-    //             document.getElementById("sorryMsg").innerHTML = "";
-
-    //       }
-    //   });
-    // }
-
-    // var validatePlaylist =  function() {
-    //     var url = document.URL.split("put_playlist");
-    //     $.post(url[0] + "playlist_validations/",{
-    //         "game": document.getElementById("gameValue").children[0].value,
-    //         "link" : document.getElementById("playlist").value
-    //   },function(response) {
-    //       if(response.status.toUpperCase() !== "SUCCESS") {
-    //           var errorMsg = "";
-    //           if(response.length) {
-    //               errorMsg = errorMsg + response.length;
-    //           }
-    //           if(response.duplicate && response.duplicate.length > 0) {
-    //               errorMsg = errorMsg +"<br>" + "The duplicates songs is/are -" + "<br>";
-    //               for(var i=0;i<response.duplicate.length;i++) {
-    //                   errorMsg = errorMsg + response.duplicate[i] + "<br>";
-    //               }
-
-    //           }
-
-
-    //         document.getElementById("sorryMsg").innerHTML = errorMsg;
-    //         document.getElementById("submitButton").style.display = "none";
-
-    //       } else {
-    //         document.getElementById("submitButton").style.display = "block";
-    //         document.getElementById("sorryMsg").innerHTML = "";
-
-    //       }
-    //   });
-    // }
-
+    $(document).keypress(
+        function(event){
+            if (event.which !== '13') {
+                enableSubmitAndClearMsg();
+            }
+    });
 
 </script>
 
@@ -165,7 +127,7 @@
                 <div class="input-field" id="gname">
                     <span class="label-style">Game Name :</span>
                     <select id="gameValue" class="participant-dropdown-list">
-                        <option>-------------</option>
+                        <option value = "-1">-------------</option>
                     </select>
                 </div>
 
@@ -175,7 +137,7 @@
                 </div>
 
                 <div class="input-field">
-                    <input onchange="enableSubmitAndClearMsg()" type="text" id="playlist" name="playlist" autocomplete="off" required />
+                    <input type="text" id="playlist" name="playlist" autocomplete="off" required />
                     <label for="playlist">Youtube Playlist URL: </label>
                 </div>
                 <button id="submitButton" type="submit" onclick="validateAndSubmit()">Submit</button>
