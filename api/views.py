@@ -172,10 +172,6 @@ def put_playlist(request):
         if name in username_list:
             return JsonResponse({'status': 'FAILED', 'message': error})
 
-        message = f"Sorry {name}, You didn't make the cut. May be try joining another game or make better friends!"
-        if len(playlist_object) == game_obj.contestants:
-            return JsonResponse({'status': 'FAILED', 'message': message})
-
         playlist_dict, error_data, jobs, duplicate_songs = {}, {}, [], []
         try:
             pl = YTPlaylist(playlist)
@@ -309,22 +305,6 @@ def vote(request):
 
 
 @csrf_exempt
-def find_duplicate_name(request):
-    try:
-        game = request.POST.get('game')
-        player_name = request.POST.get('player_name')
-        game_obj = Game.objects.get(id=game)
-        error = """Sorry, I guess you have a very common name ;)"""
-        username_list = [player_list.name for player_list in Playlist.objects.filter(game=game_obj)]
-        if player_name in username_list:
-            return JsonResponse({'message': error})
-        else:
-            return JsonResponse({'message': 'SUCCESS'})
-    except Exception as e:
-        return JsonResponse({'message': str(e)})
-
-
-@csrf_exempt
 def game_info(request):
     try:
         game = request.POST.get('game')
@@ -341,17 +321,9 @@ def game_info(request):
 
 
 @csrf_exempt
-def find_duplicate_game(request):
-    try:
-        name = request.POST.get('name')
-        game_list = [game.name for game in Game.objects.all()]
-        error = """Sorry, A game with the same name already exists ;)"""
-        if name in game_list:
-            return JsonResponse({'message': error})
-        else:
-            return JsonResponse({'message': 'SUCCESS'})
-    except Exception as e:
-        return JsonResponse({'message': str(e)})
+def game_data(request):
+    game_obj = Game.objects.filter(ready_to_play=0)
+    return JsonResponse([{game.id: game.name} for game in game_obj], safe=False)
 
 
 @csrf_exempt
@@ -367,35 +339,6 @@ def send_support_mail(request):
             mail.attach(attachment.name, attachment.read(), attachment.content_type)
         mail.send()
         return JsonResponse({'message': 'success'})
-    except Exception as e:
-        return JsonResponse({'message': str(e)})
-
-
-@csrf_exempt
-def playlist_validations(request):
-    try:
-        game = request.POST.get('game')
-        link = request.POST.get('link')
-        game_object = Game.objects.get(id=game)
-        song_list = json.loads(game_object.all_songs)
-        playlist = YTPlaylist(link)
-        duplicate_songs = []
-        error_data = {}
-        for song in playlist:
-            if song in song_list:
-                duplicate_songs.append(song)
-        if duplicate_songs:
-            error_data['duplicate'] = duplicate_songs
-
-        game_pool_size = game_object.pool_size
-        playlist_length = len(playlist)
-        length_error = f"Sorry, Your playlist should be of length {game_pool_size}! ;)"
-        if not playlist_length == game_pool_size:
-            error_data['length'] = length_error
-        if error_data:
-            error_data['status'] = 'FAILED'
-            return JsonResponse(error_data)
-        return JsonResponse({'status': 'SUCCESS'})
     except Exception as e:
         return JsonResponse({'message': str(e)})
 
