@@ -12,44 +12,60 @@
 
 <script>
 
-    var validateGameName = function () {
+    var validateAndCreateGame = function() {
 
-        var url = document.URL.split("create_game");
+        var url = document.URL.split("new_game");
+        $.post(url[0] + "create_game/", {
+            name : document.getElementById("name").value,
+            sample_size : document.getElementById("sample_size").value,
+            pool_size : document.getElementById("pool_size").value,
+            contestants : document.getElementById("contestants").value,
 
-        $.post(url[0] + "find_duplicate_game/", {
-            "name": document.getElementById("name").value
-        }, function (response) {
-            if (response.message.toUpperCase() !== "SUCCESS") {
+        }, function(response){
+            if (response && response.status && response.status.toUpperCase() !== "SUCCESS") {
                 document.getElementById("errorMsg").innerHTML = response.message;
                 document.getElementById("submitButton").style.display = "none";
 
             } else {
-                document.getElementById("submitButton").style.display = "block";
-                document.getElementById("errorMsg").innerHTML = "";
-
+                window.location.replace(url[0] + "new_entry/");
             }
+
         });
+
     }
+
+    var enableSubmitAndClearMsg = function () {
+        document.getElementById("submitButton").style.display = "block";
+        document.getElementById("errorMsg").innerHTML = "";
+    }
+
+
+    $(document).keypress(
+        function(event){
+            if (event.which !== '13') {
+                enableSubmitAndClearMsg();
+            }
+    });
 </script>
 <div class = "input-container-playlist">
         <div class="game-selector-div" style="margin-bottom: 4rem; flex-direction: column;">
             <div class="input-field">
-                <input onfocusout="validateGameName()" type="text" id="name" name="name" autocomplete="off" required />
+                <input type="text" id="name" name="name" autocomplete="off" required />
                 <label for="name" class="label-name">Game Name :</label>
             </div>
             <div class="input-field">
                 <input type="number" id="sample_size" min="1" name="sample_size" autocomplete="off" required />
-                <label for="sample_size">Rounds to Play :</label>
+                <label for="sample_size">No of songs to be played in a game :</label>
             </div>
             <div class="input-field">
                 <input type="number" id="pool_size" min="1" name="pool_size" autocomplete="off" required />
-                <label for="pool_size">Playlist Length :</label>
+                <label for="pool_size">Individual Playlist Length :</label>
             </div>
             <div class="input-field">
                 <input type="number" id="contestants" min="1" name="contestants" autocomplete="off" required />
                 <label for="contestants">Number of Contestants :</label>
             </div>
-            <button id="submitButton" type="submit" value="Submit">Create</button>
+            <button id="submitButton" type="submit" value="Submit" onclick="validateAndCreateGame()">Create</button>
             <div id="errorMsg" class="app-text-play" style="font-size: 0.75rem; color: whitesmoke"></div>
 
         </div>

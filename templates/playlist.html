@@ -66,7 +66,6 @@
             playlist : document.getElementById("playlist").value
         }, function( response ) {
             if(response) {
-                console.log(response);
                 var errorMsg = "";
 
                 if(response.status && response.status.toUpperCase() !== "SUCCESS") {
@@ -79,7 +78,6 @@
                             
                     } 
                     if( response.length) {
-                        // errorMsg = errorMsg + response.length;
                         if(errorMsg.length > 0) {
                             errorMsg = errorMsg + "<br>" + response.length;
                         } else {
@@ -137,7 +135,7 @@
                 </div>
 
                 <div class="input-field">
-                    <input type="text" id="playlist" name="playlist" autocomplete="off" required />
+                    <input type="text" id="playlist" name="playlist" autocomplete="off" required onpaste = enableSubmitAndClearMsg() />
                     <label for="playlist">Youtube Playlist URL: </label>
                 </div>
                 <button id="submitButton" type="submit" onclick="validateAndSubmit()">Submit</button>
