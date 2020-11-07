@@ -11,12 +11,6 @@
 
 
 <script>
-    $(document).keypress(
-        function(event){
-            if (event.which == '13') {
-                event.preventDefault();
-            }
-    });
 
     var validateGameName = function () {
 
@@ -37,11 +31,8 @@
         });
     }
 </script>
-
-
-    {% csrf_token %}
-    <div class="main-container">
-        <div class="input-container" style="margin-bottom: 4rem;">
+<div class = "input-container-playlist">
+        <div class="game-selector-div" style="margin-bottom: 4rem; flex-direction: column;">
             <div class="input-field">
                 <input onfocusout="validateGameName()" type="text" id="name" name="name" autocomplete="off" required />
                 <label for="name" class="label-name">Game Name :</label>
@@ -62,10 +53,11 @@
             <div id="errorMsg" class="app-text-play" style="font-size: 0.75rem; color: whitesmoke"></div>
 
         </div>
-        <div class="input-container" style="margin-left: 1rem;">
+        <div style="margin-left: 1rem;">
             <img src="{% static 'slick/oie_2212120tebkhWoO.gif' %}">
         </div>
-    </div>
+</div>
+   
 
 
 {% endblock %}
