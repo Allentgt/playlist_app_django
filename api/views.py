@@ -68,15 +68,24 @@ def thanks(request):
 def create_game(request):
     try:
         name = request.POST.get('name')
+        sample_size = int(request.POST.get('sample_size'))
+        pool_size = int(request.POST.get('pool_size'))
+        contestants = int(request.POST.get('contestants'))
         game_list = [game.name for game in Game.objects.all()]
+
         error = "Sorry, A game with the same name already exists ;)"
         if name in game_list:
             return JsonResponse({'status': 'FAILED', 'message': error})
+
+        error = f"No of songs should be between {contestants} and {pool_size * contestants}"
+        if not contestants < sample_size < pool_size * contestants:
+            return JsonResponse({'status': 'FAILED', 'message': error})
+
         data = {
             'name': name,
-            'sample_size': request.POST.get('sample_size'),
-            'pool_size': request.POST.get('pool_size'),
-            'contestants': request.POST.get('contestants')
+            'sample_size': sample_size,
+            'pool_size': pool_size,
+            'contestants': contestants
         }
         game = Game(**data)
         game.save()
