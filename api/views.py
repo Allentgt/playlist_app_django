@@ -43,8 +43,10 @@ def feedback(request):
 def thanks(request):
     return render(request, 'thanks.html')
 
+
 def new_game(request):
     return render(request, 'create_game.html')
+
 
 def new_entry(request):
     return render(request, 'playlist.html')
@@ -371,4 +373,3 @@ def end_game(request):
         return JsonResponse({'message': list_of_winners, 'delete_message': delete_message})
     except Exception as e:
         return JsonResponse({'message': str(e)})
-
