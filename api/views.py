@@ -85,8 +85,8 @@ def create_game(request):
         if name in game_list:
             return JsonResponse({'status': 'FAILED', 'message': error})
 
-        error = f"No of songs should be between {contestants} and {pool_size * contestants}"
-        if not contestants < sample_size < pool_size * contestants:
+        error = f"No of songs to be played should be between {contestants} and {pool_size * contestants}"
+        if not contestants <= sample_size <= pool_size * contestants:
             return JsonResponse({'status': 'FAILED', 'message': error})
 
         data = {
