@@ -2,6 +2,7 @@ import ast
 import os
 import random
 import re
+import time
 from functools import reduce
 from math import gcd
 
@@ -43,7 +44,7 @@ def thanks(request):
     return render(request, 'thanks.html')
 
 
-def create_game(request):
+"""def create_game(request):
     if request.method == 'POST':
         try:
             form = GameForm(request.POST)
@@ -60,16 +61,44 @@ def create_game(request):
     else:
         form = GameForm()
 
-    return render(request, 'create_game.html', {'form': form})
+    return render(request, 'create_game.html', {'form': form})"""
 
 
-def put_playlist(request):
+@csrf_exempt
+def create_game(request):
+    try:
+        name = request.POST.get('name')
+        game_list = [game.name for game in Game.objects.all()]
+        error = "Sorry, A game with the same name already exists ;)"
+        if name in game_list:
+            return JsonResponse({'status': 'FAILED', 'message': error})
+        data = {
+            'name': name,
+            'sample_size': request.POST.get('sample_size'),
+            'pool_size': request.POST.get('pool_size'),
+            'contestants': request.POST.get('contestants')
+        }
+        game = Game(**data)
+        game.save()
+        response = {
+            'status': 'SUCCESS',
+            'message': 'Game Created'
+        }
+    except Exception as e:
+        response = {
+            'status': 'FAILED',
+            'message': str(e)
+        }
+    return JsonResponse(response)
+
+
+"""def put_playlist(request):
     if request.method == 'POST':
         try:
             playlist_details = PlaylistForm(request.POST)
             if playlist_details.is_valid():
                 playlist_details = playlist_details.cleaned_data
-                error = """Sorry, I guess you have a very common name ;)"""
+                error = "Sorry, I guess you have a very common name ;)"
                 username_list = [player_list.name for player_list in Playlist.objects.filter(game=playlist_details['game'])]
                 if playlist_details['name'] in username_list:
                     return JsonResponse({'error': error})
@@ -82,7 +111,6 @@ def put_playlist(request):
                     return render(request, 'apology.html', {'message': message})
                 playlist, jobs = {}, []
                 pl = YTPlaylist(playlist_details["playlist"])
-                # pl._video_regex = re.compile(r"\"url\":\"(/watch\?v=[\w-]*)")
                 for idx, link in enumerate(pl):
                     filename = f"{playlist_details['name'].lower()}_{playlist_details['game'].name.replace(' ', '_')}_{idx + 1}"
                     result = download_and_save_music_locally.delay(filename, link)
@@ -92,6 +120,7 @@ def put_playlist(request):
                     game_obj.all_songs = json.dumps(all_songs)
                     game_obj.save()
                     playlist[idx + 1] = os.path.join(f'{filename}.mp3')
+                    time.sleep(3)
                 data = {
                     'name': playlist_details['name'].lower(),
                     'game': game_obj,
@@ -111,7 +140,69 @@ def put_playlist(request):
     context = {
         'playlist': playlist_details
     }
-    return render(request, 'playlist.html', context)
+    return render(request, 'playlist.html', context)"""
+
+
+@csrf_exempt
+def put_playlist(request):
+    try:
+        name = request.POST.get('name')
+        game = request.POST.get('game')
+        playlist = request.POST.get('playlist')
+        game_obj = Game.objects.get(id=game)
+        playlist_object = Playlist.objects.filter(game=game)
+
+        error = "Sorry, I guess you have a very common name ;)"
+        username_list = [player_list.name for player_list in playlist_object]
+        if name in username_list:
+            return JsonResponse({'status': 'FAILED', 'message': error})
+
+        message = f"Sorry {name}, You didn't make the cut. May be try joining another game or make better friends!"
+        if len(playlist_object) == game_obj.contestants:
+            return JsonResponse({'status': 'FAILED', 'message': message})
+
+        playlist_dict, error_data, jobs, duplicate_songs = {}, {}, [], []
+        pl = YTPlaylist(playlist)
+
+        song_list = json.loads(game_obj.all_songs)
+        for song in pl:
+            if song in song_list:
+                duplicate_songs.append(song)
+        if duplicate_songs:
+            error_data['duplicate'] = duplicate_songs
+
+        game_pool_size = game_obj.pool_size
+        playlist_length = len(pl)
+        length_error = f"Sorry, Your playlist should be of length {game_pool_size}! ;)"
+        if not playlist_length == game_pool_size:
+            error_data['length'] = length_error
+        if error_data:
+            error_data['status'] = 'FAILED'
+            return JsonResponse(error_data)
+
+        for idx, link in enumerate(pl):
+            filename = f"{name.lower().replace(' ', '_')}_{game.replace(' ', '_')}_{idx + 1}"
+            result = download_and_save_music_locally.delay(filename, link)
+            jobs.append(result.task_id)
+            all_songs = json.loads(game_obj.all_songs)
+            all_songs.append(link)
+            game_obj.all_songs = json.dumps(all_songs)
+            game_obj.save()
+            playlist_dict[idx + 1] = os.path.join(f'{filename}.mp3')
+        data = {
+            'name': name.lower(),
+            'game': game_obj,
+            'playlist': json.dumps(playlist_dict)
+        }
+        p = Playlist(**data)
+        p.save()
+        playlist_object = Playlist.objects.filter(game=game)
+        if len(playlist_object) == game_obj.contestants:
+            game_obj.ready_to_play = 1
+            game_obj.save()
+        return JsonResponse({'status': 'SUCCESS', 'message': 'Playlist Submitted', 'jobs': jobs})
+    except Exception as e:
+        return JsonResponse({'status': 'FAILED', 'message': str(e)})
 
 
 @csrf_exempt
