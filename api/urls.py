@@ -21,4 +21,6 @@ urlpatterns = [
     path('feedback/', views.feedback, name='feedback'),
     path('gameinfo/', views.game_info_howto, name='game_info_howto'),
     path('end_game/', views.end_game, name='end_game'),
+    path('new_game/', views.new_game, name='new_game'),
+    path('new_entry/', views.new_entry, name='new_entry'),
 ]

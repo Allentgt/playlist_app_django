@@ -43,6 +43,12 @@ def feedback(request):
 def thanks(request):
     return render(request, 'thanks.html')
 
+def new_game(request):
+    return render(request, 'create_game.html')
+
+def new_entry(request):
+    return render(request, 'playlist.html')
+
 
 """def create_game(request):
     if request.method == 'POST':
