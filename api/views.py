@@ -162,7 +162,10 @@ def put_playlist(request):
             return JsonResponse({'status': 'FAILED', 'message': message})
 
         playlist_dict, error_data, jobs, duplicate_songs = {}, {}, [], []
-        pl = YTPlaylist(playlist)
+        try:
+            pl = YTPlaylist(playlist)
+        except Exception as e:
+            return JsonResponse({'status': 'FAILED', 'message': 'Invalid Playlist URL'})
 
         song_list = json.loads(game_obj.all_songs)
         for song in pl:
