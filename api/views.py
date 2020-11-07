@@ -177,6 +177,7 @@ def put_playlist(request):
         playlist_dict, error_data, jobs, duplicate_songs = {}, {}, [], []
         try:
             pl = YTPlaylist(playlist)
+            print(pl)
         except Exception as e:
             return JsonResponse({'status': 'FAILED', 'message': 'Invalid Playlist URL'})
 
