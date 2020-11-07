@@ -7,14 +7,16 @@
     <title>Enter Your Submission</title>
 </head>
 <script>
+    var url = document.URL.split("new_entry");
 
     $(document).on('ready', function() {
-        var select = document.getElementById("gameValue").children[0];
+        var select = document.getElementById("gameValue");
+        
         select.addEventListener('change',function(){
-            var url = document.URL.split("put_playlist");
+            
 
             $.post(url[0] + "game_info/",{
-            "game": document.getElementById("gameValue").children[0].value,
+            "game": document.getElementById("gameValue").value,
             },function(response) {
                 document.getElementById("gameInfo").style.display = "block";
                 document.getElementById("gameSlots").innerHTML = response.available_slots;
@@ -32,84 +34,152 @@
             });
             
         });
+
+        $.post(url[0] + "game_data/", {}, function(result) {
+            if(result && result.length > 0) {
+                var elem = document.getElementsByTagName("select")[0];
+                var optionElem = document.createElement("option");
+
+                for (var i=0;i<result.length;i++) {
+                    elem.append(optionElem);
+                    optionElem.setAttribute("value",result[i].key);
+                    optionElem.innerHTML = result[i].name;
+
+                }
+
+            }
+        }) 
     });
 
+    var validateAndSubmit = function () {
 
-    var validateUserName = function() {
+        $.post(url[0] + "put_playlist/",{
+            name : document.getElementById("name").value,
+            game : document.getElementById("gameValue").value,
+            playlist : document.getElementById("playlist").value
+        }, function( response ) {
+            if(response) {
+                console.log(response);
+                var errorMsg = "";
 
-        var url = document.URL.split("put_playlist");
+                if(response.status && response.status.toUpperCase() !== "SUCCESS") {
+                    if( response.message) {
+                        if(errorMsg.length > 0) {
+                            errorMsg = errorMsg + "<br>" + response.message;
+                        } else {
+                            errorMsg = response.message
+                        }
+                            
+                    } 
+                    if( response.length) {
+                        // errorMsg = errorMsg + response.length;
+                        if(errorMsg.length > 0) {
+                            errorMsg = errorMsg + "<br>" + response.length;
+                        } else {
+                            errorMsg = response.length
+                        }
+                    }
+                    if(response.duplicate && response.duplicate.length > 0) {
+                        errorMsg = errorMsg +"<br>" + "The duplicates songs is/are -" + "<br>";
+                        for(var i=0;i<response.duplicate.length;i++) {
+                            errorMsg = errorMsg + response.duplicate[i] + "<br>";
+                        }
 
-        $.post(url[0] + "find_duplicate_name/",{
-            "game": document.getElementById("gameValue").children[0].value,
-            "player_name" : document.getElementById("name").value
-      },function(response) {
-          if(response.message.toUpperCase() !== "SUCCESS") {
-            document.getElementById("sorryMsg").innerHTML = response.message;
-            document.getElementById("submitButton").style.display = "none";
+                    }
 
-          } else {
-              document.getElementById("submitButton").style.display = "block";
-                document.getElementById("sorryMsg").innerHTML = "";
 
-          }
-      });
+                    document.getElementById("sorryMsg").innerHTML = errorMsg;
+                    document.getElementById("submitButton").style.display = "none";
+                } else {
+                    enableSubmitAndClearMsg();
+                }
+            }
+        })
+
     }
 
-    var validatePlaylist =  function() {
-        var url = document.URL.split("put_playlist");
-        $.post(url[0] + "playlist_validations/",{
-            "game": document.getElementById("gameValue").children[0].value,
-            "link" : document.getElementById("playlist").value
-      },function(response) {
-          if(response.status.toUpperCase() !== "SUCCESS") {
-              var errorMsg = "";
-              if(response.length) {
-                  errorMsg = errorMsg + response.length;
-              }
-              if(response.duplicate && response.duplicate.length > 0) {
-                  errorMsg = errorMsg +"<br>" + "The duplicates songs is/are -" + "<br>";
-                  for(var i=0;i<response.duplicate.length;i++) {
-                      errorMsg = errorMsg + response.duplicate[i] + "<br>";
-                  }
-
-              }
-
-
-            document.getElementById("sorryMsg").innerHTML = errorMsg;
-            document.getElementById("submitButton").style.display = "none";
-
-          } else {
-            document.getElementById("submitButton").style.display = "block";
-            document.getElementById("sorryMsg").innerHTML = "";
-
-          }
-      });
+    var enableSubmitAndClearMsg = function () {
+        document.getElementById("submitButton").style.display = "block";
+        document.getElementById("sorryMsg").innerHTML = "";
     }
+
+
+    // var validateUserName = function() {
+
+    //     var url = document.URL.split("put_playlist");
+
+    //     $.post(url[0] + "find_duplicate_name/",{
+    //         "game": document.getElementById("gameValue").children[0].value,
+    //         "player_name" : document.getElementById("name").value
+    //   },function(response) {
+    //       if(response.message.toUpperCase() !== "SUCCESS") {
+    //         document.getElementById("sorryMsg").innerHTML = response.message;
+    //         document.getElementById("submitButton").style.display = "none";
+
+    //       } else {
+    //           document.getElementById("submitButton").style.display = "block";
+    //             document.getElementById("sorryMsg").innerHTML = "";
+
+    //       }
+    //   });
+    // }
+
+    // var validatePlaylist =  function() {
+    //     var url = document.URL.split("put_playlist");
+    //     $.post(url[0] + "playlist_validations/",{
+    //         "game": document.getElementById("gameValue").children[0].value,
+    //         "link" : document.getElementById("playlist").value
+    //   },function(response) {
+    //       if(response.status.toUpperCase() !== "SUCCESS") {
+    //           var errorMsg = "";
+    //           if(response.length) {
+    //               errorMsg = errorMsg + response.length;
+    //           }
+    //           if(response.duplicate && response.duplicate.length > 0) {
+    //               errorMsg = errorMsg +"<br>" + "The duplicates songs is/are -" + "<br>";
+    //               for(var i=0;i<response.duplicate.length;i++) {
+    //                   errorMsg = errorMsg + response.duplicate[i] + "<br>";
+    //               }
+
+    //           }
+
+
+    //         document.getElementById("sorryMsg").innerHTML = errorMsg;
+    //         document.getElementById("submitButton").style.display = "none";
+
+    //       } else {
+    //         document.getElementById("submitButton").style.display = "block";
+    //         document.getElementById("sorryMsg").innerHTML = "";
+
+    //       }
+    //   });
+    // }
+
+
 </script>
 
+
         <div class="input-container-playlist">
-            <div class="game-selector-div" style="margin-bottom: 4rem;">
-                <form method="POST">
-                {% csrf_token %}
+            <div class="game-selector-div" style="margin-bottom: 4rem; flex-direction: column;">
 
                 <div class="input-field" id="gname">
                     <span class="label-style">Game Name :</span>
-                   <section id="gameValue" class="choices">{{ playlist.game }}</section>
+                    <select id="gameValue" class="participant-dropdown-list">
+                        <option>-------------</option>
+                    </select>
                 </div>
-                <br>
-                <br>
+
                 <div class="input-field">
-                    <input onfocusout = "validateUserName()" type="text" id="name" name="name" autocomplete="off" required />
+                    <input type="text" id="name" name="name" autocomplete="off" required />
                     <label for="name">Player Name:</label>
                 </div>
 
                 <div class="input-field">
-                    <input onfocusout = "validatePlaylist()" type="text" id="playlist" name="playlist" autocomplete="off" required />
+                    <input onchange="enableSubmitAndClearMsg()" type="text" id="playlist" name="playlist" autocomplete="off" required />
                     <label for="playlist">Youtube Playlist URL: </label>
                 </div>
-                <button id="submitButton" type="submit">Submit</button>
+                <button id="submitButton" type="submit" onclick="validateAndSubmit()">Submit</button>
                 <div id="sorryMsg" class="app-text-play" style="font-size: 0.75rem; color: whitesmoke"></div>
-                </form>
             </div>
             <div id="gameInfo" class="app-text-play">
                 <div>
