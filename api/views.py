@@ -323,7 +323,7 @@ def game_info(request):
 @csrf_exempt
 def game_data(request):
     game_obj = Game.objects.filter(ready_to_play=0)
-    return JsonResponse([{game.id: game.name} for game in game_obj], safe=False)
+    return JsonResponse([{'key': game.id, 'name': game.name} for game in game_obj], safe=False)
 
 
 @csrf_exempt
