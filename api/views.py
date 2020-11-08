@@ -50,6 +50,10 @@ def new_entry(request):
     return render(request, 'playlist.html')
 
 
+def play_games(request):
+    return render(request, 'games.html')
+
+
 """def create_game(request):
     if request.method == 'POST':
         try:
