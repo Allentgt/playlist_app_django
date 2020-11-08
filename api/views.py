@@ -180,8 +180,9 @@ def put_playlist(request):
         playlist_dict, error_data, jobs, duplicate_songs = {}, {}, [], []
         try:
             pl = YTPlaylist(playlist)
-            print(pl)
-        except Exception as e:
+            if isinstance(pl, YTPlaylist) and not pl:
+                return JsonResponse({'status': 'FAILED', 'message': 'Empty or private Playlist URL'})
+        except (AttributeError, Exception):
             return JsonResponse({'status': 'FAILED', 'message': 'Invalid Playlist URL'})
 
         song_list = json.loads(game_obj.all_songs)
