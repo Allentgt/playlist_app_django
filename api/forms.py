@@ -12,7 +12,7 @@ class GameForm(forms.Form):
 class GameListForm(forms.Form):
     game_list = forms.ModelChoiceField(queryset=Game.objects.filter(ready_to_play=1, is_over=0).order_by('id'),
                                        widget=forms.Select(attrs={'class': 'choices-play'}))
-
+    game_code = forms.CharField(max_length=6)
 
 class PlaylistForm(forms.Form):
     name = forms.CharField(max_length=100)

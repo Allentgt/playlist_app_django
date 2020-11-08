@@ -13,8 +13,14 @@
         <div class="game-selector-div" style="margin-top: 40%">
             <span class="label-style">Game List :</span>
            <section class="choices">{{ form.game_list }}</section>
+           
         </div>
         <br>
+        <div class="input-field game-selector-div"  >
+            <input type="text" id="game_code" name="game_code" autocomplete="off" required />
+            <label for="game_code" class="label-name">Game Code :</label>
+        </div>
+         <br>       
         <button type="submit">Play!</button>
     </form>
 </div>

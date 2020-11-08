@@ -16,7 +16,8 @@ class Game(models.Model):
     score = models.TextField(null=False, default='{}')
     all_songs = models.TextField(null=False, default='[]')
     is_over = models.BooleanField(null=False, default=False)
-
+    game_code = models.TextField(null=False)
+    
     def __str__(self):
         return self.name
 

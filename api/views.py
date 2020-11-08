@@ -1,6 +1,6 @@
 import ast
 import os
-import random
+import random,string
 import re
 import time
 from functools import reduce
@@ -93,13 +93,16 @@ def create_game(request):
             'name': name,
             'sample_size': sample_size,
             'pool_size': pool_size,
-            'contestants': contestants
+            'contestants': contestants,
+            'game_code' : ''.join(random.choices(string.ascii_letters + string.digits, k=6))
+
         }
         game = Game(**data)
         game.save()
         response = {
             'status': 'SUCCESS',
-            'message': 'Game Created'
+            'message': 'Game Created',
+            'game_code': data['game_code']
         }
     except Exception as e:
         response = {
@@ -241,7 +244,11 @@ def get_games(request):
             form = GameListForm(request.POST)
             if form.is_valid():
                 game = form.cleaned_data['game_list'].id
-                return HttpResponseRedirect(f'/api/randomise/{game}/')
+                game_code = Game.objects.get(id=game).game_code
+                if game_code == form.cleaned_data['game_code'] :
+                    return HttpResponseRedirect(f'/api/randomise/{game}/')
+                else :
+                    return JsonResponse({'message': 'Game code doesn\'t match'})
     except Exception as e:
         return JsonResponse({'message': str(e)})
     else:
@@ -374,3 +381,4 @@ def end_game(request):
         return JsonResponse({'message': list_of_winners, 'delete_message': delete_message})
     except Exception as e:
         return JsonResponse({'message': str(e)})
+
