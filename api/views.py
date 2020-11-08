@@ -1,23 +1,21 @@
 import ast
 import os
-import random,string
-import re
-import time
+import random
+import string
 from functools import reduce
 from math import gcd
 
-from celery.result import AsyncResult
-from pytube import Playlist as YTPlaylist
 import simplejson as json
+from celery.result import AsyncResult
 from django.core.mail import EmailMessage
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+from pytube import Playlist as YTPlaylist
 
-from .forms import PlaylistForm, GameForm, GameListForm
-from .models import Playlist, Game
 from playlist import settings
-from .tasks import download_and_save_music_locally
+from .models import Playlist, Game
+from .tasks import download_and_save_music_locally, send_code_via_email
 
 
 def index(request):
@@ -79,6 +77,7 @@ def create_game(request):
         sample_size = int(request.POST.get('sample_size'))
         pool_size = int(request.POST.get('pool_size'))
         contestants = int(request.POST.get('contestants'))
+        email = request.POST.get('email')
         game_list = [game.name for game in Game.objects.all()]
 
         error = "Sorry, A game with the same name already exists ;)"
@@ -94,7 +93,7 @@ def create_game(request):
             'sample_size': sample_size,
             'pool_size': pool_size,
             'contestants': contestants,
-            'game_code' : ''.join(random.choices(string.ascii_letters + string.digits, k=6))
+            'game_code': ''.join(random.choices(string.ascii_letters + string.digits, k=6))
 
         }
         game = Game(**data)
@@ -104,6 +103,20 @@ def create_game(request):
             'message': 'Game Created',
             'game_code': data['game_code']
         }
+
+        yellow = '\033[93m'
+        end = '\033[0m'
+        bold = '\033[1m'
+        darkcyan = '\033[36m'
+
+        subject = 'Unique code for the game you just created'
+        body = f"""Hi, \n This mail contains the secret code for the game you just created.\n \
+        Please don't share it with anyone.\nYou have to use the code to start the game.\n \
+        Your unique code is {data['game_code']}\n\n\nHave a great game!!!\n\n\nRegards,\n \
+        The Playlist Game Team"""
+        support = settings.EMAIL_HOST_USER
+        send_code_via_email.delay(subject, body, support, email)
+
     except Exception as e:
         response = {
             'status': 'FAILED',
@@ -241,20 +254,14 @@ def poll_download(request):
 
 def get_games(request):
     try:
-        if request.method == 'POST':
-            form = GameListForm(request.POST)
-            if form.is_valid():
-                game = form.cleaned_data['game_list'].id
-                game_code = Game.objects.get(id=game).game_code
-                if game_code == form.cleaned_data['game_code'] :
-                    return HttpResponseRedirect(f'/api/randomise/{game}/')
-                else :
-                    return JsonResponse({'message': 'Game code doesn\'t match'})
+        game = int(request.POST.get('game'))
+        game_code = Game.objects.get(id=game).game_code
+        if game_code == request.POST.get('game_code'):
+            return HttpResponseRedirect(f'/api/randomise/{game}/')
+        else:
+            return JsonResponse({'message': 'Game code doesn\'t match'})
     except Exception as e:
         return JsonResponse({'message': str(e)})
-    else:
-        form = GameListForm()
-    return render(request, 'games.html', {'form': form})
 
 
 def randomise(request, game):
@@ -333,7 +340,12 @@ def game_info(request):
 
 @csrf_exempt
 def game_data(request):
-    game_obj = Game.objects.filter(ready_to_play=0)
+    ready_to_play = int(request.POST.get('ready_to_play'))
+    if ready_to_play == 0:
+        game_obj = Game.objects.filter(ready_to_play=0)
+    else:
+        game_obj = Game.objects.filter(ready_to_play=1, is_over=0)
+
     return JsonResponse([{'key': game.id, 'name': game.name} for game in game_obj], safe=False)
 
 
@@ -382,4 +394,3 @@ def end_game(request):
         return JsonResponse({'message': list_of_winners, 'delete_message': delete_message})
     except Exception as e:
         return JsonResponse({'message': str(e)})
-

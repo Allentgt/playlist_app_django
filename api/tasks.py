@@ -3,6 +3,7 @@ import subprocess
 
 import backoff
 import youtube_dl
+from django.core.mail import EmailMessage
 from pytube import YouTube
 from celery.decorators import task
 from celery_progress.backend import ProgressRecorder
@@ -37,3 +38,10 @@ def download_and_save_music_locally(self, name, link):
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         ydl.download([link])
     progress_recorder.set_progress(2, 2, 'Finished Download')
+
+
+@task(name='send_code_via_email')
+@backoff.on_exception(backoff.expo, Exception, max_tries=3, on_backoff=backoff_handler)
+def send_code_via_email(subject, body, support, email):
+    mail = EmailMessage(subject, body, support, [email])
+    mail.send()
