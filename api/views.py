@@ -252,6 +252,7 @@ def poll_download(request):
         return JsonResponse({'message': str(e)})
 
 
+@csrf_exempt
 def get_games(request):
     try:
         game = int(request.POST.get('game'))
