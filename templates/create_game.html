@@ -27,7 +27,17 @@
                 document.getElementById("submitButton").style.display = "none";
 
             } else {
-                window.location.replace(url[0] + "new_entry/");
+                if(response.game_code) {
+                    document.getElementById("gameForm").style.display = "none";
+                    document.getElementById("gameCode").style.display = "block";
+
+                    var msg = "Game created successfully !!!" + "</br>" +"The game code is " + response.game_code + "<br>" + "Use this code to start the game." ;
+
+                    document.getElementsByClassName("thanks")[0].innerHTML = msg;
+
+                }
+                
+
             }
 
         });
@@ -47,7 +57,7 @@
             }
     });
 </script>
-<div class = "input-container-playlist">
+<div id = "gameForm" class = "input-container-playlist">
         <div class="game-selector-div" style="margin-bottom: 4rem; flex-direction: column;">
             <div class="input-field">
                 <input type="text" id="name" name="name" autocomplete="off" required />
@@ -73,7 +83,15 @@
             <img src="{% static 'slick/oie_2212120tebkhWoO.gif' %}">
         </div>
 </div>
-   
+
+<div id="gameCode" style="display: none; align-items: center; margin-top: 75px; margin-bottom: 4rem;">
+    <div class="thanks" style="text-align: center;">
+    </div>
+    <div class="home-btn" style = "margin: 0;position: absolute;left: 50%;-ms-transform: translate(-50%, -50%);transform: translate(-50%, -50%);"> 
+        <button onclick="location.href = '/api/'">Home</button>
+    </div>
+
+</div>
 
 
 {% endblock %}
