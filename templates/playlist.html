@@ -121,21 +121,21 @@
 
 
         <div class="input-container-playlist">
-            <div class="game-selector-div" style="margin-bottom: 4rem; flex-direction: column;">
+            <div style="margin-bottom: 4rem; flex-direction: column;">
 
-                <div class="input-field" id="gname">
+                <div class="input-field" id="gname" style="margin-left: 7.5%;">
                     <span class="label-style">Game Name :</span>
                     <select id="gameValue" class="participant-dropdown-list">
                         <option value = "-1">-------------</option>
                     </select>
                 </div>
 
-                <div class="input-field">
+                <div class="input-field game-selector-div">
                     <input type="text" id="name" name="name" autocomplete="off" onpaste = enableSubmitAndClearMsg() required />
                     <label for="name">Player Name:</label>
                 </div>
 
-                <div class="input-field">
+                <div class="input-field game-selector-div" style="margin-top:2rem">
                     <input type="text" id="playlist" name="playlist" autocomplete="off" required onpaste = enableSubmitAndClearMsg() />
                     <label for="playlist">Youtube Playlist URL: </label>
                 </div>
