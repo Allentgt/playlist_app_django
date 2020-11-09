@@ -268,7 +268,7 @@ def get_games(request):
         game = int(request.POST.get('game'))
         game_code = Game.objects.get(id=game).game_code
         if game_code == request.POST.get('game_code'):
-            return HttpResponseRedirect(f'/api/randomise/{game}/')
+            return JsonResponse({'status': 'success'})
         else:
             return JsonResponse({'message': 'Game code doesn\'t match'})
     except Exception as e:

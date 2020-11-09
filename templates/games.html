@@ -7,21 +7,90 @@
     <title>Join Game</title>
 </head>
 
+<script>
+    var enableSubmitAndClearMsg = function () {
+        document.getElementById("submitButton").style.display = "block";
+        document.getElementById("sorryMsg").innerHTML = "";
+    };
+
+    $(document).keypress(
+        function(event){
+            if (event.which !== '13') {
+                enableSubmitAndClearMsg();
+            }
+    });
+
+    var url = document.URL.split("play_games");
+
+    $(document).on('ready', function(){
+        var select = document.getElementById("gameValue");
+
+        select.addEventListener('change',function(){
+            enableSubmitAndClearMsg();
+        });
+
+        $.post(url[0] + "game_data/", {ready_to_play : 1},function(result) {
+            if(result && result.length > 0) {
+               
+                for (var i=0;i<result.length;i++) {
+                    var elem = document.getElementsByTagName("select")[0];
+                    var optionElem = document.createElement("option");
+
+                    elem.append(optionElem);
+                    optionElem.setAttribute("value",result[i].key);
+                    optionElem.innerHTML = result[i].name;
+
+                }
+
+            }
+
+        })
+
+    });
+
+    
+
+    var validateAndPlay = function() {
+        if(parseInt(document.getElementById("gameValue").value) === -1 ) {
+            document.getElementById("submitButton").style.display = "none";
+            document.getElementById("sorryMsg").innerHTML = "Please select the game !!";
+            return;
+        }
+
+        $.post(url[0] + "get_games/", {
+            game : document.getElementById("gameValue").value,
+            game_code : document.getElementById("game_code").value},function(response) {
+                if(response && response.message) {
+                    document.getElementById("submitButton").style.display = "none";
+                    document.getElementById("sorryMsg").innerHTML = response.message;
+                } else if(response && response.status) {
+                    window.location.replace("/api/randomise/" + document.getElementById("gameValue").value + "/");
+                }
+            })
+
+
+    }
+
+</script>
+
 <div class="main-container" style="justify-items: center;align-items: center; margin-bottom: 4rem;">
-    <form style="margin-top: -50px; width: 30%;display: flex; flex-direction: column;" action="/api/get_games/" method="post">
-        {% csrf_token %}
+    <div style="margin-top: -50px; width: 30%;display: flex; flex-direction: column;">
         <div class="game-selector-div" style="margin-top: 40%">
             <span class="label-style">Game List :</span>
-           <section class="choices">{{ form.game_list }}</section>
+            <select id="gameValue" class="participant-dropdown-list">
+                <option value = "-1">-------------</option>
+            </select>
            
         </div>
         <br>
-        <div class="input-field game-selector-div"  >
-            <input type="text" id="game_code" name="game_code" autocomplete="off" required />
+        <div class="input-field game-selector-div" style="margin-top: 2rem" >
+            <input type="text" id="game_code" name="game_code" autocomplete="off" onpaste=enableSubmitAndClearMsg() required />
             <label for="game_code" class="label-name">Game Code :</label>
         </div>
          <br>       
-        <button type="submit">Play!</button>
-    </form>
+        <button id="submitButton" onclick="validateAndPlay()" >Play!</button>
+        <div id="sorryMsg" class="app-text-play" style="font-size: 0.75rem; color: whitesmoke; text-align: center;"></div>
+
+    </div>
 </div>
 {% endblock %}

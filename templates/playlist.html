@@ -36,12 +36,13 @@
             
         });
 
-        $.post(url[0] + "game_data/", {}, function(result) {
+        $.post(url[0] + "game_data/", {ready_to_play : 0}, function(result) {
             if(result && result.length > 0) {
-                var elem = document.getElementsByTagName("select")[0];
-                var optionElem = document.createElement("option");
-
+                
                 for (var i=0;i<result.length;i++) {
+                    var elem = document.getElementsByTagName("select")[0];
+                    var optionElem = document.createElement("option");
+
                     elem.append(optionElem);
                     optionElem.setAttribute("value",result[i].key);
                     optionElem.innerHTML = result[i].name;
@@ -130,7 +131,7 @@
                 </div>
 
                 <div class="input-field">
-                    <input type="text" id="name" name="name" autocomplete="off" required />
+                    <input type="text" id="name" name="name" autocomplete="off" onpaste = enableSubmitAndClearMsg() required />
                     <label for="name">Player Name:</label>
                 </div>
 

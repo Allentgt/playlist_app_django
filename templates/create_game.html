@@ -20,6 +20,7 @@
             sample_size : document.getElementById("sample_size").value,
             pool_size : document.getElementById("pool_size").value,
             contestants : document.getElementById("contestants").value,
+            email : document.getElementById("email").value
 
         }, function(response){
             if (response && response.status && response.status.toUpperCase() !== "SUCCESS") {
@@ -60,20 +61,24 @@
 <div id = "gameForm" class = "input-container-playlist">
         <div class="game-selector-div" style="margin-bottom: 4rem; flex-direction: column;">
             <div class="input-field">
-                <input type="text" id="name" name="name" autocomplete="off" required />
+                <input type="text" id="name" name="name" autocomplete="off" onpaste = enableSubmitAndClearMsg() required />
                 <label for="name" class="label-name">Game Name :</label>
             </div>
             <div class="input-field">
-                <input type="number" id="sample_size" min="1" name="sample_size" autocomplete="off" required />
+                <input type="number" id="sample_size" min="1" name="sample_size" autocomplete="off" onpaste = enableSubmitAndClearMsg() required />
                 <label for="sample_size">No of songs to be played in a game :</label>
             </div>
             <div class="input-field">
-                <input type="number" id="pool_size" min="1" name="pool_size" autocomplete="off" required />
+                <input type="number" id="pool_size" min="1" name="pool_size" autocomplete="off" onpaste = enableSubmitAndClearMsg() required />
                 <label for="pool_size">Individual Playlist Length :</label>
             </div>
             <div class="input-field">
-                <input type="number" id="contestants" min="1" name="contestants" autocomplete="off" required />
+                <input type="number" id="contestants" min="1" name="contestants" autocomplete="off" onpaste = enableSubmitAndClearMsg() required />
                 <label for="contestants">Number of Contestants :</label>
+            </div>
+            <div class="input-field">
+                <input type="text" id="email" name="email" autocomplete="off" onpaste = enableSubmitAndClearMsg() required />
+                <label for="email">Email (Game code will be sent in this):</label>
             </div>
             <button id="submitButton" type="submit" value="Submit" onclick="validateAndCreateGame()">Create</button>
             <div id="errorMsg" class="app-text-play" style="font-size: 0.75rem; color: whitesmoke"></div>
