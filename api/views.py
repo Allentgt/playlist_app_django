@@ -1,6 +1,7 @@
 import ast
 import os
 import random
+import re
 import string
 from functools import reduce
 from math import gcd
@@ -82,6 +83,11 @@ def create_game(request):
         pool_size = int(request.POST.get('pool_size'))
         contestants = int(request.POST.get('contestants'))
         email = request.POST.get('email')
+
+        regex = r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+        if not re.search(regex, email):
+            return JsonResponse({'status': 'FAILED', 'message': 'Please enter a valid email ID'})
+
         game_list = [game.name for game in Game.objects.all()]
 
         error = "Sorry, A game with the same name already exists ;)"
