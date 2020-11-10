@@ -3,6 +3,7 @@ import os
 import random
 import re
 import string
+import time
 from functools import reduce
 from math import gcd
 
@@ -159,6 +160,7 @@ def put_playlist(request):
             game_obj.all_songs = json.dumps(all_songs)
             game_obj.save()
             playlist_dict[idx + 1] = os.path.join(f'{filename}.mp3')
+            time.sleep(2)
         data = {
             'name': name.lower(),
             'game': game_obj,
@@ -321,10 +323,15 @@ def end_game(request):
             song_list.extend(json.loads(row.playlist).values())
         delete_message = 'Already empty!'
         workdir = 'api/static/music'
+        static_dir = 'staticfiles'
         for file in os.listdir(workdir):
             if file in song_list:
                 try:
                     os.remove(f'{workdir}/{file}')
+                    try:
+                        os.remove(f'{static_dir}/{file}')
+                    except FileNotFoundError:
+                        pass
                     delete_message = 'SUCCESS'
                 except Exception as e:
                     delete_message = str(e)
