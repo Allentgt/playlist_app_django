@@ -55,26 +55,6 @@ def play_games(request):
     return render(request, 'games.html')
 
 
-"""def create_game(request):
-    if request.method == 'POST':
-        try:
-            form = GameForm(request.POST)
-            if form.is_valid():
-                data = {'name': form.cleaned_data['name'],
-                        'sample_size': form.cleaned_data['sample_size'],
-                        'pool_size': form.cleaned_data['pool_size'],
-                        'contestants': form.cleaned_data['contestants']}
-                game = Game(**data)
-                game.save()
-                return HttpResponseRedirect('/api/put_playlist/')
-        except Exception as e:
-            return JsonResponse({'message': str(e)})
-    else:
-        form = GameForm()
-
-    return render(request, 'create_game.html', {'form': form})"""
-
-
 @csrf_exempt
 def create_game(request):
     try:
@@ -114,16 +94,13 @@ def create_game(request):
             'game_code': data['game_code']
         }
 
-        yellow = '\033[93m'
-        end = '\033[0m'
-        bold = '\033[1m'
-        darkcyan = '\033[36m'
-
         subject = 'Unique code for the game you just created'
-        body = f"""Hi, \n This mail contains the secret code for the game you just created.\n \
-        Please don't share it with anyone.\nYou have to use the code to start the game.\n \
-        Your unique code is {data['game_code']}\n\n\nHave a great game!!!\n\n\nRegards,\n \
-        The Playlist Game Team"""
+        body = f"""<!DOCTYPE html><html><body>Hi,<br><br>This mail contains the secret code for the game you just created.
+        <br>Please don't share it with anyone.<br>You have to use the code to start the game.<br>
+        Your unique code is :<div style='font-weight: bolder; font-style: italic; color: darkcyan'>
+        {data['game_code']}</div><br><br><br>Have a great game!!!<br><br>Regards,<br>
+        The Playlist Game Team</body></html>"""
+
         support = settings.EMAIL_HOST_USER
         send_code_via_email.delay(subject, body, support, email)
 
@@ -133,57 +110,6 @@ def create_game(request):
             'message': str(e)
         }
     return JsonResponse(response)
-
-
-"""def put_playlist(request):
-    if request.method == 'POST':
-        try:
-            playlist_details = PlaylistForm(request.POST)
-            if playlist_details.is_valid():
-                playlist_details = playlist_details.cleaned_data
-                error = "Sorry, I guess you have a very common name ;)"
-                username_list = [player_list.name for player_list in Playlist.objects.filter(game=playlist_details['game'])]
-                if playlist_details['name'] in username_list:
-                    return JsonResponse({'error': error})
-                game_obj = Game.objects.get(name=playlist_details['game'])
-                playlist_object = Playlist.objects.filter(game=game_obj)
-                message = f'''Sorry {playlist_details["name"]}, You didn\'t make the cut :(\n
-                May be try joining another game 
-                or make better friends! '''
-                if len(playlist_object) == game_obj.contestants:
-                    return render(request, 'apology.html', {'message': message})
-                playlist, jobs = {}, []
-                pl = YTPlaylist(playlist_details["playlist"])
-                for idx, link in enumerate(pl):
-                    filename = f"{playlist_details['name'].lower()}_{playlist_details['game'].name.replace(' ', '_')}_{idx + 1}"
-                    result = download_and_save_music_locally.delay(filename, link)
-                    jobs.append(result.task_id)
-                    all_songs = json.loads(game_obj.all_songs)
-                    all_songs.append(link)
-                    game_obj.all_songs = json.dumps(all_songs)
-                    game_obj.save()
-                    playlist[idx + 1] = os.path.join(f'{filename}.mp3')
-                    time.sleep(3)
-                data = {
-                    'name': playlist_details['name'].lower(),
-                    'game': game_obj,
-                    'playlist': json.dumps(playlist)
-                }
-                p = Playlist(**data)
-                p.save()
-                playlist_object = Playlist.objects.filter(game=game_obj)
-                if len(playlist_object) == game_obj.contestants:
-                    game_obj.ready_to_play = 1
-                    game_obj.save()
-                return render(request, 'thanks.html', context={'jobs': jobs})
-        except Exception as e:
-            return JsonResponse({'message': str(e)})
-    else:
-        playlist_details = PlaylistForm()
-    context = {
-        'playlist': playlist_details
-    }
-    return render(request, 'playlist.html', context)"""
 
 
 @csrf_exempt
