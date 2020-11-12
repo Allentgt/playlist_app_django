@@ -6,7 +6,18 @@
     <meta charset="UTF-8">
 </head>
     <script type="text/javascript">
+        
+        var playInIDevices = function() {
+            if((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i)) || (navigator.userAgent.match(/iPad/i))) {
+                document.write('<a id="init" ontouchstart="javascript:sndInit();"></a>');
+            }
+        }
 
+        var sndInit = function() {
+    	    document.getElementsByTagName("audio")[0].play();
+    	    document.getElementById('init').style.display = 'none';
+        }
+        
         var displayAudio = function() {
             var audioElem = document.getElementById("audioDiv");
             var elem = document.createElement("AUDIO");
@@ -17,6 +28,7 @@
 
             document.getElementById("nextButton").style.display = "none";
             document.getElementById("voteButton").style.display = "block";
+            playInIDevices();
 
         }
 
