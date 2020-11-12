@@ -60,6 +60,30 @@
 
             });
         }
+        
+        var endGame = function () {
+            var para = document.createElement("P");
+            para.innerHTML = "Game Over !!";
+            document.getElementById("audioContainer").appendChild(para);
+
+            document.getElementById("nextButton").style.display = "none";
+            document.getElementById("voteButton").style.display = "none";
+
+            var url = document.URL.split("randomise");
+            var gameId = parseInt(document.URL.split("randomise/")[1].split("/")[0]);
+
+            $.post(url[0] + "end_game/", {"game" : gameId}, function (res) {
+                 var msgText;
+                 if(res && res.message.length > 1) {
+                     msgText = "The Winners are "
+                 } else {
+                     msgText = "The Winner is "
+                 }
+
+                 document.getElementById("winner").innerHTML = msgText + res.message.toString() + " !!";
+            })
+            
+        };
 
         var next = function () {
 
@@ -74,26 +98,7 @@
                 document.getElementById("nextButton").style.display = "none";
 
             } else {
-                var para = document.createElement("P");
-                para.innerHTML = "Game Over !!";
-                document.getElementById("audioContainer").appendChild(para);
-
-                document.getElementById("nextButton").style.display = "none";
-                document.getElementById("voteButton").style.display = "none";
-
-                var url = document.URL.split("randomise");
-                var gameId = parseInt(document.URL.split("randomise/")[1].split("/")[0]);
-
-                $.post(url[0] + "end_game/", {"game" : gameId}, function (res) {
-                    var msgText;
-                    if(res && res.message.length > 1) {
-                        msgText = "The Winners are "
-                    } else {
-                        msgText = "The Winner is "
-                    }
-
-                    document.getElementById("winner").innerHTML = msgText + res.message.toString() + " !!";
-                })
+                endGame();
             }
 
         }
@@ -139,7 +144,7 @@
 
                 <button class="btn btn-primary" id="voteButton" onclick="votes()" style="margin-top: 15px;">Vote</button>
                 <button class="btn btn-primary" id="nextButton" onclick="next()" style="margin-top: 15px; margin-left: 4rem;">Next</button>
-                <button class="btn btn-primary" id="endButton" onclick="location.href='/api/'" style="margin-top: 15px;">End Game</button>
+                <button class="btn btn-primary" id="endButton" onclick="endGame()" style="margin-top: 15px;">End Game</button>
             </div>
 
         </div>
