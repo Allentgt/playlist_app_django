@@ -3,14 +3,13 @@ import os
 import random
 import re
 import string
-import time
 from functools import reduce
 from math import gcd
 
 import simplejson as json
 from celery.result import AsyncResult
 from django.core.mail import EmailMessage
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from pytube import Playlist as YTPlaylist
@@ -160,7 +159,6 @@ def put_playlist(request):
             game_obj.all_songs = json.dumps(all_songs)
             game_obj.save()
             playlist_dict[idx + 1] = os.path.join(f'{filename}.mp3')
-            time.sleep(2)
         data = {
             'name': name.lower(),
             'game': game_obj,
@@ -220,15 +218,11 @@ def randomise(request, game):
             all_playlist[obj.name] = json.loads(obj.playlist)
             uniquePlayers.append(obj.name)
         for idx, i in all_playlist.items():
-            sampling = random.choices(list(i.values()), k=sample_size)
-            sampling = [{idx: i} for i in sampling]
-            all_random_sample.extend(sampling)
+            all_random_sample.extend({'name': idx, 'link': songs} for songs in list(i.values()))
         random.shuffle(all_random_sample)
-        result = []
-        for i in all_random_sample:
-            result.append({'name': list(i.keys())[0], 'link': list(i.values())[0]})
+        all_random_sample = random.sample(all_random_sample, k=sample_size)
         return render(request, 'songs.html',
-                      {'context': result, 'uniquePlayers': uniquePlayers, 'scorecard': scorecard})
+                      {'context': all_random_sample, 'uniquePlayers': uniquePlayers, 'scorecard': scorecard})
     except Exception as e:
         return JsonResponse({'message': str(e)})
 
