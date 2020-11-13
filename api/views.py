@@ -95,10 +95,10 @@ def create_game(request):
         }
 
         subject = 'Unique code for the game you just created'
-        body = f"""<!DOCTYPE html><html><body>Hi,<br><br>This mail contains the secret code for the game you just created.
-        <br>Please don't share it with anyone.<br>You have to use the code to start the game.<br>
-        Your unique code is :<div style='font-weight: bolder; font-style: italic; color: darkcyan'>
-        {data['game_code']}</div><br><br><br>Have a great game!!!<br><br>Regards,<br>
+        body = f"""<!DOCTYPE html><html><body>Hi,<br><br>This mail contains the secret code for the game you just 
+        created. <br>Please don't share it with anyone.<br>You have to use the code to start the game.<br> Your 
+        unique code is :<div style='font-weight: bolder; font-style: italic; color: darkcyan'> 
+        {data['game_code']}</div><br><br><br>Have a great game!!!<br><br>Regards,<br> 
         The Playlist Game Team</body></html>"""
 
         support = settings.EMAIL_HOST_USER
@@ -196,7 +196,7 @@ def get_games(request):
         if game_code == request.POST.get('game_code'):
             return JsonResponse({'status': 'success'})
         else:
-            return JsonResponse({'message': 'Game code doesn\'t match'})
+            return JsonResponse({"message": "Game code doesn't match"})
     except Exception as e:
         return JsonResponse({'message': str(e)})
 
@@ -205,7 +205,7 @@ def randomise(request, game):
     try:
         all_playlist = {}
         all_random_sample = []
-        uniquePlayers = []
+        unique_players = []
         playlist = Playlist.objects.filter(game=game)
         game_object = Game.objects.get(id=game)
         sample_size = game_object.sample_size
@@ -216,13 +216,13 @@ def randomise(request, game):
         game_object.save()
         for obj in playlist:
             all_playlist[obj.name] = json.loads(obj.playlist)
-            uniquePlayers.append(obj.name)
+            unique_players.append(obj.name)
         for idx, i in all_playlist.items():
             all_random_sample.extend({'name': idx, 'link': songs} for songs in list(i.values()))
         random.shuffle(all_random_sample)
         all_random_sample = random.sample(all_random_sample, k=sample_size)
         return render(request, 'songs.html',
-                      {'context': all_random_sample, 'uniquePlayers': uniquePlayers, 'scorecard': scorecard})
+                      {'context': all_random_sample, 'uniquePlayers': unique_players, 'scorecard': scorecard})
     except Exception as e:
         return JsonResponse({'message': str(e)})
 
