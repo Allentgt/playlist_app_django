@@ -1,4 +1,5 @@
 import ast
+import math
 import os
 import random
 import re
@@ -17,6 +18,50 @@ from pytube import Playlist as YTPlaylist
 from playlist import settings
 from .models import Playlist, Game
 from .tasks import download_and_save_music_locally, send_code_via_email
+
+
+def sum_fix(offset, count, result_list):
+    factor = math.floor(offset / count) if offset > 0 else -1 * math.ceil(offset / count)
+    remainder_step = math.remainder(offset, count)
+    if factor >= 1:
+        fix_list = [(offset - remainder_step) / count] * count
+        result_list = [sum(x) for x in zip(result_list, fix_list)]
+        sum_fix(remainder_step, count, result_list)
+    else:
+        offset_mod = offset if offset > 0 else offset * -1
+        if offset_mod >= max(result_list) / 2:
+            if offset % 2 == 0:
+                result_list[-1] += offset / 2
+                result_list[-2] += offset / 2
+            else:
+                result_list[-1] += (offset - 1) / 2
+                result_list[-2] += offset - (offset - 1) / 2
+        else:
+            if offset < 0:
+                result_list[0] += offset
+
+            else:
+                result_list[-1] += offset
+    return result_list
+
+
+def get_song_count(total_songs, contestant_count):
+    result = list()
+    threshold = math.ceil(total_songs / contestant_count)
+    tolerance = math.floor(threshold / 3)
+    for _ in range(contestant_count):
+        num = random.randint(threshold - tolerance, threshold + tolerance)
+        result.append(num)
+
+    print('Initial List : ', result, '\nInitial Sum : ', sum(result))
+    list_sum = sum(result)
+
+    remainder = total_songs - list_sum
+    print('Remainder : ', remainder)
+    result = sum_fix(remainder, contestant_count, sorted(result, reverse=True))
+    random.shuffle(result)
+    print('Final List : ', result, '\nFinal Sum : ', sum(result))
+    return result
 
 
 def index(request):
@@ -60,8 +105,8 @@ def create_game(request):
     try:
         name = request.POST.get('name')
         sample_size = int(request.POST.get('sample_size'))
-        pool_size = int(request.POST.get('pool_size'))
         contestants = int(request.POST.get('contestants'))
+        pool_size = math.ceil(math.ceil(sample_size / contestants) * (4/3))
         email = request.POST.get('email')
 
         regex = r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
@@ -95,10 +140,11 @@ def create_game(request):
         }
 
         subject = 'Unique code for the game you just created'
-        body = f"""<!DOCTYPE html><html><body>Hi,<br><br>This mail contains the secret code for the game you just 
-        created. <br>Please don't share it with anyone.<br>You have to use the code to start the game.<br> Your 
-        unique code is :<div style='font-weight: bolder; font-style: italic; color: darkcyan'> 
-        {data['game_code']}</div><br><br><br>Have a great game!!!<br><br>Regards,<br> 
+        body = f"""<!DOCTYPE html><html><body>Hi,<br><br>This mail contains the secret code for the game 
+        <div style='font-weight: bolder; font-style: italic; color: darkcyan'>{game.name}</div>
+        you just created. <br>Please don't share it with anyone.<br>You have to use the code to start the game.<br> 
+        Your unique code is :<div style='font-weight: bolder; font-style: italic; color: darkcyan'> {data['game_code']}
+        </div><br><br><br>Have a great game!!!<br><br>Regards,<br> 
         The Playlist Game Team</body></html>"""
 
         support = settings.EMAIL_HOST_USER
@@ -142,9 +188,10 @@ def put_playlist(request):
             error_data['duplicate'] = duplicate_songs
 
         game_pool_size = game_obj.pool_size
+        game_sample_size = game_obj.sample_size
         playlist_length = len(pl)
-        length_error = f"Sorry, Your playlist should be of length {game_pool_size}! ;)"
-        if not playlist_length == game_pool_size:
+        length_error = f"Sorry, Your playlist length should be between {game_pool_size} and {game_sample_size}! ;)"
+        if not game_pool_size <= playlist_length <= game_sample_size:
             error_data['length'] = length_error
         if error_data:
             error_data['status'] = 'FAILED'
@@ -203,24 +250,25 @@ def get_games(request):
 
 def randomise(request, game):
     try:
-        all_playlist = {}
         all_random_sample = []
         unique_players = []
         playlist = Playlist.objects.filter(game=game)
         game_object = Game.objects.get(id=game)
         sample_size = game_object.sample_size
+        contestants = game_object.contestants
         scorecard = dict()
         for player in playlist:
             scorecard[player.name] = 0
         game_object.score = json.dumps(scorecard)
         game_object.save()
-        for obj in playlist:
-            all_playlist[obj.name] = json.loads(obj.playlist)
+
+        selection_list = [int(item) for item in get_song_count(total_songs=sample_size, contestant_count=contestants)]
+        for sample, obj in zip(selection_list, playlist):
             unique_players.append(obj.name)
-        for idx, i in all_playlist.items():
-            all_random_sample.extend({'name': idx, 'link': songs} for songs in list(i.values()))
+            individual_data = list(json.loads(obj.playlist).values())
+            selected_data = random.sample(individual_data, k=sample)
+            all_random_sample.extend({'name': obj.name, 'link': songs} for songs in selected_data)
         random.shuffle(all_random_sample)
-        all_random_sample = random.sample(all_random_sample, k=sample_size)
         return render(request, 'songs.html',
                       {'context': all_random_sample, 'uniquePlayers': unique_players, 'scorecard': scorecard})
     except Exception as e:
