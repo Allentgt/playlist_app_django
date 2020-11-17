@@ -18,7 +18,6 @@
         $.post(url[0] + "create_game/", {
             name : document.getElementById("name").value,
             sample_size : document.getElementById("sample_size").value,
-            pool_size : document.getElementById("pool_size").value,
             contestants : document.getElementById("contestants").value,
             email : document.getElementById("email").value
 
@@ -67,10 +66,6 @@
             <div class="input-field game-selector-div" style="margin-top:2rem">
                 <input type="number" id="sample_size" min="1" name="sample_size" autocomplete="off" onpaste = enableSubmitAndClearMsg() required />
                 <label for="sample_size">No of songs to be played in a game :</label>
-            </div>
-            <div class="input-field game-selector-div" style="margin-top:2rem">
-                <input type="number" id="pool_size" min="1" name="pool_size" autocomplete="off" onpaste = enableSubmitAndClearMsg() required />
-                <label for="pool_size">Individual Playlist Length :</label>
             </div>
             <div class="input-field game-selector-div" style="margin-top:2rem">
                 <input type="number" id="contestants" min="1" name="contestants" autocomplete="off" onpaste = enableSubmitAndClearMsg() required />
