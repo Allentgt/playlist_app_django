@@ -15,6 +15,13 @@
     var validateAndCreateGame = function() {
 
         var url = document.URL.split("new_game");
+        var sampleSize = document.getElementById("sample_size").value;
+        var contestant = document.getElementById("contestants").value
+        if(parseInt(sampleSize) < 1 || parseInt (contestant) < 1) {
+         document.getElementById("submitButton").style.display = "none";
+         document.getElementById("errorMsg").innerHTML = "Please enter the positive integers !!";
+         return;
+        }
         $.post(url[0] + "create_game/", {
             name : document.getElementById("name").value,
             sample_size : document.getElementById("sample_size").value,
