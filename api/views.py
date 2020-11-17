@@ -312,7 +312,7 @@ def game_info(request):
         response = {
             'contestants': [player.name for player in playlist_obj],
             'available_slots': game_obj.contestants - len(playlist_obj),
-            'playlist_length': game_obj.pool_size
+            'playlist_length': f'{game_obj.pool_size} - {game_obj.sample_size}'
         }
         return JsonResponse(response)
     except Exception as e:
