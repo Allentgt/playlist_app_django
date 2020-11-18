@@ -22,11 +22,6 @@
          document.getElementById("errorMsg").innerHTML = "Please enter the positive integers !!";
          return;
         }
-        if (sampleSize === "" || contestant === "" || name === "" ) {
-          document.getElementById("submitButton").style.display = "none";
-          document.getElementById("errorMsg").innerHTML = "Please enter all the fields !!";
-          return;
-        }
 
         $.post(url[0] + "create_game/", {
             name : document.getElementById("name").value,
