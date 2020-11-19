@@ -16,11 +16,18 @@
 
         var url = document.URL.split("new_game");
         var sampleSize = document.getElementById("sample_size").value;
-        var contestant = document.getElementById("contestants").value
+        var contestant = document.getElementById("contestants").value;
+        var name = document.getElementById("name").value;
         if((sampleSize !="" && parseInt(sampleSize) < 1) || (contestant !="" && parseInt (contestant) < 1)) {
          document.getElementById("submitButton").style.display = "none";
          document.getElementById("errorMsg").innerHTML = "Please enter the positive integers !!";
          return;
+        }
+
+        if (sampleSize === "" || contestant === "" || name === "" ) {
+          document.getElementById("submitButton").style.display = "none";
+          document.getElementById("errorMsg").innerHTML = "Please enter all the fields !!";
+          return;
         }
 
         $.post(url[0] + "create_game/", {
