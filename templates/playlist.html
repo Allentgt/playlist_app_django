@@ -7,6 +7,13 @@
     <title>Enter Your Submission</title>
 </head>
 <script>
+
+    function removeAllChildNodes(parent) {
+        while (parent.firstChild) {
+            parent.removeChild(parent.firstChild);
+        }
+    }
+
     var url = document.URL.split("new_entry");
 
     $(document).on('ready', function() {
@@ -32,9 +39,64 @@
                     document.getElementById("submitButton").style.display = "block";
 
                 }
+
+                var elemToInsert = document.getElementById("songsLabel");
+                $(".songs-name-div").remove();
+                var maxLen = parseInt(response.playlist_length.split("- ")[1]);
+
+                for(var i=0;i<maxLen;i++) {
+                    var divElem = document.createElement("div");
+                    divElem.setAttribute("class","songs-name-div");
+                    divElem.style.marginLeft = "7.5%"
+                    divElem.style.maxWidth = "350px"
+
+                    var inputElem =  createInputElem();
+                    inputElem.style.marginTop = "1rem";
+                    inputElem.setAttribute("id" ,"input - " +i);
+
+                    divElem.append(inputElem);
+
+                    var buttonElem =  createButtonElem();
+                    buttonElem.style.marginTop = "1rem";
+                    buttonElem.setAttribute("id" ,"button - " +i);
+                    divElem.append(buttonElem);
+
+                    var selectElem =  createSelectElem();
+                    selectElem.style.marginTop = "1rem";
+                    selectElem.setAttribute("id" ,"select - " +i);
+
+                    divElem.append(selectElem);
+
+                    $(divElem).insertAfter(elemToInsert);
+                    elemToInsert = divElem;
+
+                }
+
             });
             
         });
+
+        var createInputElem = function() {
+            var elem = document.createElement("input");
+            elem.setAttribute("type","text");
+            elem.style.width = "350px";
+            return elem;
+        }
+
+        var createButtonElem = function() {
+            var elem = document.createElement("button");
+            elem.setAttribute("onclick","getYTVideoId(this.id)");
+            elem.innerHTML = "Search";
+            return elem;
+        }
+
+        var createSelectElem = function() {
+            var elem = document.createElement("select");
+            elem.setAttribute("class","participant-dropdown-list selected-songs");
+            elem.style.width = "12rem";
+            elem.style.marginLeft = "0.3rem"
+            return elem;
+        }
 
         $.post(url[0] + "game_data/", {ready_to_play : 0}, function(result) {
             if(result && result.length > 0) {
@@ -61,10 +123,16 @@
             return;
         }
 
+        var selectedSongs = document.getElementsByClassName("selected-songs");
+        var ytId = [];
+        for (var i=0;i<selectedSongs.length;i++) {
+            ytId.push(selectedSongs[i].value);
+        }
+
         $.post(url[0] + "put_playlist/",{
             name : document.getElementById("name").value,
             game : document.getElementById("gameValue").value,
-            playlist : document.getElementById("playlist").value
+            ytId : ytId
         }, function( response ) {
             if(response) {
                 var errorMsg = "";
@@ -109,6 +177,39 @@
         document.getElementById("sorryMsg").innerHTML = "";
     }
 
+    var getYTVideoId = function(id) {
+        var idToOperate = id.split("- ")[1];
+        removeAllChildNodes(document.getElementById("select - "+idToOperate));
+        var searchString = document.getElementById("input - "+idToOperate).value;
+        var query = "https://youtube.googleapis.com/youtube/v3/search?";
+        var params = "part=snippet&maxResults=25&order=title&q="+ searchString +"&type=video&";
+        var key = "key=AIzaSyAEMe3f9sghtMSCuSL5Jwit2w_2Qg2Jn3E";
+        $.get(query+params+key,function(response){
+            var elem = document.getElementById("select - "+idToOperate);
+            if(response && response.items && response.items.length > 0) {
+                var result = response.items;
+                for (var i=0;i<result.length;i++) {
+                    // var elem = document.getElementsById("searchedSongs");
+                    var optionElem = document.createElement("option");
+
+                    elem.append(optionElem);
+                    optionElem.setAttribute("value",result[i].id.videoId);
+                    optionElem.innerHTML = result[i].snippet.title;
+
+                }
+
+            } else{
+                //No songs found;
+                var optionElem = document.createElement("option");
+                elem.append(optionElem);
+                optionElem.innerHTML = "No Songs found with this keyword.";
+            }
+
+            
+
+        });
+    }
+
 
     $(document).keypress(
         function(event){
@@ -135,11 +236,8 @@
                     <label for="name">Player Name:</label>
                 </div>
 
-                <div class="input-field game-selector-div" style="margin-top:2rem">
-                    <input type="text" id="playlist" name="playlist" autocomplete="off" required onpaste = enableSubmitAndClearMsg() />
-                    <label for="playlist">Youtube Playlist URL: </label>
-                </div>
-                <button id="submitButton" type="submit" onclick="validateAndSubmit()">Submit</button>
+                <label id="songsLabel" style="top: unset;left: unset;margin-left:2%; max-width: fit-content; ">Enter Song Name : </label>
+                <button id="submitButton" type="submit" style="margin-top:2rem" onclick="validateAndSubmit()">Submit</button>
                 <div id="sorryMsg" class="app-text-play game-selector-div" style="font-size: 0.75rem; color: whitesmoke"></div>
             </div>
             <div id="gameInfo" class="app-text-play">
