@@ -7,6 +7,7 @@ import string
 from functools import reduce
 from math import gcd
 
+import pafy as pafy
 import simplejson as json
 from celery.result import AsyncResult
 from django.core.mail import EmailMessage
@@ -173,15 +174,20 @@ def put_playlist(request):
             return JsonResponse({'status': 'FAILED', 'message': error})
 
         playlist_dict, error_data, jobs, duplicate_songs = {}, {}, [], []
-        try:
-            pl = YTPlaylist(playlist)
-            if isinstance(pl, YTPlaylist) and not pl:
-                return JsonResponse({'status': 'FAILED', 'message': 'Empty or private Playlist URL'})
-        except (AttributeError, Exception):
-            return JsonResponse({'status': 'FAILED', 'message': 'Invalid Playlist URL'})
+        playlist = pafy.get_playlist(playlist)
+
+        # try:
+        #     print(playlist)
+        #     playlist = pafy.get_playlist(playlist)
+        #     if isinstance(playlist, YTPlaylist) and not pl:
+        #         return JsonResponse({'status': 'FAILED', 'message': 'Empty or private Playlist URL'})
+        # except (AttributeError, Exception) as e:
+        #     print(str(e))
+        #     return JsonResponse({'status': 'FAILED', 'message': 'Invalid Playlist URL'})
 
         song_list = json.loads(game_obj.all_songs)
-        for song in pl:
+        for i in playlist["items"]:
+            song = i['pafy'].watchv_url
             if song in song_list:
                 duplicate_songs.append(song)
         if duplicate_songs:
@@ -189,7 +195,7 @@ def put_playlist(request):
 
         game_pool_size = game_obj.pool_size
         game_sample_size = game_obj.sample_size
-        playlist_length = len(pl)
+        playlist_length = len(playlist["items"])
         length_error = f"Sorry, Your playlist length should be between {game_pool_size} and {game_sample_size}! ;)"
         if not game_pool_size <= playlist_length <= game_sample_size:
             error_data['length'] = length_error
@@ -197,7 +203,8 @@ def put_playlist(request):
             error_data['status'] = 'FAILED'
             return JsonResponse(error_data)
 
-        for idx, link in enumerate(pl):
+        for idx, i in enumerate(playlist["items"]):
+            link = i['pafy'].watchv_url
             filename = f"{name.lower().replace(' ', '_')}_{game.replace(' ', '_')}_{idx + 1}"
             result = download_and_save_music_locally.delay(filename, link)
             jobs.append(result.task_id)

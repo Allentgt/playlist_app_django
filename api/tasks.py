@@ -2,6 +2,7 @@ import os
 import subprocess
 
 import backoff
+import pafy
 import youtube_dl
 from django.core.mail import EmailMessage, send_mail
 from pytube import YouTube
@@ -21,9 +22,6 @@ def download_and_save_music_locally(self, name, link):
     # yt = YouTube(link)
     progress_recorder = ProgressRecorder(self)
     progress_recorder.set_progress(1, 2, 'Starting Download')
-    # stream = yt.streams.filter(only_audio=True).first()
-    # stream.download('api/static/music/', filename=name)
-    # subprocess.run(['music-dl', '--url', link, '--dir', 'api/static/music/', '--codec', 'mp3'])
 
     filepath = os.path.join(os.getcwd(), f'api/static/music/{name}.mp3')
     ydl_opts = {
@@ -37,6 +35,10 @@ def download_and_save_music_locally(self, name, link):
     }
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         ydl.download([link])
+    # video = pafy.new(link)
+    #
+    # best_audio = video.getbestaudio()
+    # best_audio.download(filepath=filepath + best_audio.extension)
     progress_recorder.set_progress(2, 2, 'Finished Download')
 
 
